@@ -1,0 +1,184 @@
+= Network Automation with Python: A Complete Series
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:series: Python Network Automation Mastery
+:total-parts: 8
+:status: Planning
+:doctype: article
+:toc: left
+
+== Series Overview
+
+A comprehensive 8-part series taking you from Python basics to advanced network automation, based on real production implementations managing 500+ devices.
+
+== Series Structure
+
+=== Part 1: Python Fundamentals for Network Engineers
+*Status:* Outlined
+*Target:* February 2025
+
+[source,asciidoc]
+----
+Topics:
+- Why Python over Perl/Bash
+- Setting up development environment
+- Core Python concepts for networking
+- Working with APIs vs CLI scraping
+----
+
+=== Part 2: Device Communication Patterns
+*Status:* Drafting
+*Target:* February 2025
+
+[source,python]
+----
+# Preview of content
+from netmiko import ConnectHandler
+from napalm import get_network_driver
+import asyncio
+import asyncssh
+
+# Covering:
+# - Netmiko for CLI
+# - NAPALM for multi-vendor
+# - AsyncSSH for scale
+# - REST APIs (ISE, DNA Center)
+----
+
+=== Part 3: Configuration Management at Scale
+*Status:* Research
+*Target:* March 2025
+
+Content outline:
+* Jinja2 templating
+* Config validation
+* Rollback mechanisms
+* Change tracking
+
+=== Part 4: Network Testing and Validation
+*Status:* Planning
+*Target:* March 2025
+
+* Pre/post change validation
+* Automated testing with pytest
+* Network state verification
+* Compliance checking
+
+=== Part 5: Event-Driven Automation
+*Status:* Planning
+*Target:* April 2025
+
+* Syslog parsing
+* SNMP trap handling
+* Streaming telemetry
+* Auto-remediation patterns
+
+=== Part 6: Integration with Network Controllers
+*Status:* Planning
+*Target:* April 2025
+
+* ISE API automation
+* DNA Center workflows
+* vManage for SD-WAN
+* Custom middleware
+
+=== Part 7: Building a Network Automation Framework
+*Status:* Planning
+*Target:* May 2025
+
+* Framework architecture
+* Job scheduling
+* Web UI with Flask/FastAPI
+* Database integration
+
+=== Part 8: Production Deployment and Operations
+*Status:* Planning
+*Target:* May 2025
+
+* CI/CD for network automation
+* Error handling and recovery
+* Monitoring and alerting
+* Scaling strategies
+
+== Series Resources
+
+=== Code Repository
+[source,text]
+----
+github.com/evanusmodestus/network-automation-series
+├── part1-fundamentals/
+├── part2-device-communication/
+├── part3-config-management/
+├── part4-testing/
+├── part5-event-driven/
+├── part6-controllers/
+├── part7-framework/
+└── part8-production/
+----
+
+=== Lab Environment
+
+Recommended setup for following along:
+
+[source,yaml]
+----
+lab_environment:
+  containerlab:
+    topology: ceos-spine-leaf
+    nodes: 8
+  
+  eve-ng:
+    ios_routers: 4
+    nexus_switches: 2
+    asa_firewall: 1
+    
+  virtual_ise:
+    version: 3.2
+    nodes: 2
+----
+
+=== Prerequisites
+
+* Basic networking knowledge (CCNA level)
+* Python 3.8+ installed
+* Access to network devices (physical or virtual)
+* Linux/WSL environment
+
+== Reader Feedback Integration
+
+Planning to incorporate reader challenges and solutions:
+
+[source,asciidoc]
+----
+Reader Challenges Queue:
+1. Multi-vendor config backup solution
+2. Automated VLAN provisioning
+3. Certificate deployment automation
+4. Compliance reporting
+----
+
+== Cross-References
+
+This series complements:
+
+* link:../01_POSTS/2025-POST-INFRA-001-infrastructure-as-code.adoc[Infrastructure as Code post]
+* link:../01_POSTS/2025-POST-ISE-002-automation-framework.adoc[ISE Automation Framework]
+
+== Publishing Schedule
+
+[options="header"]
+|===
+|Part |Title |Target Date |Status
+|1 |Python Fundamentals |Feb 1, 2025 |Outlined
+|2 |Device Communication |Feb 15, 2025 |Drafting
+|3 |Config Management |Mar 1, 2025 |Research
+|4 |Testing & Validation |Mar 15, 2025 |Planning
+|5 |Event-Driven |Apr 1, 2025 |Planning
+|6 |Controllers |Apr 15, 2025 |Planning
+|7 |Framework |May 1, 2025 |Planning
+|8 |Production |May 15, 2025 |Planning
+|===
+
+---
+_Series planning document - Updates weekly_

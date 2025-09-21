@@ -5,10 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
-<meta name="description" content="Real-world insights from managing Cisco Identity Services Engine in production environments for nearly a decade">
-<meta name="keywords" content="ISE, Cisco, Network Security, 802.1X, RADIUS, TACACS+">
 <meta name="author" content="Evan Rosado">
-<title>Nine Years of ISE: Lessons from the Trenches</title>
+<title>Tech Blog: Production Knowledge Repository</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -560,7 +558,7 @@ pre.rouge .gs {
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Nine Years of ISE: Lessons from the Trenches</h1>
+<h1>Tech Blog: Production Knowledge Repository</h1>
 <div class="details">
 <span id="author" class="author">Evan Rosado</span><br>
 <span id="email" class="email"><a href="mailto:evan.rosado@outlook.com">evan.rosado@outlook.com</a></span><br>
@@ -569,218 +567,109 @@ pre.rouge .gs {
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a></li>
-<li><a href="#_the_evolution_ive_witnessed">2. The Evolution I&#8217;ve Witnessed</a>
+<li><a href="#_what_this_is">1. What This Is</a></li>
+<li><a href="#_quick_start">2. Quick Start</a>
 <ul class="sectlevel2">
-<li><a href="#_from_appliances_to_virtual_to_cloud">2.1. From Appliances to Virtual to Cloud</a></li>
+<li><a href="#_view_blog_locally">2.1. View Blog Locally</a></li>
+<li><a href="#_convert_after_updates">2.2. Convert After Updates</a></li>
+<li><a href="#_publish_to_github_pages">2.3. Publish to GitHub Pages</a></li>
 </ul>
 </li>
-<li><a href="#_hard_earned_lessons">3. Hard-Earned Lessons</a>
+<li><a href="#_directory_structure">3. Directory Structure</a></li>
+<li><a href="#_use_cases">4. Use Cases</a>
 <ul class="sectlevel2">
-<li><a href="#_lesson_1_scale_isnt_just_about_node_count">3.1. Lesson 1: Scale Isn&#8217;t Just About Node Count</a></li>
-<li><a href="#_lesson_2_the_rfc_knowledge_that_actually_matters">3.2. Lesson 2: The RFC Knowledge That Actually Matters</a></li>
-<li><a href="#_lesson_3_posture_assessment_reality">3.3. Lesson 3: Posture Assessment Reality</a></li>
+<li><a href="#_use_case_1_writing_new_ise_post">4.1. Use Case 1: Writing New ISE Post</a></li>
+<li><a href="#_use_case_2_working_on_draft">4.2. Use Case 2: Working on Draft</a></li>
+<li><a href="#_use_case_3_creating_series">4.3. Use Case 3: Creating Series</a></li>
+<li><a href="#_use_case_4_adding_diagrams">4.4. Use Case 4: Adding Diagrams</a></li>
 </ul>
 </li>
-<li><a href="#_the_architecture_that_actually_works">4. The Architecture That Actually Works</a>
+<li><a href="#_current_content">5. Current Content</a>
 <ul class="sectlevel2">
-<li><a href="#_distributed_deployment_model">4.1. Distributed Deployment Model</a></li>
+<li><a href="#_published_posts_6">5.1. Published Posts (6)</a></li>
+<li><a href="#_drafts_1">5.2. Drafts (1)</a></li>
+<li><a href="#_series_1">5.3. Series (1)</a></li>
 </ul>
 </li>
-<li><a href="#_automation_the_force_multiplier">5. Automation: The Force Multiplier</a>
+<li><a href="#_writing_workflow">6. Writing Workflow</a>
 <ul class="sectlevel2">
-<li><a href="#_infrastructure_as_code_for_ise">5.1. Infrastructure as Code for ISE</a></li>
-<li><a href="#_python_scripts_for_daily_operations">5.2. Python Scripts for Daily Operations</a></li>
+<li><a href="#_daily_workflow">6.1. Daily Workflow</a></li>
+<li><a href="#_publishing_checklist">6.2. Publishing Checklist</a></li>
 </ul>
 </li>
-<li><a href="#_performance_tuning_that_matters">6. Performance Tuning That Matters</a>
+<li><a href="#_technical_details">7. Technical Details</a>
 <ul class="sectlevel2">
-<li><a href="#_database_optimization">6.1. Database Optimization</a></li>
-<li><a href="#_radius_configuration_optimization">6.2. RADIUS Configuration Optimization</a></li>
+<li><a href="#_asciidoc_features_used">7.1. AsciiDoc Features Used</a></li>
+<li><a href="#_naming_convention">7.2. Naming Convention</a></li>
+<li><a href="#_conversion_tools">7.3. Conversion Tools</a></li>
 </ul>
 </li>
-<li><a href="#_integration_patterns_that_scale">7. Integration Patterns That Scale</a>
+<li><a href="#_maintenance">8. Maintenance</a>
 <ul class="sectlevel2">
-<li><a href="#_pxgrid_integration_architecture">7.1. pxGrid Integration Architecture</a></li>
+<li><a href="#_update_html_after_changes">8.1. Update HTML After Changes</a></li>
+<li><a href="#_backup">8.2. Backup</a></li>
 </ul>
 </li>
-<li><a href="#_what_i_wish_id_known_earlier">8. What I Wish I&#8217;d Known Earlier</a>
-<ul class="sectlevel2">
-<li><a href="#_the_hidden_costs">8.1. The Hidden Costs</a></li>
-<li><a href="#_the_unwritten_best_practices">8.2. The Unwritten Best Practices</a></li>
-</ul>
-</li>
-<li><a href="#_looking_forward_ise_in_2025_and_beyond">9. Looking Forward: ISE in 2025 and Beyond</a></li>
-<li><a href="#_conclusion">10. Conclusion</a></li>
+<li><a href="#_problems_this_solves">9. Problems This Solves</a></li>
+<li><a href="#_next_steps">10. Next Steps</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_what_this_is">1. What This Is</h2>
 <div class="sectionbody">
-<div class="quoteblock abstract">
-<blockquote>
 <div class="paragraph">
-<p>After nine years of designing, deploying, and managing Cisco Identity Services Engine (ISE) in enterprise environments, I&#8217;ve accumulated insights that go beyond the documentation. This post shares practical lessons learned from thousands of hours in production environments.</p>
-</div>
-</blockquote>
+<p>My personal technical blog documenting 9 years of production experience with Cisco ISE, network automation, and the transition from network engineering to full-stack development. Real configurations, actual code, lessons learned.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_introduction">1. Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>When I first encountered Cisco ISE in 2016, it was version 2.1, and the product was still finding its identity (pun intended). Fast forward to 2025, and I&#8217;ve shepherded ISE deployments through multiple major versions, architectural changes, and countless midnight troubleshooting sessions. This isn&#8217;t another "how to configure ISE" guide—it&#8217;s a reflection on what actually matters when you&#8217;re responsible for identity services in production.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_evolution_ive_witnessed">2. The Evolution I&#8217;ve Witnessed</h2>
+<h2 id="_quick_start">2. Quick Start</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_from_appliances_to_virtual_to_cloud">2.1. From Appliances to Virtual to Cloud</h3>
-<div class="paragraph">
-<p>My ISE journey began with physical appliances—the SNS-3415 and SNS-3495 series. The migration to virtual appliances around ISE 2.3 was transformative, not just technically but operationally. Today&#8217;s cloud-ready ISE 3.x bears little resemblance to those early deployments, yet the core challenges remain surprisingly consistent.</p>
-</div>
+<h3 id="_view_blog_locally">2.1. View Blog Locally</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="c1"># Evolution of my ISE deployments</span>
-<span class="na">2016</span><span class="pi">:</span> <span class="s">Physical appliances, 2-node deployment, 5,000 endpoints</span>
-<span class="na">2018</span><span class="pi">:</span> <span class="s">Virtual appliances, 4-node deployment, 15,000 endpoints</span>
-<span class="na">2020</span><span class="pi">:</span> <span class="s">Distributed deployment, 8 nodes across 3 sites, 30,000 endpoints</span>
-<span class="na">2023</span><span class="pi">:</span> <span class="s">Hybrid cloud/on-prem, 12 nodes, 50,000+ endpoints</span>
-<span class="na">2025</span><span class="pi">:</span> <span class="s">Full automation with Terraform, handling 75,000+ endpoints</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_hard_earned_lessons">3. Hard-Earned Lessons</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_lesson_1_scale_isnt_just_about_node_count">3.1. Lesson 1: Scale Isn&#8217;t Just About Node Count</h3>
-<div class="paragraph">
-<p>Early in my ISE career, I believed that scaling meant adding more Policy Service Nodes (PSNs). Reality taught me differently. True scale comes from:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Intelligent profiling policies</strong> that reduce unnecessary authentications</p>
-</li>
-<li>
-<p><strong>Optimized authorization policies</strong> that minimize rule evaluation time</p>
-</li>
-<li>
-<p><strong>Strategic placement of PSNs</strong> relative to network topology</p>
-</li>
-<li>
-<p><strong>Proper log collection architecture</strong> that doesn&#8217;t overwhelm MnT nodes</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_lesson_2_the_rfc_knowledge_that_actually_matters">3.2. Lesson 2: The RFC Knowledge That Actually Matters</h3>
-<div class="paragraph">
-<p>While studying for certifications, I memorized RFC 2865 (RADIUS) and RFC 3580 (802.1X). But production taught me that understanding these specific sections actually matters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>RFC 3748, Section 4</strong>: EAP packet format - crucial for troubleshooting authentication failures</p>
-</li>
-<li>
-<p><strong>RFC 3579, Section 2.1</strong>: RADIUS attributes for 802.1X - essential for authorization profiles</p>
-</li>
-<li>
-<p><strong>RFC 6614</strong>: RADIUS over TLS - increasingly important for cloud deployments</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="asciidoc">.Real-world RFC application
-When troubleshooting RADIUS packet drops, understanding RFC 2865 Section 3
-(Packet Format) helped identify MTU issues that weren't obvious from ISE logs.
-The 4096-byte maximum RADIUS packet size was being exceeded due to excessive
-authorization attributes.</code></pre>
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Open the HTML index to browse all posts</span>
+firefox html_output/index.html
+<span class="c"># or</span>
+chrome html_output/index.html</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_lesson_3_posture_assessment_reality">3.3. Lesson 3: Posture Assessment Reality</h3>
-<div class="paragraph">
-<p>The marketing materials make posture assessment seem straightforward. Reality is more nuanced:</p>
-</div>
+<h3 id="_convert_after_updates">2.2. Convert After Updates</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="c1"># Simplified posture decision logic I've implemented
-</span><span class="k">def</span> <span class="nf">assess_endpoint_risk</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
-    <span class="sh">"""</span><span class="s">
-    Real-world posture assessment considers more than just compliance
-    </span><span class="sh">"""</span>
-    <span class="n">factors</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="sh">'</span><span class="s">patch_level</span><span class="sh">'</span><span class="p">:</span> <span class="nf">check_patch_status</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
-        <span class="sh">'</span><span class="s">antivirus</span><span class="sh">'</span><span class="p">:</span> <span class="nf">check_av_status</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
-        <span class="sh">'</span><span class="s">disk_encryption</span><span class="sh">'</span><span class="p">:</span> <span class="nf">check_encryption</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
-        <span class="sh">'</span><span class="s">certificate_validity</span><span class="sh">'</span><span class="p">:</span> <span class="nf">check_cert_chain</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
-        <span class="sh">'</span><span class="s">behavioral_anomalies</span><span class="sh">'</span><span class="p">:</span> <span class="nf">check_baseline_deviation</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-    <span class="p">}</span>
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Convert all posts and regenerate index</span>
+./convert.sh
 
-    <span class="c1"># Weighted risk scoring based on environment
-</span>    <span class="n">risk_score</span> <span class="o">=</span> <span class="nf">calculate_weighted_risk</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
-
-    <span class="c1"># Business logic often overrides technical assessment
-</span>    <span class="k">if</span> <span class="n">device</span><span class="p">.</span><span class="n">owner</span> <span class="ow">in</span> <span class="n">vip_users</span> <span class="ow">and</span> <span class="n">risk_score</span> <span class="o">&lt;</span> <span class="n">critical_threshold</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sh">'</span><span class="s">conditional_access</span><span class="sh">'</span>
-
-    <span class="k">return</span> <span class="nf">determine_access_level</span><span class="p">(</span><span class="n">risk_score</span><span class="p">)</span></code></pre>
+<span class="c"># Convert single post</span>
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor <span class="se">\</span>
+  <span class="nt">-D</span> html_output/ <span class="se">\</span>
+  01_POSTS/2025-POST-ISE-001-nine-years-of-ise.adoc</code></pre>
 </div>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_architecture_that_actually_works">4. The Architecture That Actually Works</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>After numerous iterations, I&#8217;ve found this architecture pattern works consistently:</p>
 </div>
 <div class="sect2">
-<h3 id="_distributed_deployment_model">4.1. Distributed Deployment Model</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="asciidoc">                           [PAN/MnT Primary]
-                                  |
-                    +-------------+-------------+
-                    |                           |
-              [PAN Secondary]           [MnT Secondary]
-                    |                           |
-        +-----------+-----------+               |
-        |           |           |               |
-    [PSN-DC1]   [PSN-DC2]   [PSN-DMZ]    [pxGrid Node]
-        |           |           |               |
-    [10k endpoints] [10k endpoints] [Guest/BYOD] [Ecosystem]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Key insights from this architecture:</p>
-</div>
+<h3 id="_publish_to_github_pages">2.3. Publish to GitHub Pages</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Separate your personas</strong> - Don&#8217;t run all services on all nodes</p>
+<p>Push changes to GitHub: <code>git push origin main</code></p>
 </li>
 <li>
-<p><strong>Dedicated pxGrid nodes</strong> for ecosystem integrations</p>
+<p>Go to GitHub → Actions tab</p>
 </li>
 <li>
-<p><strong>DMZ PSNs</strong> for guest and BYOD to isolate risk</p>
+<p>Click "Publish Blog" workflow</p>
 </li>
 <li>
-<p><strong>Geographic distribution</strong> that aligns with your WAN topology</p>
+<p>Click "Run workflow"</p>
+</li>
+<li>
+<p>Blog publishes to: <code>https://[username].github.io/tech-blog</code></p>
 </li>
 </ol>
 </div>
@@ -788,277 +677,395 @@ authorization attributes.</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_automation_the_force_multiplier">5. Automation: The Force Multiplier</h2>
+<h2 id="_directory_structure">3. Directory Structure</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>By year five, I realized that manual ISE management doesn&#8217;t scale. Here&#8217;s the automation framework I&#8217;ve developed:</p>
-</div>
-<div class="sect2">
-<h3 id="_infrastructure_as_code_for_ise">5.1. Infrastructure as Code for ISE</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="hcl"><span class="c1"># Terraform configuration for ISE deployment</span>
-<span class="nx">resource</span> <span class="s2">"ise_network_device"</span> <span class="s2">"branch_switch"</span> <span class="p">{</span>
-  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">branch_switches</span>
+<pre class="rouge highlight"><code data-lang="text">tech-blog/
+├── 01_POSTS/           # Completed posts ready to publish
+│   ├── ISE posts       # 9 years of ISE experience
+│   ├── Development     # Full-stack journey
+│   └── Infrastructure  # Automation, IaC
+├── 02_DRAFTS/          # Work in progress
+├── 03_SERIES/          # Multi-part article series
+├── 04_ASSETS/          # Images, diagrams, code outputs
+├── 05_TEMPLATES/       # Post templates
+├── html_output/        # Converted HTML files
+│   ├── index.html      # Browse all posts
+│   └── *.html          # Individual post pages
+└── convert.sh          # Conversion script</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_use_cases">4. Use Cases</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_use_case_1_writing_new_ise_post">4.1. Use Case 1: Writing New ISE Post</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># 1. Create new post</span>
+<span class="nb">cp </span>05_TEMPLATES/post-template.adoc <span class="se">\</span>
+   01_POSTS/2025-POST-ISE-003-troubleshooting-radius.adoc
 
-  <span class="nx">name</span>        <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">key</span>
-  <span class="nx">description</span> <span class="o">=</span> <span class="s2">"Managed via Terraform - ${each.value.location}"</span>
+<span class="c"># 2. Write content</span>
+vim 01_POSTS/2025-POST-ISE-003-troubleshooting-radius.adoc
 
-  <span class="nx">ip_address</span>  <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">management_ip</span>
-  <span class="nx">mask</span>        <span class="o">=</span> <span class="mi">32</span>
+<span class="c"># 3. Preview locally</span>
+./convert.sh
+firefox html_output/index.html
 
-  <span class="nx">radius_shared_secret</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">vault_generic_secret</span><span class="p">.</span><span class="nx">radius</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">data</span><span class="p">[</span><span class="s2">"secret"</span><span class="p">]</span>
-
-  <span class="nx">device_groups</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"Location#${each.value.location}"</span><span class="p">,</span>
-    <span class="s2">"Device Type#Switches"</span><span class="p">,</span>
-    <span class="s2">"Deployment#Production"</span>
-  <span class="p">]</span>
-
-  <span class="nx">snmp_settings</span> <span class="p">{</span>
-    <span class="nx">enabled</span>  <span class="o">=</span> <span class="kc">true</span>
-    <span class="nx">version</span>  <span class="o">=</span> <span class="s2">"3"</span>
-    <span class="nx">username</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">vault_generic_secret</span><span class="p">.</span><span class="nx">snmp</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">data</span><span class="p">[</span><span class="s2">"username"</span><span class="p">]</span>
-  <span class="p">}</span>
-<span class="p">}</span></code></pre>
+<span class="c"># 4. When ready, commit and publish</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Add RADIUS troubleshooting guide"</span>
+git push
+<span class="c"># Then trigger GitHub Action</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_python_scripts_for_daily_operations">5.2. Python Scripts for Daily Operations</h3>
+<h3 id="_use_case_2_working_on_draft">4.2. Use Case 2: Working on Draft</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="c1"># ISE bulk operations script I use weekly
-</span><span class="kn">import</span> <span class="n">requests</span>
-<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
-<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># 1. Continue draft</span>
+vim 02_DRAFTS/2025-DRAFT-SEC-001-zero-trust-network-implementation.adoc
 
-<span class="k">class</span> <span class="nc">ISEManager</span><span class="p">:</span>
-    <span class="sh">"""</span><span class="s">Production-tested ISE management utilities</span><span class="sh">"""</span>
+<span class="c"># 2. Preview progress</span>
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor <span class="se">\</span>
+  <span class="nt">-D</span> html_output/drafts/ <span class="se">\</span>
+  02_DRAFTS/<span class="k">*</span>.adoc
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">servers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_init_session</span><span class="p">(</span><span class="n">credentials</span><span class="p">)</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">https://</span><span class="si">{</span><span class="n">servers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">:9060/ers</span><span class="sh">"</span>
+<span class="c"># 3. When complete, move to posts</span>
+<span class="nb">mv </span>02_DRAFTS/2025-DRAFT-SEC-001-<span class="k">*</span>.adoc <span class="se">\</span>
+   01_POSTS/2025-POST-SEC-001-zero-trust-network.adoc</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_case_3_creating_series">4.3. Use Case 3: Creating Series</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># 1. Plan series in 03_SERIES</span>
+vim 03_SERIES/2025-SERIES-PYTHON-001-network-automation-mastery.adoc
 
-    <span class="k">def</span> <span class="nf">bulk_endpoint_import</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">csv_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-        <span class="sh">"""</span><span class="s">
-        Import endpoints from CSV - handles 10,000+ at a time
-        </span><span class="sh">"""</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="sh">'</span><span class="s">success</span><span class="sh">'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="sh">'</span><span class="s">failed</span><span class="sh">'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="sh">'</span><span class="s">errors</span><span class="sh">'</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="c"># 2. Write individual parts</span>
+vim 01_POSTS/2025-POST-PYTHON-001-part1-fundamentals.adoc
+vim 01_POSTS/2025-POST-PYTHON-002-part2-device-communication.adoc
 
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="nf">iterrows</span><span class="p">():</span>
-            <span class="n">endpoint</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="sh">"</span><span class="s">ERSEndPoint</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="sh">'</span><span class="s">mac_address</span><span class="sh">'</span><span class="p">].</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s">:</span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">).</span><span class="nf">upper</span><span class="p">(),</span>
-                    <span class="sh">"</span><span class="s">mac</span><span class="sh">"</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="sh">'</span><span class="s">mac_address</span><span class="sh">'</span><span class="p">],</span>
-                    <span class="sh">"</span><span class="s">groupId</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_group_id</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="sh">'</span><span class="s">group</span><span class="sh">'</span><span class="p">]),</span>
-                    <span class="sh">"</span><span class="s">staticGroupAssignment</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="sh">"</span><span class="s">customAttributes</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="sh">"</span><span class="s">attributes</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="sh">"</span><span class="s">Owner</span><span class="sh">"</span><span class="p">:</span> <span class="n">row</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">owner</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Unknown</span><span class="sh">'</span><span class="p">),</span>
-                            <span class="sh">"</span><span class="s">Department</span><span class="sh">"</span><span class="p">:</span> <span class="n">row</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">department</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">IT</span><span class="sh">'</span><span class="p">),</span>
-                            <span class="sh">"</span><span class="s">AssetTag</span><span class="sh">"</span><span class="p">:</span> <span class="n">row</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">asset_tag</span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+<span class="c"># 3. Link them in series doc</span>
+<span class="c"># 4. Convert and preview</span>
+./convert.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_case_4_adding_diagrams">4.4. Use Case 4: Adding Diagrams</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># 1. Add diagram to assets</span>
+<span class="nb">cp</span> ~/my-diagram.svg 04_ASSETS/
 
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">base_url</span><span class="si">}</span><span class="s">/config/endpoint</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">json</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span>
-                    <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span><span class="p">:</span>
-                    <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">success</span><span class="sh">'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">failed</span><span class="sh">'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">errors</span><span class="sh">'</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="sh">'</span><span class="s">mac_address</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-            <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">failed</span><span class="sh">'</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">errors</span><span class="sh">'</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="sh">'</span><span class="s">mac_address</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="c"># 2. Reference in post</span>
+<span class="nb">echo</span> <span class="s1">'image::../04_ASSETS/my-diagram.svg[Architecture, 800, 600]'</span> <span class="o">&gt;&gt;</span> post.adoc
 
-        <span class="k">return</span> <span class="n">results</span></code></pre>
+<span class="c"># 3. Convert to see it embedded</span>
+./convert.sh</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_performance_tuning_that_matters">6. Performance Tuning That Matters</h2>
+<h2 id="_current_content">5. Current Content</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_database_optimization">6.1. Database Optimization</h3>
-<div class="paragraph">
-<p>After hitting performance walls around 30,000 endpoints, these database optimizations made the difference:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Custom indexes that significantly improved performance</span>
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx_radius_auth_time</span> <span class="k">ON</span> <span class="n">radius_authentication_log</span><span class="p">(</span><span class="nb">timestamp</span><span class="p">)</span>
-    <span class="k">WHERE</span> <span class="nb">timestamp</span> <span class="o">&gt;</span> <span class="k">CURRENT_DATE</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'7 days'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx_endpoint_mac_upper</span> <span class="k">ON</span> <span class="n">endpoints</span><span class="p">(</span><span class="k">UPPER</span><span class="p">(</span><span class="n">mac_address</span><span class="p">));</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx_posture_composite</span> <span class="k">ON</span> <span class="n">posture_assessment</span><span class="p">(</span>
-    <span class="n">endpoint_id</span><span class="p">,</span>
-    <span class="n">assessment_time</span><span class="p">,</span>
-    <span class="n">compliance_status</span>
-<span class="p">)</span> <span class="k">WHERE</span> <span class="n">compliance_status</span> <span class="o">!=</span> <span class="s1">'compliant'</span><span class="p">;</span></code></pre>
-</div>
-</div>
+<h3 id="_published_posts_6">5.1. Published Posts (6)</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Post</th>
+<th class="tableblock halign-left valign-top">Topic</th>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">HTML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-ISE-001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nine Years of ISE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-ISE-001-nine-years-of-ise.html">View</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-ISE-002</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ISE Automation Framework</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-ISE-002-automation-framework.html">View</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-DEV-001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Network Engineer to Full-Stack</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-DEV-001-network-engineer-to-fullstack.html">View</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-LINUX-001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arch Linux Workstation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-LINUX-001-arch-linux-workstation.html">View</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-VIM-001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Neovim Complete IDE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-VIM-001-neovim-complete-ide.html">View</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2025-POST-INFRA-001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Infrastructure as Code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓ Complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="html_output/2025-POST-INFRA-001-infrastructure-as-code.html">View</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
-<h3 id="_radius_configuration_optimization">6.2. RADIUS Configuration Optimization</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="text"># /etc/freeradius/radius.conf optimizations learned the hard way
-thread pool {
-    start_servers = 10      # Increased from default 5
-    max_servers = 64        # Increased from default 32
-    min_spare_servers = 5
-    max_spare_servers = 20
-    max_requests_per_server = 4096  # Prevent thread exhaustion
-}
-
-# Timeout adjustments for large deployments
-response_window = 30        # Increased from 20 for WAN sites
-zombie_period = 60          # Allows for network delays</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_integration_patterns_that_scale">7. Integration Patterns That Scale</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_pxgrid_integration_architecture">7.1. pxGrid Integration Architecture</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="k">class</span> <span class="nc">pxGridIntegration</span><span class="p">:</span>
-    <span class="sh">"""</span><span class="s">
-    Production pxGrid integration pattern
-    </span><span class="sh">"""</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">stomp_config</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="sh">'</span><span class="s">hosts</span><span class="sh">'</span><span class="p">:</span> <span class="p">[(</span><span class="sh">'</span><span class="s">ise-pxgrid-01.corp.local</span><span class="sh">'</span><span class="p">,</span> <span class="mi">8910</span><span class="p">)],</span>
-            <span class="sh">'</span><span class="s">use_ssl</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">ssl_version</span><span class="sh">'</span><span class="p">:</span> <span class="n">ssl</span><span class="p">.</span><span class="n">PROTOCOL_TLS</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">cert_file</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">/certs/client.crt</span><span class="sh">'</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">key_file</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">/certs/client.key</span><span class="sh">'</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">ca_certs</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">/certs/ca-bundle.crt</span><span class="sh">'</span>
-        <span class="p">}</span>
-
-    <span class="k">def</span> <span class="nf">subscribe_to_session_directory</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
-        <span class="sh">"""</span><span class="s">
-        Subscribe to session updates for real-time visibility
-        </span><span class="sh">"""</span>
-        <span class="n">subscription</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="sh">'</span><span class="s">topic</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">/topic/com.cisco.ise.session</span><span class="sh">'</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">filter</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
-                <span class="sh">'</span><span class="s">sessionState</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">STARTED</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">DISCONNECTED</span><span class="sh">'</span><span class="p">],</span>
-                <span class="sh">'</span><span class="s">nasIpAddress</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">monitored_devices</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">stomp_client</span><span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="n">subscription</span><span class="p">)</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_what_i_wish_id_known_earlier">8. What I Wish I&#8217;d Known Earlier</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_the_hidden_costs">8.1. The Hidden Costs</h3>
+<h3 id="_drafts_1">5.2. Drafts (1)</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Certificate management overhead</strong>: Budget 10-15% of your time for cert renewals</p>
-</li>
-<li>
-<p><strong>Upgrade windows</strong>: Major upgrades really do need 6-8 hour maintenance windows</p>
-</li>
-<li>
-<p><strong>Log storage</strong>: You&#8217;ll need 5x more storage than initially calculated</p>
-</li>
-<li>
-<p><strong>Training</strong>: Every team member needs at least basic ISE knowledge</p>
+<p>Zero Trust Network Implementation (40% complete)</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_unwritten_best_practices">8.2. The Unwritten Best Practices</h3>
+<h3 id="_series_1">5.3. Series (1)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Python Network Automation Mastery (8 parts planned)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_workflow">6. Writing Workflow</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_daily_workflow">6.1. Daily Workflow</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Morning: Review and plan</span>
+<span class="nb">ls</span> <span class="nt">-la</span> 02_DRAFTS/  <span class="c"># Check drafts</span>
+<span class="nb">grep</span> <span class="nt">-r</span> <span class="s2">"TODO"</span> 01_POSTS/ 02_DRAFTS/  <span class="c"># Find TODOs</span>
+
+<span class="c"># Write/Edit</span>
+vim 02_DRAFTS/current-post.adoc
+
+<span class="c"># Preview</span>
+./convert.sh
+firefox html_output/index.html
+
+<span class="c"># End of day: Commit</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Progress on [topic]"</span>
+git push</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_publishing_checklist">6.2. Publishing Checklist</h3>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-square-o"></i> Content technically accurate</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Code examples tested</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> No sensitive information</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Diagrams/assets included</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Links working</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Converted to HTML</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Reviewed in browser</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Committed to git</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> GitHub Action triggered</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_technical_details">7. Technical Details</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_asciidoc_features_used">7.1. AsciiDoc Features Used</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Source code highlighting</p>
+</li>
+<li>
+<p>Tables and diagrams</p>
+</li>
+<li>
+<p>Cross-references</p>
+</li>
+<li>
+<p>Table of contents</p>
+</li>
+<li>
+<p>Admonitions (NOTE, TIP, WARNING)</p>
+</li>
+<li>
+<p>Include files</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_naming_convention">7.2. Naming Convention</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="text">YYYY-POST-CATEGORY-NNN-description.adoc
+
+Categories:
+- ISE: Identity Services Engine
+- DEV: Development
+- SEC: Security
+- NET: Networking
+- LINUX: Linux/Unix
+- VIM: Vim/Neovim
+- PYTHON: Python
+- INFRA: Infrastructure</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conversion_tools">7.3. Conversion Tools</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Install asciidoctor</span>
+gem <span class="nb">install </span>asciidoctor
+gem <span class="nb">install </span>asciidoctor-rouge  <span class="c"># Syntax highlighting</span>
+
+<span class="c"># Location</span>
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maintenance">8. Maintenance</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_update_html_after_changes">8.1. Update HTML After Changes</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Always run after editing</span>
+./convert.sh
+
+<span class="c"># This:</span>
+<span class="c"># 1. Converts all .adoc to .html</span>
+<span class="c"># 2. Updates index.html</span>
+<span class="c"># 3. Preserves directory structure</span>
+<span class="c"># 4. Links everything properly</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_backup">8.2. Backup</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Regular backups</span>
+<span class="nb">tar</span> <span class="nt">-czf</span> blog-backup-<span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span>.tar.gz <span class="se">\</span>
+  01_POSTS/ 02_DRAFTS/ 03_SERIES/ 04_ASSETS/</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_problems_this_solves">9. Problems This Solves</h2>
+<div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Always maintain a lab ISE</strong> that mirrors production</p>
+<p><strong>Knowledge Documentation</strong>: 9 years of ISE experience documented</p>
 </li>
 <li>
-<p><strong>Script your backup verifications</strong> - don&#8217;t trust the GUI</p>
+<p><strong>Portfolio Building</strong>: Shows real production experience</p>
 </li>
 <li>
-<p><strong>Monitor RADIUS latency</strong>, not just availability</p>
+<p><strong>Knowledge Sharing</strong>: Helps others avoid my mistakes</p>
 </li>
 <li>
-<p><strong>Document your authorization logic</strong> outside of ISE</p>
+<p><strong>Career Growth</strong>: Documents journey from network to full-stack</p>
 </li>
 <li>
-<p><strong>Build device onboarding automation</strong> from day one</p>
+<p><strong>Technical Writing</strong>: Professional documentation practice</p>
 </li>
 </ol>
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="_looking_forward_ise_in_2025_and_beyond">9. Looking Forward: ISE in 2025 and Beyond</h2>
+<h2 id="_next_steps">10. Next Steps</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>As I write this in 2025, ISE has evolved into a platform that would seem like science fiction to my 2016 self. Cloud-native deployments, AI-assisted policy creation, and API-first architecture have transformed how we approach identity services.</p>
-</div>
-<div class="paragraph">
-<p>Yet the fundamentals remain:
-* Understand your network flows
-* Design for failure scenarios
-* Automate everything you do twice
-* Never stop learning</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_conclusion">10. Conclusion</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Nine years with ISE has taught me that expertise isn&#8217;t about knowing every feature—it&#8217;s about understanding which features matter for your environment and how to implement them reliably at scale. The RFCs, the late-night troubleshooting sessions, the failed upgrades that taught valuable lessons—they all contribute to a deeper understanding that goes beyond certification guides.</p>
-</div>
-<div class="paragraph">
-<p>For those starting their ISE journey: be patient, build a lab, and remember that every production issue is a learning opportunity. For veterans: keep pushing the boundaries of what&#8217;s possible with automation and integration.</p>
-</div>
-<div class="paragraph">
-<p>The identity services landscape will continue evolving, but the principles of good design, thorough testing, and continuous improvement remain constant.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Complete Zero Trust draft</p>
+</li>
+<li>
+<p>Start Python automation series Part 1</p>
+</li>
+<li>
+<p>Add more ISE troubleshooting guides</p>
+</li>
+<li>
+<p>Document Domus Digitalis architecture</p>
+</li>
+<li>
+<p>Create Terraform/Ansible tutorials</p>
+</li>
+</ol>
 </div>
 <hr>
 <div class="paragraph">
-<p><em>Next in this series: "ISE Performance Tuning: Beyond the Documentation" where I&#8217;ll share specific configurations and scripts that have solved real production performance issues.</em></p>
-</div>
-<div class="openblock small">
-<div class="content">
-<div class="paragraph">
-<p><strong>About the Author</strong>: Evan Rosado is a Network Engineer specializing in identity services and security architecture. With nine years of hands-on ISE experience and a passion for automation, he bridges the gap between traditional networking and modern DevOps practices.</p>
-</div>
-</div>
+<p><em>Real production knowledge. No fluff.</em></p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-20 18:05:00 -0700
+Last updated 2025-09-20 20:38:53 -0700
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>

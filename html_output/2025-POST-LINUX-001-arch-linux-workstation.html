@@ -437,6 +437,126 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge, pre.rouge .w {
+  color: #24292f;
+  background-color: #f6f8fa;
+}
+pre.rouge .k, pre.rouge .kd, pre.rouge .kn, pre.rouge .kp, pre.rouge .kr, pre.rouge .kt, pre.rouge .kv {
+  color: #cf222e;
+}
+pre.rouge .gr {
+  color: #f6f8fa;
+}
+pre.rouge .gd {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+pre.rouge .nb {
+  color: #953800;
+}
+pre.rouge .nc {
+  color: #953800;
+}
+pre.rouge .no {
+  color: #953800;
+}
+pre.rouge .nn {
+  color: #953800;
+}
+pre.rouge .sr {
+  color: #116329;
+}
+pre.rouge .na {
+  color: #116329;
+}
+pre.rouge .nt {
+  color: #116329;
+}
+pre.rouge .gi {
+  color: #116329;
+  background-color: #dafbe1;
+}
+pre.rouge .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .kc {
+  color: #0550ae;
+}
+pre.rouge .l, pre.rouge .ld, pre.rouge .m, pre.rouge .mb, pre.rouge .mf, pre.rouge .mh, pre.rouge .mi, pre.rouge .il, pre.rouge .mo, pre.rouge .mx {
+  color: #0550ae;
+}
+pre.rouge .sb {
+  color: #0550ae;
+}
+pre.rouge .bp {
+  color: #0550ae;
+}
+pre.rouge .ne {
+  color: #0550ae;
+}
+pre.rouge .nl {
+  color: #0550ae;
+}
+pre.rouge .py {
+  color: #0550ae;
+}
+pre.rouge .nv, pre.rouge .vc, pre.rouge .vg, pre.rouge .vi, pre.rouge .vm {
+  color: #0550ae;
+}
+pre.rouge .o, pre.rouge .ow {
+  color: #0550ae;
+}
+pre.rouge .gh {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .s, pre.rouge .sa, pre.rouge .sc, pre.rouge .dl, pre.rouge .sd, pre.rouge .s2, pre.rouge .se, pre.rouge .sh, pre.rouge .sx, pre.rouge .s1, pre.rouge .ss {
+  color: #0a3069;
+}
+pre.rouge .nd {
+  color: #8250df;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #8250df;
+}
+pre.rouge .err {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cm, pre.rouge .cp, pre.rouge .cpf, pre.rouge .c1, pre.rouge .cs {
+  color: #6e7781;
+}
+pre.rouge .gl {
+  color: #6e7781;
+}
+pre.rouge .gt {
+  color: #6e7781;
+}
+pre.rouge .ni {
+  color: #24292f;
+}
+pre.rouge .si {
+  color: #24292f;
+}
+pre.rouge .ge {
+  color: #24292f;
+  font-style: italic;
+}
+pre.rouge .gs {
+  color: #24292f;
+  font-weight: bold;
+}
+</style>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -449,69 +569,69 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">Introduction</a></li>
-<li><a href="#_why_arch_linux_for_professional_development">Why Arch Linux for Professional Development</a>
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_why_arch_linux_for_professional_development">2. Why Arch Linux for Professional Development</a>
 <ul class="sectlevel2">
-<li><a href="#_the_case_for_arch">The Case for Arch</a></li>
-<li><a href="#_my_setup_overview">My Setup Overview</a></li>
+<li><a href="#_the_case_for_arch">2.1. The Case for Arch</a></li>
+<li><a href="#_my_setup_overview">2.2. My Setup Overview</a></li>
 </ul>
 </li>
-<li><a href="#_installation_and_base_configuration">Installation and Base Configuration</a>
+<li><a href="#_installation_and_base_configuration">3. Installation and Base Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_wsl2_arch_installation">WSL2 Arch Installation</a></li>
-<li><a href="#_essential_system_configuration">Essential System Configuration</a></li>
-<li><a href="#_core_package_installation">Core Package Installation</a></li>
+<li><a href="#_wsl2_arch_installation">3.1. WSL2 Arch Installation</a></li>
+<li><a href="#_essential_system_configuration">3.2. Essential System Configuration</a></li>
+<li><a href="#_core_package_installation">3.3. Core Package Installation</a></li>
 </ul>
 </li>
-<li><a href="#_shell_environment_configuration">Shell Environment Configuration</a>
+<li><a href="#_shell_environment_configuration">4. Shell Environment Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_zsh_with_custom_framework">Zsh with Custom Framework</a></li>
+<li><a href="#_zsh_with_custom_framework">4.1. Zsh with Custom Framework</a></li>
 </ul>
 </li>
-<li><a href="#_terminal_multiplexer_setup">Terminal Multiplexer Setup</a>
+<li><a href="#_terminal_multiplexer_setup">5. Terminal Multiplexer Setup</a>
 <ul class="sectlevel2">
-<li><a href="#_tmux_configuration_for_development">Tmux Configuration for Development</a></li>
-<li><a href="#_tmux_session_templates">Tmux Session Templates</a></li>
+<li><a href="#_tmux_configuration_for_development">5.1. Tmux Configuration for Development</a></li>
+<li><a href="#_tmux_session_templates">5.2. Tmux Session Templates</a></li>
 </ul>
 </li>
-<li><a href="#_development_environment_integration">Development Environment Integration</a>
+<li><a href="#_development_environment_integration">6. Development Environment Integration</a>
 <ul class="sectlevel2">
-<li><a href="#_docker_on_wsl2">Docker on WSL2</a></li>
-<li><a href="#_python_development_environment">Python Development Environment</a></li>
-<li><a href="#_node_js_and_javascript_setup">Node.js and JavaScript Setup</a></li>
+<li><a href="#_docker_on_wsl2">6.1. Docker on WSL2</a></li>
+<li><a href="#_python_development_environment">6.2. Python Development Environment</a></li>
+<li><a href="#_node_js_and_javascript_setup">6.3. Node.js and JavaScript Setup</a></li>
 </ul>
 </li>
-<li><a href="#_system_monitoring_and_management">System Monitoring and Management</a>
+<li><a href="#_system_monitoring_and_management">7. System Monitoring and Management</a>
 <ul class="sectlevel2">
-<li><a href="#_custom_monitoring_scripts">Custom Monitoring Scripts</a></li>
-<li><a href="#_backup_strategy">Backup Strategy</a></li>
+<li><a href="#_custom_monitoring_scripts">7.1. Custom Monitoring Scripts</a></li>
+<li><a href="#_backup_strategy">7.2. Backup Strategy</a></li>
 </ul>
 </li>
-<li><a href="#_security_hardening">Security Hardening</a>
+<li><a href="#_security_hardening">8. Security Hardening</a>
 <ul class="sectlevel2">
-<li><a href="#_system_security">System Security</a></li>
-<li><a href="#_development_security">Development Security</a></li>
+<li><a href="#_system_security">8.1. System Security</a></li>
+<li><a href="#_development_security">8.2. Development Security</a></li>
 </ul>
 </li>
-<li><a href="#_performance_optimization">Performance Optimization</a>
+<li><a href="#_performance_optimization">9. Performance Optimization</a>
 <ul class="sectlevel2">
-<li><a href="#_system_tuning">System Tuning</a></li>
-<li><a href="#_wsl2_specific_optimizations">WSL2 Specific Optimizations</a></li>
+<li><a href="#_system_tuning">9.1. System Tuning</a></li>
+<li><a href="#_wsl2_specific_optimizations">9.2. WSL2 Specific Optimizations</a></li>
 </ul>
 </li>
-<li><a href="#_troubleshooting_common_issues">Troubleshooting Common Issues</a>
+<li><a href="#_troubleshooting_common_issues">10. Troubleshooting Common Issues</a>
 <ul class="sectlevel2">
-<li><a href="#_wsl2_network_issues">WSL2 Network Issues</a></li>
-<li><a href="#_package_management_issues">Package Management Issues</a></li>
+<li><a href="#_wsl2_network_issues">10.1. WSL2 Network Issues</a></li>
+<li><a href="#_package_management_issues">10.2. Package Management Issues</a></li>
 </ul>
 </li>
-<li><a href="#_my_daily_workflow">My Daily Workflow</a>
+<li><a href="#_my_daily_workflow">11. My Daily Workflow</a>
 <ul class="sectlevel2">
-<li><a href="#_morning_routine">Morning Routine</a></li>
-<li><a href="#_project_organization">Project Organization</a></li>
+<li><a href="#_morning_routine">11.1. Morning Routine</a></li>
+<li><a href="#_project_organization">11.2. Project Organization</a></li>
 </ul>
 </li>
-<li><a href="#_conclusion">Conclusion</a></li>
+<li><a href="#_conclusion">12. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -528,7 +648,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_introduction">Introduction</h2>
+<h2 id="_introduction">1. Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Arch Linux&#8217;s philosophy of simplicity and user control aligns perfectly with engineering mindsets. You build exactly what you need—no more, no less. After three years of daily driving Arch for network automation and full-stack development, I&#8217;ve developed a setup that&#8217;s both minimal and powerful.</p>
@@ -539,10 +659,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_why_arch_linux_for_professional_development">Why Arch Linux for Professional Development</h2>
+<h2 id="_why_arch_linux_for_professional_development">2. Why Arch Linux for Professional Development</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_the_case_for_arch">The Case for Arch</h3>
+<h3 id="_the_case_for_arch">2.1. The Case for Arch</h3>
 <div class="paragraph">
 <p>Working in enterprise environments taught me that understanding your tools completely is non-negotiable. Arch forces this understanding:</p>
 </div>
@@ -567,126 +687,126 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_my_setup_overview">My Setup Overview</h3>
+<h3 id="_my_setup_overview">2.2. My Setup Overview</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml">environment:
-  host: Windows 11 Professional
-  virtualization: WSL2
-  distro: Arch Linux
-  kernel: 6.6.87.2-microsoft-standard-WSL2
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">environment</span><span class="pi">:</span>
+  <span class="na">host</span><span class="pi">:</span> <span class="s">Windows 11 Professional</span>
+  <span class="na">virtualization</span><span class="pi">:</span> <span class="s">WSL2</span>
+  <span class="na">distro</span><span class="pi">:</span> <span class="s">Arch Linux</span>
+  <span class="na">kernel</span><span class="pi">:</span> <span class="s">6.6.87.2-microsoft-standard-WSL2</span>
 
-workloads:
-  - network_automation:
-      - Python scripts for ISE management
-      - Ansible playbooks for infrastructure
-      - Terraform for cloud resources
+<span class="na">workloads</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">network_automation</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">Python scripts for ISE management</span>
+      <span class="pi">-</span> <span class="s">Ansible playbooks for infrastructure</span>
+      <span class="pi">-</span> <span class="s">Terraform for cloud resources</span>
 
-  - full_stack_development:
-      - Next.js/React applications
-      - Node.js backend services
-      - PostgreSQL databases
-      - Redis caching layers
+  <span class="pi">-</span> <span class="na">full_stack_development</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">Next.js/React applications</span>
+      <span class="pi">-</span> <span class="s">Node.js backend services</span>
+      <span class="pi">-</span> <span class="s">PostgreSQL databases</span>
+      <span class="pi">-</span> <span class="s">Redis caching layers</span>
 
-  - security_operations:
-      - Network packet analysis
-      - Certificate management
-      - Vulnerability scanning</code></pre>
+  <span class="pi">-</span> <span class="na">security_operations</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">Network packet analysis</span>
+      <span class="pi">-</span> <span class="s">Certificate management</span>
+      <span class="pi">-</span> <span class="s">Vulnerability scanning</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_installation_and_base_configuration">Installation and Base Configuration</h2>
+<h2 id="_installation_and_base_configuration">3. Installation and Base Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_wsl2_arch_installation">WSL2 Arch Installation</h3>
+<h3 id="_wsl2_arch_installation">3.1. WSL2 Arch Installation</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Download Arch bootstrap
-curl -L https://github.com/yuk7/ArchWSL/releases/latest/download/Arch.zip -o Arch.zip
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Download Arch bootstrap</span>
+curl <span class="nt">-L</span> https://github.com/yuk7/ArchWSL/releases/latest/download/Arch.zip <span class="nt">-o</span> Arch.zip
 
-# Extract and install
+<span class="c"># Extract and install</span>
 unzip Arch.zip
 ./Arch.exe
 
-# Initial setup inside Arch
+<span class="c"># Initial setup inside Arch</span>
 passwd
-echo "%wheel ALL=(ALL) ALL" &gt; /etc/sudoers.d/wheel
-useradd -m -G wheel -s /bin/zsh evanusmodestus
+<span class="nb">echo</span> <span class="s2">"%wheel ALL=(ALL) ALL"</span> <span class="o">&gt;</span> /etc/sudoers.d/wheel
+useradd <span class="nt">-m</span> <span class="nt">-G</span> wheel <span class="nt">-s</span> /bin/zsh evanusmodestus
 passwd evanusmodestus
 
-# Initialize keyring
-pacman-key --init
-pacman-key --populate
-pacman -Sy archlinux-keyring
-pacman -Su</code></pre>
+<span class="c"># Initialize keyring</span>
+pacman-key <span class="nt">--init</span>
+pacman-key <span class="nt">--populate</span>
+pacman <span class="nt">-Sy</span> archlinux-keyring
+pacman <span class="nt">-Su</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_essential_system_configuration">Essential System Configuration</h3>
+<h3 id="_essential_system_configuration">3.2. Essential System Configuration</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># /etc/pacman.conf optimizations
-[options]
-HoldPkg     = pacman glibc
-Architecture = auto
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># /etc/pacman.conf optimizations</span>
+<span class="o">[</span>options]
+HoldPkg     <span class="o">=</span> pacman glibc
+Architecture <span class="o">=</span> auto
 Color
 CheckSpace
 VerbosePkgLists
-ParallelDownloads = 5
-ILoveCandy  # Yes, really - adds a pacman animation
+ParallelDownloads <span class="o">=</span> 5
+ILoveCandy  <span class="c"># Yes, really - adds a pacman animation</span>
 
-# Multilib for compatibility
-[multilib]
-Include = /etc/pacman.d/mirrorlist
+<span class="c"># Multilib for compatibility</span>
+<span class="o">[</span>multilib]
+Include <span class="o">=</span> /etc/pacman.d/mirrorlist
 
-# Faster mirrors
-sudo pacman -S reflector
-sudo reflector --country US --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist</code></pre>
+<span class="c"># Faster mirrors</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> reflector
+<span class="nb">sudo </span>reflector <span class="nt">--country</span> US <span class="nt">--age</span> 12 <span class="nt">--protocol</span> https <span class="nt">--sort</span> rate <span class="nt">--save</span> /etc/pacman.d/mirrorlist</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_core_package_installation">Core Package Installation</h3>
+<h3 id="_core_package_installation">3.3. Core Package Installation</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Development essentials
-sudo pacman -S --needed \
-  base-devel git vim neovim \
-  python python-pip \
-  nodejs npm yarn \
-  docker docker-compose \
-  postgresql redis \
-  tmux zsh fzf ripgrep \
-  htop btop ncdu \
-  openssh openssl \
-  wget curl jq \
-  man-db man-pages \
-  gcc clang cmake \
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Development essentials</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> <span class="nt">--needed</span> <span class="se">\</span>
+  base-devel git vim neovim <span class="se">\</span>
+  python python-pip <span class="se">\</span>
+  nodejs npm yarn <span class="se">\</span>
+  docker docker-compose <span class="se">\</span>
+  postgresql redis <span class="se">\</span>
+  tmux zsh fzf ripgrep <span class="se">\</span>
+  htop btop ncdu <span class="se">\</span>
+  openssh openssl <span class="se">\</span>
+  wget curl jq <span class="se">\</span>
+  man-db man-pages <span class="se">\</span>
+  gcc clang cmake <span class="se">\</span>
   go rust
 
-# Network tools for infrastructure work
-sudo pacman -S --needed \
-  net-tools iproute2 \
-  tcpdump wireshark-cli \
-  nmap netcat \
-  bind-tools \
-  openvpn wireguard-tools \
+<span class="c"># Network tools for infrastructure work</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> <span class="nt">--needed</span> <span class="se">\</span>
+  net-tools iproute2 <span class="se">\</span>
+  tcpdump wireshark-cli <span class="se">\</span>
+  nmap netcat <span class="se">\</span>
+  bind-tools <span class="se">\</span>
+  openvpn wireguard-tools <span class="se">\</span>
   ansible terraform
 
-# AUR helper for extended packages
+<span class="c"># AUR helper for extended packages</span>
 git clone https://aur.archlinux.org/yay.git
-cd yay &amp;&amp; makepkg -si
+<span class="nb">cd </span>yay <span class="o">&amp;&amp;</span> makepkg <span class="nt">-si</span>
 
-# AUR packages
-yay -S --needed \
-  azure-cli-bin \
-  kubectl-bin \
-  helm-bin \
-  lazygit-bin \
+<span class="c"># AUR packages</span>
+yay <span class="nt">-S</span> <span class="nt">--needed</span> <span class="se">\</span>
+  azure-cli-bin <span class="se">\</span>
+  kubectl-bin <span class="se">\</span>
+  helm-bin <span class="se">\</span>
+  lazygit-bin <span class="se">\</span>
   lazydocker-bin</code></pre>
 </div>
 </div>
@@ -694,211 +814,211 @@ yay -S --needed \
 </div>
 </div>
 <div class="sect1">
-<h2 id="_shell_environment_configuration">Shell Environment Configuration</h2>
+<h2 id="_shell_environment_configuration">4. Shell Environment Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_zsh_with_custom_framework">Zsh with Custom Framework</h3>
+<h3 id="_zsh_with_custom_framework">4.1. Zsh with Custom Framework</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># ~/.zshrc - Optimized for development
-export ZDOTDIR="${HOME}/.config/zsh"
-export HISTFILE="${ZDOTDIR}/.zsh_history"
-export HISTSIZE=50000
-export SAVEHIST=50000
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># ~/.zshrc - Optimized for development</span>
+<span class="nb">export </span><span class="nv">ZDOTDIR</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">HOME</span><span class="k">}</span><span class="s2">/.config/zsh"</span>
+<span class="nb">export </span><span class="nv">HISTFILE</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">ZDOTDIR</span><span class="k">}</span><span class="s2">/.zsh_history"</span>
+<span class="nb">export </span><span class="nv">HISTSIZE</span><span class="o">=</span>50000
+<span class="nb">export </span><span class="nv">SAVEHIST</span><span class="o">=</span>50000
 
-# Performance optimizations
-zmodload zsh/zprof  # Profiling
-autoload -Uz compinit &amp;&amp; compinit -C  # Faster completion
+<span class="c"># Performance optimizations</span>
+zmodload zsh/zprof  <span class="c"># Profiling</span>
+autoload <span class="nt">-Uz</span> compinit <span class="o">&amp;&amp;</span> compinit <span class="nt">-C</span>  <span class="c"># Faster completion</span>
 
-# Plugin management without Oh-My-Zsh
-ZPLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+<span class="c"># Plugin management without Oh-My-Zsh</span>
+<span class="nv">ZPLUGIN_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">XDG_DATA_HOME</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/.local/share</span><span class="k">}</span><span class="s2">/zsh/plugins"</span>
 
-# Load plugins
-for plugin in zsh-autosuggestions zsh-syntax-highlighting zsh-completions; do
-  [[ -d "$ZPLUGIN_DIR/$plugin" ]] &amp;&amp; source "$ZPLUGIN_DIR/$plugin/$plugin.zsh"
-done
+<span class="c"># Load plugins</span>
+<span class="k">for </span>plugin <span class="k">in </span>zsh-autosuggestions zsh-syntax-highlighting zsh-completions<span class="p">;</span> <span class="k">do</span>
+  <span class="o">[[</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$ZPLUGIN_DIR</span><span class="s2">/</span><span class="nv">$plugin</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">"</span><span class="nv">$ZPLUGIN_DIR</span><span class="s2">/</span><span class="nv">$plugin</span><span class="s2">/</span><span class="nv">$plugin</span><span class="s2">.zsh"</span>
+<span class="k">done</span>
 
-# Custom prompt showing git status and Python venv
+<span class="c"># Custom prompt showing git status and Python venv</span>
 setopt PROMPT_SUBST
-PROMPT='%F{cyan}%n@%m%f %F{blue}%~%f $(git_prompt_info)$(venv_prompt_info)
-%F{green}❯%f '
+<span class="nv">PROMPT</span><span class="o">=</span><span class="s1">'%F{cyan}%n@%m%f %F{blue}%~%f $(git_prompt_info)$(venv_prompt_info)
+%F{green}❯%f '</span>
 
-git_prompt_info() {
-  local branch=$(git branch --show-current 2&gt;/dev/null)
-  [[ -n $branch ]] &amp;&amp; echo " %F{magenta}($branch)%f"
-}
+git_prompt_info<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local </span><span class="nv">branch</span><span class="o">=</span><span class="si">$(</span>git branch <span class="nt">--show-current</span> 2&gt;/dev/null<span class="si">)</span>
+  <span class="o">[[</span> <span class="nt">-n</span> <span class="nv">$branch</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">" %F{magenta}(</span><span class="nv">$branch</span><span class="s2">)%f"</span>
+<span class="o">}</span>
 
-venv_prompt_info() {
-  [[ -n $VIRTUAL_ENV ]] &amp;&amp; echo " %F{yellow}[$(basename $VIRTUAL_ENV)]%f"
-}
+venv_prompt_info<span class="o">()</span> <span class="o">{</span>
+  <span class="o">[[</span> <span class="nt">-n</span> <span class="nv">$VIRTUAL_ENV</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">" %F{yellow}[</span><span class="si">$(</span><span class="nb">basename</span> <span class="nv">$VIRTUAL_ENV</span><span class="si">)</span><span class="s2">]%f"</span>
+<span class="o">}</span>
 
-# Productivity aliases
-alias ll='ls -lah'
-alias vim='nvim'
-alias gs='git status'
-alias gd='git diff'
-alias gc='git commit'
-alias gp='git push'
-alias docker-clean='docker system prune -af'
-alias k='kubectl'
-alias tf='terraform'
+<span class="c"># Productivity aliases</span>
+<span class="nb">alias </span><span class="nv">ll</span><span class="o">=</span><span class="s1">'ls -lah'</span>
+<span class="nb">alias </span><span class="nv">vim</span><span class="o">=</span><span class="s1">'nvim'</span>
+<span class="nb">alias </span><span class="nv">gs</span><span class="o">=</span><span class="s1">'git status'</span>
+<span class="nb">alias </span><span class="nv">gd</span><span class="o">=</span><span class="s1">'git diff'</span>
+<span class="nb">alias </span><span class="nv">gc</span><span class="o">=</span><span class="s1">'git commit'</span>
+<span class="nb">alias </span><span class="nv">gp</span><span class="o">=</span><span class="s1">'git push'</span>
+<span class="nb">alias </span>docker-clean<span class="o">=</span><span class="s1">'docker system prune -af'</span>
+<span class="nb">alias </span><span class="nv">k</span><span class="o">=</span><span class="s1">'kubectl'</span>
+<span class="nb">alias </span><span class="nv">tf</span><span class="o">=</span><span class="s1">'terraform'</span>
 
-# Network engineering aliases
-alias sshi='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias ansible-lab='ansible-playbook -i inventory/lab'
-alias ise-backup='python3 ~/scripts/ise-backup.py'
-alias pcap='tcpdump -i any -w /tmp/capture-$(date +%Y%m%d-%H%M%S).pcap'
+<span class="c"># Network engineering aliases</span>
+<span class="nb">alias </span><span class="nv">sshi</span><span class="o">=</span><span class="s1">'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'</span>
+<span class="nb">alias </span>ansible-lab<span class="o">=</span><span class="s1">'ansible-playbook -i inventory/lab'</span>
+<span class="nb">alias </span>ise-backup<span class="o">=</span><span class="s1">'python3 ~/scripts/ise-backup.py'</span>
+<span class="nb">alias </span><span class="nv">pcap</span><span class="o">=</span><span class="s1">'tcpdump -i any -w /tmp/capture-$(date +%Y%m%d-%H%M%S).pcap'</span>
 
-# Development functions
-mkcd() { mkdir -p "$1" &amp;&amp; cd "$1" }
-backup() { cp -r "$1" "$1.backup-$(date +%Y%m%d-%H%M%S)" }
-ports() { sudo lsof -i -P -n | grep LISTEN }
-myip() { curl -s https://ipinfo.io/json | jq -r '.ip' }</code></pre>
+<span class="c"># Development functions</span>
+mkcd<span class="o">()</span> <span class="o">{</span> <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">}</span>
+backup<span class="o">()</span> <span class="o">{</span> <span class="nb">cp</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">.backup-</span><span class="si">$(</span><span class="nb">date</span> +%Y%m%d-%H%M%S<span class="si">)</span><span class="s2">"</span> <span class="o">}</span>
+ports<span class="o">()</span> <span class="o">{</span> <span class="nb">sudo </span>lsof <span class="nt">-i</span> <span class="nt">-P</span> <span class="nt">-n</span> | <span class="nb">grep </span>LISTEN <span class="o">}</span>
+myip<span class="o">()</span> <span class="o">{</span> curl <span class="nt">-s</span> https://ipinfo.io/json | jq <span class="nt">-r</span> <span class="s1">'.ip'</span> <span class="o">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_terminal_multiplexer_setup">Terminal Multiplexer Setup</h2>
+<h2 id="_terminal_multiplexer_setup">5. Terminal Multiplexer Setup</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_tmux_configuration_for_development">Tmux Configuration for Development</h3>
+<h3 id="_tmux_configuration_for_development">5.1. Tmux Configuration for Development</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># ~/.tmux.conf - Optimized for development workflows
-# Set prefix to Ctrl-a (like screen)
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># ~/.tmux.conf - Optimized for development workflows</span>
+<span class="c"># Set prefix to Ctrl-a (like screen)</span>
 unbind C-b
-set-option -g prefix C-a
+set-option <span class="nt">-g</span> prefix C-a
 bind-key C-a send-prefix
 
-# Modern settings
-set -g default-terminal "tmux-256color"
-set -ag terminal-overrides ",xterm-256color:RGB"
-set -g mouse on
-set -g history-limit 50000
-set -g display-time 4000
-set -g status-interval 5
-set -g focus-events on
-setw -g aggressive-resize on
+<span class="c"># Modern settings</span>
+<span class="nb">set</span> <span class="nt">-g</span> default-terminal <span class="s2">"tmux-256color"</span>
+<span class="nb">set</span> <span class="nt">-ag</span> terminal-overrides <span class="s2">",xterm-256color:RGB"</span>
+<span class="nb">set</span> <span class="nt">-g</span> mouse on
+<span class="nb">set</span> <span class="nt">-g</span> history-limit 50000
+<span class="nb">set</span> <span class="nt">-g</span> display-time 4000
+<span class="nb">set</span> <span class="nt">-g</span> status-interval 5
+<span class="nb">set</span> <span class="nt">-g</span> focus-events on
+setw <span class="nt">-g</span> aggressive-resize on
 
-# Start windows and panes at 1
-set -g base-index 1
-setw -g pane-base-index 1
-set -g renumber-windows on
+<span class="c"># Start windows and panes at 1</span>
+<span class="nb">set</span> <span class="nt">-g</span> base-index 1
+setw <span class="nt">-g</span> pane-base-index 1
+<span class="nb">set</span> <span class="nt">-g</span> renumber-windows on
 
-# Split panes using | and -
-bind | split-window -h -c "#{pane_current_path}"
-bind - split-window -v -c "#{pane_current_path}"
-unbind '"'
+<span class="c"># Split panes using | and -</span>
+<span class="nb">bind</span> | split-window <span class="nt">-h</span> <span class="nt">-c</span> <span class="s2">"#{pane_current_path}"</span>
+<span class="nb">bind</span> - split-window <span class="nt">-v</span> <span class="nt">-c</span> <span class="s2">"#{pane_current_path}"</span>
+unbind <span class="s1">'"'</span>
 unbind %
 
-# Vim-style pane navigation
-bind h select-pane -L
-bind j select-pane -D
-bind k select-pane -U
-bind l select-pane -R
+<span class="c"># Vim-style pane navigation</span>
+<span class="nb">bind </span>h <span class="k">select</span><span class="nt">-pane</span> <span class="nt">-L</span>
+<span class="nb">bind </span>j <span class="k">select</span><span class="nt">-pane</span> <span class="nt">-D</span>
+<span class="nb">bind </span>k <span class="k">select</span><span class="nt">-pane</span> <span class="nt">-U</span>
+<span class="nb">bind </span>l <span class="k">select</span><span class="nt">-pane</span> <span class="nt">-R</span>
 
-# Resize panes
-bind -r H resize-pane -L 5
-bind -r J resize-pane -D 5
-bind -r K resize-pane -U 5
-bind -r L resize-pane -R 5
+<span class="c"># Resize panes</span>
+<span class="nb">bind</span> <span class="nt">-r</span> H resize-pane <span class="nt">-L</span> 5
+<span class="nb">bind</span> <span class="nt">-r</span> J resize-pane <span class="nt">-D</span> 5
+<span class="nb">bind</span> <span class="nt">-r</span> K resize-pane <span class="nt">-U</span> 5
+<span class="nb">bind</span> <span class="nt">-r</span> L resize-pane <span class="nt">-R</span> 5
 
-# Session management
-bind C-c new-session
-bind C-f command-prompt -p find-session 'switch-client -t %%'
+<span class="c"># Session management</span>
+<span class="nb">bind </span>C-c new-session
+<span class="nb">bind </span>C-f command-prompt <span class="nt">-p</span> find-session <span class="s1">'switch-client -t %%'</span>
 
-# Status bar configuration
-set -g status-style 'bg=#1a1b26 fg=#a9b1d6'
-set -g status-left '#[fg=#7aa2f7,bold] #S #[fg=#a9b1d6]│ '
-set -g status-right '#[fg=#a9b1d6]│ #[fg=#7aa2f7]%H:%M %Y-%m-%d '
-set -g status-left-length 30
-set -g status-right-length 50
+<span class="c"># Status bar configuration</span>
+<span class="nb">set</span> <span class="nt">-g</span> status-style <span class="s1">'bg=#1a1b26 fg=#a9b1d6'</span>
+<span class="nb">set</span> <span class="nt">-g</span> status-left <span class="s1">'#[fg=#7aa2f7,bold] #S #[fg=#a9b1d6]│ '</span>
+<span class="nb">set</span> <span class="nt">-g</span> status-right <span class="s1">'#[fg=#a9b1d6]│ #[fg=#7aa2f7]%H:%M %Y-%m-%d '</span>
+<span class="nb">set</span> <span class="nt">-g</span> status-left-length 30
+<span class="nb">set</span> <span class="nt">-g</span> status-right-length 50
 
-# Window status
-setw -g window-status-current-style 'fg=#7aa2f7 bold'
-setw -g window-status-current-format ' #I:#W#F '
-setw -g window-status-style 'fg=#565f89'
-setw -g window-status-format ' #I:#W#F '
+<span class="c"># Window status</span>
+setw <span class="nt">-g</span> window-status-current-style <span class="s1">'fg=#7aa2f7 bold'</span>
+setw <span class="nt">-g</span> window-status-current-format <span class="s1">' #I:#W#F '</span>
+setw <span class="nt">-g</span> window-status-style <span class="s1">'fg=#565f89'</span>
+setw <span class="nt">-g</span> window-status-format <span class="s1">' #I:#W#F '</span>
 
-# Pane borders
-set -g pane-border-style 'fg=#565f89'
-set -g pane-active-border-style 'fg=#7aa2f7'
+<span class="c"># Pane borders</span>
+<span class="nb">set</span> <span class="nt">-g</span> pane-border-style <span class="s1">'fg=#565f89'</span>
+<span class="nb">set</span> <span class="nt">-g</span> pane-active-border-style <span class="s1">'fg=#7aa2f7'</span>
 
-# Plugins (using TPM)
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-sensible'
-set -g @plugin 'tmux-plugins/tmux-resurrect'
-set -g @plugin 'tmux-plugins/tmux-continuum'
-set -g @plugin 'tmux-plugins/tmux-yank'
+<span class="c"># Plugins (using TPM)</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tpm'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-sensible'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-resurrect'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-continuum'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-yank'</span>
 
-# Plugin configuration
-set -g @resurrect-capture-pane-contents 'on'
-set -g @continuum-restore 'on'
-set -g @continuum-boot 'on'
+<span class="c"># Plugin configuration</span>
+<span class="nb">set</span> <span class="nt">-g</span> @resurrect-capture-pane-contents <span class="s1">'on'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @continuum-restore <span class="s1">'on'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @continuum-boot <span class="s1">'on'</span>
 
-# Initialize TPM
-run '~/.tmux/plugins/tpm/tpm'
+<span class="c"># Initialize TPM</span>
+run <span class="s1">'~/.tmux/plugins/tpm/tpm'</span>
 
-# Development session layouts
-bind D source-file ~/.tmux/dev-session.conf
-bind I source-file ~/.tmux/ise-session.conf</code></pre>
+<span class="c"># Development session layouts</span>
+<span class="nb">bind </span>D source-file ~/.tmux/dev-session.conf
+<span class="nb">bind </span>I source-file ~/.tmux/ise-session.conf</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_tmux_session_templates">Tmux Session Templates</h3>
+<h3 id="_tmux_session_templates">5.2. Tmux Session Templates</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># ~/.tmux/dev-session.conf - Full-stack development layout
-new-session -s dev -n editor -c ~/dev-workspace
-send-keys 'nvim' C-m
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># ~/.tmux/dev-session.conf - Full-stack development layout</span>
+new-session <span class="nt">-s</span> dev <span class="nt">-n</span> editor <span class="nt">-c</span> ~/dev-workspace
+send-keys <span class="s1">'nvim'</span> C-m
 
-new-window -n frontend -c ~/dev-workspace/projects/web/domus-digitalis/apps/frontend
-send-keys 'npm run dev' C-m
+new-window <span class="nt">-n</span> frontend <span class="nt">-c</span> ~/dev-workspace/projects/web/domus-digitalis/apps/frontend
+send-keys <span class="s1">'npm run dev'</span> C-m
 
-new-window -n backend -c ~/dev-workspace/projects/web/domus-digitalis/apps/backend
-split-window -h -p 40
-send-keys -t 0 'npm run dev' C-m
-send-keys -t 1 'docker-compose logs -f' C-m
+new-window <span class="nt">-n</span> backend <span class="nt">-c</span> ~/dev-workspace/projects/web/domus-digitalis/apps/backend
+split-window <span class="nt">-h</span> <span class="nt">-p</span> 40
+send-keys <span class="nt">-t</span> 0 <span class="s1">'npm run dev'</span> C-m
+send-keys <span class="nt">-t</span> 1 <span class="s1">'docker-compose logs -f'</span> C-m
 
-new-window -n database
-send-keys 'docker exec -it postgres psql -U domus_user domus_dev' C-m
+new-window <span class="nt">-n</span> database
+send-keys <span class="s1">'docker exec -it postgres psql -U domus_user domus_dev'</span> C-m
 
-new-window -n git
-send-keys 'lazygit' C-m
+new-window <span class="nt">-n</span> git
+send-keys <span class="s1">'lazygit'</span> C-m
 
-select-window -t editor</code></pre>
+<span class="k">select</span><span class="nt">-window</span> <span class="nt">-t</span> editor</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_development_environment_integration">Development Environment Integration</h2>
+<h2 id="_development_environment_integration">6. Development Environment Integration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_docker_on_wsl2">Docker on WSL2</h3>
+<h3 id="_docker_on_wsl2">6.1. Docker on WSL2</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Docker without Docker Desktop
-# /etc/docker/daemon.json
-{
-  "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"],
-  "storage-driver": "overlay2",
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "3"
-  },
-  "dns": ["8.8.8.8", "8.8.4.4"],
-  "insecure-registries": ["localhost:5000"]
-}
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Docker without Docker Desktop</span>
+<span class="c"># /etc/docker/daemon.json</span>
+<span class="o">{</span>
+  <span class="s2">"hosts"</span>: <span class="o">[</span><span class="s2">"unix:///var/run/docker.sock"</span>, <span class="s2">"tcp://0.0.0.0:2375"</span><span class="o">]</span>,
+  <span class="s2">"storage-driver"</span>: <span class="s2">"overlay2"</span>,
+  <span class="s2">"log-driver"</span>: <span class="s2">"json-file"</span>,
+  <span class="s2">"log-opts"</span>: <span class="o">{</span>
+    <span class="s2">"max-size"</span>: <span class="s2">"10m"</span>,
+    <span class="s2">"max-file"</span>: <span class="s2">"3"</span>
+  <span class="o">}</span>,
+  <span class="s2">"dns"</span>: <span class="o">[</span><span class="s2">"8.8.8.8"</span>, <span class="s2">"8.8.4.4"</span><span class="o">]</span>,
+  <span class="s2">"insecure-registries"</span>: <span class="o">[</span><span class="s2">"localhost:5000"</span><span class="o">]</span>
+<span class="o">}</span>
 
-# Start Docker daemon automatically
-sudo mkdir -p /etc/systemd/system/
-cat &lt;&lt; 'EOF' | sudo tee /etc/systemd/system/docker-wsl.service
+<span class="c"># Start Docker daemon automatically</span>
+<span class="nb">sudo mkdir</span> <span class="nt">-p</span> /etc/systemd/system/
+<span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="sh">'</span><span class="no">EOF</span><span class="sh">' | sudo tee /etc/systemd/system/docker-wsl.service
 [Unit]
 Description=Docker Daemon for WSL
 After=network.target
@@ -911,55 +1031,55 @@ RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
-EOF
+</span><span class="no">EOF
 
-sudo systemctl enable docker-wsl
-sudo systemctl start docker-wsl</code></pre>
+</span><span class="nb">sudo </span>systemctl <span class="nb">enable </span>docker-wsl
+<span class="nb">sudo </span>systemctl start docker-wsl</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_python_development_environment">Python Development Environment</h3>
+<h3 id="_python_development_environment">6.2. Python Development Environment</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Python environment management
-# ~/.config/python/startup.py
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Python environment management</span>
+<span class="c"># ~/.config/python/startup.py</span>
 import sys
 import os
 from pathlib import Path
 
-# Add custom modules path
-sys.path.insert(0, str(Path.home() / 'dev-workspace' / 'scripts'))
+<span class="c"># Add custom modules path</span>
+sys.path.insert<span class="o">(</span>0, str<span class="o">(</span>Path.home<span class="o">()</span> / <span class="s1">'dev-workspace'</span> / <span class="s1">'scripts'</span><span class="o">))</span>
 
-# Rich REPL
+<span class="c"># Rich REPL</span>
 try:
     from rich import pretty
     from rich.console import Console
-    pretty.install()
-    console = Console()
-    print = console.print
+    pretty.install<span class="o">()</span>
+    console <span class="o">=</span> Console<span class="o">()</span>
+    print <span class="o">=</span> console.print
 except ImportError:
     pass
 
-# Auto-reload modules in development
+<span class="c"># Auto-reload modules in development</span>
 try:
     import importlib
     import types
 
-    def reload_all():
-        """Reload all imported modules"""
-        for name, module in list(sys.modules.items()):
-            if isinstance(module, types.ModuleType) and hasattr(module, '__file__'):
-                if module.__file__ and '/site-packages/' not in module.__file__:
+    def reload_all<span class="o">()</span>:
+        <span class="s2">"""Reload all imported modules"""</span>
+        <span class="k">for </span>name, module <span class="k">in </span>list<span class="o">(</span>sys.modules.items<span class="o">())</span>:
+            <span class="k">if </span>isinstance<span class="o">(</span>module, types.ModuleType<span class="o">)</span> and hasattr<span class="o">(</span>module, <span class="s1">'__file__'</span><span class="o">)</span>:
+                <span class="k">if </span>module.__file__ and <span class="s1">'/site-packages/'</span> not <span class="k">in </span>module.__file__:
                     try:
-                        importlib.reload(module)
-                        print(f"Reloaded: {name}")
+                        importlib.reload<span class="o">(</span>module<span class="o">)</span>
+                        print<span class="o">(</span>f<span class="s2">"Reloaded: {name}"</span><span class="o">)</span>
                     except:
                         pass
 except ImportError:
     pass
 
-# Useful imports for interactive sessions
+<span class="c"># Useful imports for interactive sessions</span>
 import json
 import requests
 import pandas as pd
@@ -968,7 +1088,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict, Counter
 from pprint import pprint
 
-# Network automation helpers
+<span class="c"># Network automation helpers</span>
 try:
     from netmiko import ConnectHandler
     from nornir import InitNornir
@@ -976,119 +1096,119 @@ try:
 except ImportError:
     pass
 
-print("🐍 Python development environment loaded")
+print<span class="o">(</span><span class="s2">"🐍 Python development environment loaded"</span><span class="o">)</span>
 
-# Set PYTHONSTARTUP environment variable
-export PYTHONSTARTUP=~/.config/python/startup.py</code></pre>
+<span class="c"># Set PYTHONSTARTUP environment variable</span>
+<span class="nb">export </span><span class="nv">PYTHONSTARTUP</span><span class="o">=</span>~/.config/python/startup.py</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_node_js_and_javascript_setup">Node.js and JavaScript Setup</h3>
+<h3 id="_node_js_and_javascript_setup">6.3. Node.js and JavaScript Setup</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Node version management with fnm (fast node manager)
-curl -fsSL https://fnm.vercel.app/install | bash
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Node version management with fnm (fast node manager)</span>
+curl <span class="nt">-fsSL</span> https://fnm.vercel.app/install | bash
 
-# ~/.config/fnm/fnm.toml
-[settings]
-use-on-cd = true
-corepack-enabled = true
-version-file-strategy = "recursive"
+<span class="c"># ~/.config/fnm/fnm.toml</span>
+<span class="o">[</span>settings]
+use-on-cd <span class="o">=</span> <span class="nb">true
+</span>corepack-enabled <span class="o">=</span> <span class="nb">true
+</span>version-file-strategy <span class="o">=</span> <span class="s2">"recursive"</span>
 
-# Install latest LTS
-fnm install --lts
+<span class="c"># Install latest LTS</span>
+fnm <span class="nb">install</span> <span class="nt">--lts</span>
 fnm default lts-latest
 
-# Global packages for development
-npm install -g \
-  typescript \
-  @types/node \
-  ts-node \
-  nodemon \
-  pm2 \
-  eslint \
-  prettier \
-  npm-check-updates \
-  vercel \
+<span class="c"># Global packages for development</span>
+npm <span class="nb">install</span> <span class="nt">-g</span> <span class="se">\</span>
+  typescript <span class="se">\</span>
+  @types/node <span class="se">\</span>
+  ts-node <span class="se">\</span>
+  nodemon <span class="se">\</span>
+  pm2 <span class="se">\</span>
+  eslint <span class="se">\</span>
+  prettier <span class="se">\</span>
+  npm-check-updates <span class="se">\</span>
+  vercel <span class="se">\</span>
   @railway/cli
 
-# PNPM for faster package management
-corepack enable
-corepack prepare pnpm@latest --activate</code></pre>
+<span class="c"># PNPM for faster package management</span>
+corepack <span class="nb">enable
+</span>corepack prepare pnpm@latest <span class="nt">--activate</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_system_monitoring_and_management">System Monitoring and Management</h2>
+<h2 id="_system_monitoring_and_management">7. System Monitoring and Management</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_custom_monitoring_scripts">Custom Monitoring Scripts</h3>
+<h3 id="_custom_monitoring_scripts">7.1. Custom Monitoring Scripts</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">#!/bin/bash
-# ~/scripts/system-monitor.sh - Real-time system monitoring
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># ~/scripts/system-monitor.sh - Real-time system monitoring</span>
 
-monitor_system() {
-  while true; do
-    clear
-    echo "=== System Monitor - $(date) ==="
-    echo ""
+monitor_system<span class="o">()</span> <span class="o">{</span>
+  <span class="k">while </span><span class="nb">true</span><span class="p">;</span> <span class="k">do
+    </span>clear
+    <span class="nb">echo</span> <span class="s2">"=== System Monitor - </span><span class="si">$(</span><span class="nb">date</span><span class="si">)</span><span class="s2"> ==="</span>
+    <span class="nb">echo</span> <span class="s2">""</span>
 
-    # CPU and Memory
-    echo "📊 Resources:"
-    echo "├─ CPU: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}')%"
-    echo "├─ RAM: $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
-    echo "└─ Swap: $(free -h | awk '/^Swap:/ {print $3 "/" $2}')"
-    echo ""
+    <span class="c"># CPU and Memory</span>
+    <span class="nb">echo</span> <span class="s2">"📊 Resources:"</span>
+    <span class="nb">echo</span> <span class="s2">"├─ CPU: </span><span class="si">$(</span>top <span class="nt">-bn1</span> | <span class="nb">grep</span> <span class="s2">"Cpu(s)"</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span><span class="s2">%"</span>
+    <span class="nb">echo</span> <span class="s2">"├─ RAM: </span><span class="si">$(</span>free <span class="nt">-h</span> | <span class="nb">awk</span> <span class="s1">'/^Mem:/ {print $3 "/" $2}'</span><span class="si">)</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"└─ Swap: </span><span class="si">$(</span>free <span class="nt">-h</span> | <span class="nb">awk</span> <span class="s1">'/^Swap:/ {print $3 "/" $2}'</span><span class="si">)</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">""</span>
 
-    # Disk usage
-    echo "💾 Disk Usage:"
-    df -h | grep -E '^/dev|^/mnt' | awk '{printf "├─ %-20s %s/%s (%s)\n", $6, $3, $2, $5}'
-    echo ""
+    <span class="c"># Disk usage</span>
+    <span class="nb">echo</span> <span class="s2">"💾 Disk Usage:"</span>
+    <span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s1">'^/dev|^/mnt'</span> | <span class="nb">awk</span> <span class="s1">'{printf "├─ %-20s %s/%s (%s)\n", $6, $3, $2, $5}'</span>
+    <span class="nb">echo</span> <span class="s2">""</span>
 
-    # Network
-    echo "🌐 Network:"
-    echo "├─ Connections: $(ss -tun | tail -n +2 | wc -l)"
-    echo "├─ Listening: $(ss -tuln | tail -n +2 | wc -l)"
+    <span class="c"># Network</span>
+    <span class="nb">echo</span> <span class="s2">"🌐 Network:"</span>
+    <span class="nb">echo</span> <span class="s2">"├─ Connections: </span><span class="si">$(</span>ss <span class="nt">-tun</span> | <span class="nb">tail</span> <span class="nt">-n</span> +2 | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"├─ Listening: </span><span class="si">$(</span>ss <span class="nt">-tuln</span> | <span class="nb">tail</span> <span class="nt">-n</span> +2 | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2">"</span>
 
-    # Docker
-    if command -v docker &amp;&gt; /dev/null; then
-      echo ""
-      echo "🐋 Docker:"
-      echo "├─ Containers: $(docker ps -q | wc -l) running / $(docker ps -aq | wc -l) total"
-      echo "├─ Images: $(docker images -q | sort -u | wc -l)"
-      echo "└─ Volumes: $(docker volume ls -q | wc -l)"
-    fi
+    <span class="c"># Docker</span>
+    <span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> docker &amp;&gt; /dev/null<span class="p">;</span> <span class="k">then
+      </span><span class="nb">echo</span> <span class="s2">""</span>
+      <span class="nb">echo</span> <span class="s2">"🐋 Docker:"</span>
+      <span class="nb">echo</span> <span class="s2">"├─ Containers: </span><span class="si">$(</span>docker ps <span class="nt">-q</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2"> running / </span><span class="si">$(</span>docker ps <span class="nt">-aq</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2"> total"</span>
+      <span class="nb">echo</span> <span class="s2">"├─ Images: </span><span class="si">$(</span>docker images <span class="nt">-q</span> | <span class="nb">sort</span> <span class="nt">-u</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2">"</span>
+      <span class="nb">echo</span> <span class="s2">"└─ Volumes: </span><span class="si">$(</span>docker volume <span class="nb">ls</span> <span class="nt">-q</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span><span class="s2">"</span>
+    <span class="k">fi</span>
 
-    # Processes
-    echo ""
-    echo "📋 Top Processes (by CPU):"
-    ps aux | head -1
-    ps aux | sort -nrk 3,3 | head -5
+    <span class="c"># Processes</span>
+    <span class="nb">echo</span> <span class="s2">""</span>
+    <span class="nb">echo</span> <span class="s2">"📋 Top Processes (by CPU):"</span>
+    ps aux | <span class="nb">head</span> <span class="nt">-1</span>
+    ps aux | <span class="nb">sort</span> <span class="nt">-nrk</span> 3,3 | <span class="nb">head</span> <span class="nt">-5</span>
 
-    sleep 5
-  done
-}
+    <span class="nb">sleep </span>5
+  <span class="k">done</span>
+<span class="o">}</span>
 
-# Run with: monitor_system</code></pre>
+<span class="c"># Run with: monitor_system</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_backup_strategy">Backup Strategy</h3>
+<h3 id="_backup_strategy">7.2. Backup Strategy</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">#!/bin/bash
-# ~/scripts/backup-system.sh - Comprehensive backup solution
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># ~/scripts/backup-system.sh - Comprehensive backup solution</span>
 
-BACKUP_DIR="/mnt/backup/arch-$(date +%Y%m%d)"
-EXCLUDE_FILE="$HOME/.backup-exclude"
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/mnt/backup/arch-</span><span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span><span class="s2">"</span>
+<span class="nv">EXCLUDE_FILE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.backup-exclude"</span>
 
-# Create exclude file
-cat &gt; "$EXCLUDE_FILE" &lt;&lt; 'EOF'
+<span class="c"># Create exclude file</span>
+<span class="nb">cat</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$EXCLUDE_FILE</span><span class="s2">"</span> <span class="o">&lt;&lt;</span> <span class="sh">'</span><span class="no">EOF</span><span class="sh">'
 /tmp/*
 /var/tmp/*
 /var/cache/*
@@ -1101,258 +1221,258 @@ cat &gt; "$EXCLUDE_FILE" &lt;&lt; 'EOF'
 */__pycache__/*
 *.pyc
 .git/objects/*
-EOF
+</span><span class="no">EOF
 
-backup_configs() {
-  echo "📦 Backing up configurations..."
+</span>backup_configs<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">echo</span> <span class="s2">"📦 Backing up configurations..."</span>
 
-  # Essential configs
-  mkdir -p "$BACKUP_DIR/configs"
+  <span class="c"># Essential configs</span>
+  <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs"</span>
 
-  # System configs
-  sudo cp -r /etc/pacman.conf "$BACKUP_DIR/configs/"
-  sudo cp -r /etc/pacman.d/mirrorlist "$BACKUP_DIR/configs/"
+  <span class="c"># System configs</span>
+  <span class="nb">sudo cp</span> <span class="nt">-r</span> /etc/pacman.conf <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
+  <span class="nb">sudo cp</span> <span class="nt">-r</span> /etc/pacman.d/mirrorlist <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
 
-  # User configs
-  cp -r ~/.config "$BACKUP_DIR/configs/"
-  cp -r ~/.zshrc "$BACKUP_DIR/configs/"
-  cp -r ~/.tmux.conf "$BACKUP_DIR/configs/"
-  cp -r ~/.gitconfig "$BACKUP_DIR/configs/"
+  <span class="c"># User configs</span>
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/.config <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/.zshrc <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/.tmux.conf <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/.gitconfig <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/"</span>
 
-  # Package lists
-  pacman -Qe &gt; "$BACKUP_DIR/configs/pacman-explicit.txt"
-  pacman -Qm &gt; "$BACKUP_DIR/configs/pacman-aur.txt"
-  pip list &gt; "$BACKUP_DIR/configs/pip-packages.txt"
-  npm list -g --depth=0 &gt; "$BACKUP_DIR/configs/npm-global.txt"
-}
+  <span class="c"># Package lists</span>
+  pacman <span class="nt">-Qe</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/pacman-explicit.txt"</span>
+  pacman <span class="nt">-Qm</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/pacman-aur.txt"</span>
+  pip list <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/pip-packages.txt"</span>
+  npm list <span class="nt">-g</span> <span class="nt">--depth</span><span class="o">=</span>0 <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs/npm-global.txt"</span>
+<span class="o">}</span>
 
-backup_projects() {
-  echo "💼 Backing up projects..."
+backup_projects<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">echo</span> <span class="s2">"💼 Backing up projects..."</span>
 
-  rsync -av --exclude-from="$EXCLUDE_FILE" \
-    ~/dev-workspace/ \
-    "$BACKUP_DIR/dev-workspace/"
-}
+  rsync <span class="nt">-av</span> <span class="nt">--exclude-from</span><span class="o">=</span><span class="s2">"</span><span class="nv">$EXCLUDE_FILE</span><span class="s2">"</span> <span class="se">\</span>
+    ~/dev-workspace/ <span class="se">\</span>
+    <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/dev-workspace/"</span>
+<span class="o">}</span>
 
-backup_scripts() {
-  echo "📜 Backing up scripts..."
+backup_scripts<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">echo</span> <span class="s2">"📜 Backing up scripts..."</span>
 
-  cp -r ~/scripts "$BACKUP_DIR/"
-  cp -r ~/automation "$BACKUP_DIR/"
-}
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/scripts <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/"</span>
+  <span class="nb">cp</span> <span class="nt">-r</span> ~/automation <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/"</span>
+<span class="o">}</span>
 
-# Run backup
-mkdir -p "$BACKUP_DIR"
+<span class="c"># Run backup</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span>
 backup_configs
 backup_projects
 backup_scripts
 
-# Compress
-echo "🗜️ Compressing backup..."
-tar czf "$BACKUP_DIR.tar.gz" -C "$(dirname $BACKUP_DIR)" "$(basename $BACKUP_DIR)"
-rm -rf "$BACKUP_DIR"
+<span class="c"># Compress</span>
+<span class="nb">echo</span> <span class="s2">"🗜️ Compressing backup..."</span>
+<span class="nb">tar </span>czf <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">.tar.gz"</span> <span class="nt">-C</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="nv">$BACKUP_DIR</span><span class="si">)</span><span class="s2">"</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">basename</span> <span class="nv">$BACKUP_DIR</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span>
 
-echo "✅ Backup complete: $BACKUP_DIR.tar.gz"
-echo "Size: $(du -h $BACKUP_DIR.tar.gz | cut -f1)"</code></pre>
+<span class="nb">echo</span> <span class="s2">"✅ Backup complete: </span><span class="nv">$BACKUP_DIR</span><span class="s2">.tar.gz"</span>
+<span class="nb">echo</span> <span class="s2">"Size: </span><span class="si">$(</span><span class="nb">du</span> <span class="nt">-h</span> <span class="nv">$BACKUP_DIR</span>.tar.gz | <span class="nb">cut</span> <span class="nt">-f1</span><span class="si">)</span><span class="s2">"</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_security_hardening">Security Hardening</h2>
+<h2 id="_security_hardening">8. Security Hardening</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_system_security">System Security</h3>
+<h3 id="_system_security">8.1. System Security</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Firewall configuration with ufw
-sudo pacman -S ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow from 172.16.0.0/12  # WSL2 network
-sudo ufw enable
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Firewall configuration with ufw</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> ufw
+<span class="nb">sudo </span>ufw default deny incoming
+<span class="nb">sudo </span>ufw default allow outgoing
+<span class="nb">sudo </span>ufw allow from 172.16.0.0/12  <span class="c"># WSL2 network</span>
+<span class="nb">sudo </span>ufw <span class="nb">enable</span>
 
-# Fail2ban for SSH protection (if exposed)
-sudo pacman -S fail2ban
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
+<span class="c"># Fail2ban for SSH protection (if exposed)</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> fail2ban
+<span class="nb">sudo </span>systemctl <span class="nb">enable </span>fail2ban
+<span class="nb">sudo </span>systemctl start fail2ban
 
-# Security auditing
-sudo pacman -S lynis rkhunter
+<span class="c"># Security auditing</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> lynis rkhunter
 
-# Run security audit
-sudo lynis audit system
-sudo rkhunter --check</code></pre>
+<span class="c"># Run security audit</span>
+<span class="nb">sudo </span>lynis audit system
+<span class="nb">sudo </span>rkhunter <span class="nt">--check</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_development_security">Development Security</h3>
+<h3 id="_development_security">8.2. Development Security</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Git credential management
-git config --global credential.helper store
-git config --global credential.helper cache --timeout=3600
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Git credential management</span>
+git config <span class="nt">--global</span> credential.helper store
+git config <span class="nt">--global</span> credential.helper cache <span class="nt">--timeout</span><span class="o">=</span>3600
 
-# SSH key management
-# ~/.ssh/config
+<span class="c"># SSH key management</span>
+<span class="c"># ~/.ssh/config</span>
 Host github.com
     User git
     IdentityFile ~/.ssh/github_ed25519
-    IdentitiesOnly yes
+    IdentitiesOnly <span class="nb">yes
 
-Host gitlab.company.com
+</span>Host gitlab.company.com
     User git
     Port 2222
     IdentityFile ~/.ssh/gitlab_rsa
-    IdentitiesOnly yes
+    IdentitiesOnly <span class="nb">yes
 
-Host ise-*
+</span>Host ise-<span class="k">*</span>
     User admin
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
     IdentityFile ~/.ssh/ise_automation
 
-# GPG for commit signing
-gpg --full-generate-key
-gpg --list-secret-keys --keyid-format=long
-git config --global user.signingkey &lt;key-id&gt;
-git config --global commit.gpgsign true</code></pre>
+<span class="c"># GPG for commit signing</span>
+gpg <span class="nt">--full-generate-key</span>
+gpg <span class="nt">--list-secret-keys</span> <span class="nt">--keyid-format</span><span class="o">=</span>long
+git config <span class="nt">--global</span> user.signingkey &lt;key-id&gt;
+git config <span class="nt">--global</span> commit.gpgsign <span class="nb">true</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_performance_optimization">Performance Optimization</h2>
+<h2 id="_performance_optimization">9. Performance Optimization</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_system_tuning">System Tuning</h3>
+<h3 id="_system_tuning">9.1. System Tuning</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># /etc/sysctl.d/99-performance.conf
-# Network performance
-net.core.rmem_max = 134217728
-net.core.wmem_max = 134217728
-net.ipv4.tcp_rmem = 4096 87380 134217728
-net.ipv4.tcp_wmem = 4096 65536 134217728
-net.ipv4.tcp_congestion_control = bbr
-net.core.netdev_max_backlog = 5000
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># /etc/sysctl.d/99-performance.conf</span>
+<span class="c"># Network performance</span>
+net.core.rmem_max <span class="o">=</span> 134217728
+net.core.wmem_max <span class="o">=</span> 134217728
+net.ipv4.tcp_rmem <span class="o">=</span> 4096 87380 134217728
+net.ipv4.tcp_wmem <span class="o">=</span> 4096 65536 134217728
+net.ipv4.tcp_congestion_control <span class="o">=</span> bbr
+net.core.netdev_max_backlog <span class="o">=</span> 5000
 
-# File system
-fs.inotify.max_user_watches = 524288
-fs.file-max = 2097152
+<span class="c"># File system</span>
+fs.inotify.max_user_watches <span class="o">=</span> 524288
+fs.file-max <span class="o">=</span> 2097152
 
-# Virtual memory
-vm.swappiness = 10
-vm.vfs_cache_pressure = 50
+<span class="c"># Virtual memory</span>
+vm.swappiness <span class="o">=</span> 10
+vm.vfs_cache_pressure <span class="o">=</span> 50
 
-# Apply settings
-sudo sysctl -p /etc/sysctl.d/99-performance.conf</code></pre>
+<span class="c"># Apply settings</span>
+<span class="nb">sudo </span>sysctl <span class="nt">-p</span> /etc/sysctl.d/99-performance.conf</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_wsl2_specific_optimizations">WSL2 Specific Optimizations</h3>
+<h3 id="_wsl2_specific_optimizations">9.2. WSL2 Specific Optimizations</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="ini"># Windows: %USERPROFILE%\.wslconfig
-[wsl2]
-memory=8GB
-processors=4
-localhostForwarding=true
-kernelCommandLine = syscall.x32=y
+<pre class="rouge highlight"><code data-lang="ini"><span class="c"># Windows: %USERPROFILE%\.wslconfig
+</span><span class="nn">[wsl2]</span>
+<span class="py">memory</span><span class="p">=</span><span class="s">8GB</span>
+<span class="py">processors</span><span class="p">=</span><span class="s">4</span>
+<span class="py">localhostForwarding</span><span class="p">=</span><span class="s">true</span>
+<span class="py">kernelCommandLine</span> <span class="p">=</span> <span class="s">syscall.x32=y</span>
 
-[experimental]
-sparseVhd=true
-autoMemoryReclaim=gradual</code></pre>
+<span class="nn">[experimental]</span>
+<span class="py">sparseVhd</span><span class="p">=</span><span class="s">true</span>
+<span class="py">autoMemoryReclaim</span><span class="p">=</span><span class="s">gradual</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_troubleshooting_common_issues">Troubleshooting Common Issues</h2>
+<h2 id="_troubleshooting_common_issues">10. Troubleshooting Common Issues</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_wsl2_network_issues">WSL2 Network Issues</h3>
+<h3 id="_wsl2_network_issues">10.1. WSL2 Network Issues</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Fix DNS resolution
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Fix DNS resolution</span>
+<span class="nb">echo</span> <span class="s2">"nameserver 8.8.8.8"</span> | <span class="nb">sudo tee</span> /etc/resolv.conf
 
-# Fix time sync issues
-sudo hwclock -s
+<span class="c"># Fix time sync issues</span>
+<span class="nb">sudo </span>hwclock <span class="nt">-s</span>
 
-# Reset WSL2 networking (from Windows)
-wsl --shutdown
+<span class="c"># Reset WSL2 networking (from Windows)</span>
+wsl <span class="nt">--shutdown</span>
 netsh winsock reset
 netsh int ip reset</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_package_management_issues">Package Management Issues</h3>
+<h3 id="_package_management_issues">10.2. Package Management Issues</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash"># Fix corrupted package database
-sudo rm /var/lib/pacman/db.lck
-sudo pacman -Syy
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Fix corrupted package database</span>
+<span class="nb">sudo rm</span> /var/lib/pacman/db.lck
+<span class="nb">sudo </span>pacman <span class="nt">-Syy</span>
 
-# Fix GPG key issues
-sudo pacman-key --refresh-keys
-sudo pacman -S archlinux-keyring
+<span class="c"># Fix GPG key issues</span>
+<span class="nb">sudo </span>pacman-key <span class="nt">--refresh-keys</span>
+<span class="nb">sudo </span>pacman <span class="nt">-S</span> archlinux-keyring
 
-# Clear package cache
-sudo pacman -Scc</code></pre>
+<span class="c"># Clear package cache</span>
+<span class="nb">sudo </span>pacman <span class="nt">-Scc</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_my_daily_workflow">My Daily Workflow</h2>
+<h2 id="_my_daily_workflow">11. My Daily Workflow</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_morning_routine">Morning Routine</h3>
+<h3 id="_morning_routine">11.1. Morning Routine</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">#!/bin/bash
-# ~/scripts/morning-setup.sh
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># ~/scripts/morning-setup.sh</span>
 
-echo "☕ Starting morning setup..."
+<span class="nb">echo</span> <span class="s2">"☕ Starting morning setup..."</span>
 
-# System updates
-echo "📦 Checking updates..."
-sudo pacman -Syu --noconfirm
-yay -Sua --noconfirm
+<span class="c"># System updates</span>
+<span class="nb">echo</span> <span class="s2">"📦 Checking updates..."</span>
+<span class="nb">sudo </span>pacman <span class="nt">-Syu</span> <span class="nt">--noconfirm</span>
+yay <span class="nt">-Sua</span> <span class="nt">--noconfirm</span>
 
-# Start services
-echo "🐋 Starting Docker..."
-sudo systemctl start docker-wsl
+<span class="c"># Start services</span>
+<span class="nb">echo</span> <span class="s2">"🐋 Starting Docker..."</span>
+<span class="nb">sudo </span>systemctl start docker-wsl
 
-# Update repositories
-echo "📁 Updating repositories..."
-for repo in ~/dev-workspace/projects/*/*; do
-  if [ -d "$repo/.git" ]; then
-    echo "Updating $(basename $repo)..."
-    git -C "$repo" fetch --all --prune
-  fi
-done
+<span class="c"># Update repositories</span>
+<span class="nb">echo</span> <span class="s2">"📁 Updating repositories..."</span>
+<span class="k">for </span>repo <span class="k">in</span> ~/dev-workspace/projects/<span class="k">*</span>/<span class="k">*</span><span class="p">;</span> <span class="k">do
+  if</span> <span class="o">[</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$repo</span><span class="s2">/.git"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Updating </span><span class="si">$(</span><span class="nb">basename</span> <span class="nv">$repo</span><span class="si">)</span><span class="s2">..."</span>
+    git <span class="nt">-C</span> <span class="s2">"</span><span class="nv">$repo</span><span class="s2">"</span> fetch <span class="nt">--all</span> <span class="nt">--prune</span>
+  <span class="k">fi
+done</span>
 
-# Start tmux sessions
-echo "💻 Starting development environment..."
-tmux new-session -d -s main
-tmux new-session -d -s ise
-tmux new-session -d -s dev
+<span class="c"># Start tmux sessions</span>
+<span class="nb">echo</span> <span class="s2">"💻 Starting development environment..."</span>
+tmux new-session <span class="nt">-d</span> <span class="nt">-s</span> main
+tmux new-session <span class="nt">-d</span> <span class="nt">-s</span> ise
+tmux new-session <span class="nt">-d</span> <span class="nt">-s</span> dev
 
-echo "✅ Ready for work!"</code></pre>
+<span class="nb">echo</span> <span class="s2">"✅ Ready for work!"</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_project_organization">Project Organization</h3>
+<h3 id="_project_organization">11.2. Project Organization</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="text">~/dev-workspace/
@@ -1370,7 +1490,7 @@ echo "✅ Ready for work!"</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_conclusion">Conclusion</h2>
+<h2 id="_conclusion">12. Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This Arch Linux setup has evolved over three years of daily use in production environments. It handles everything from managing 75,000+ network endpoints through ISE to developing full-stack applications with modern frameworks.</p>
@@ -1405,5 +1525,8 @@ echo "✅ Ready for work!"</code></pre>
 Last updated 2025-09-20 18:15:33 -0700
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="code-copy.js"></script>
 </body>
 </html>

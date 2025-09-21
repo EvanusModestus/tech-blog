@@ -1,0 +1,276 @@
+= Tech Blog: Production Knowledge Repository
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:toc: left
+:toclevels: 3
+
+== What This Is
+
+My personal technical blog documenting 9 years of production experience with Cisco ISE, network automation, and the transition from network engineering to full-stack development. Real configurations, actual code, lessons learned.
+
+== Quick Start
+
+=== View Blog Locally
+
+[source,bash]
+----
+# Open the HTML index to browse all posts
+firefox html_output/index.html
+# or
+chrome html_output/index.html
+----
+
+=== Convert After Updates
+
+[source,bash]
+----
+# Convert all posts and regenerate index
+./convert.sh
+
+# Convert single post
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor \
+  -D html_output/ \
+  01_POSTS/2025-POST-ISE-001-nine-years-of-ise.adoc
+----
+
+=== Publish to GitHub Pages
+
+. Push changes to GitHub: `git push origin main`
+. Go to GitHub → Actions tab
+. Click "Publish Blog" workflow
+. Click "Run workflow"
+. Blog publishes to: `https://[username].github.io/tech-blog`
+
+== Directory Structure
+
+[source,text]
+----
+tech-blog/
+├── 01_POSTS/           # Completed posts ready to publish
+│   ├── ISE posts       # 9 years of ISE experience
+│   ├── Development     # Full-stack journey
+│   └── Infrastructure  # Automation, IaC
+├── 02_DRAFTS/          # Work in progress
+├── 03_SERIES/          # Multi-part article series
+├── 04_ASSETS/          # Images, diagrams, code outputs
+├── 05_TEMPLATES/       # Post templates
+├── html_output/        # Converted HTML files
+│   ├── index.html      # Browse all posts
+│   └── *.html          # Individual post pages
+└── convert.sh          # Conversion script
+----
+
+== Use Cases
+
+=== Use Case 1: Writing New ISE Post
+
+[source,bash]
+----
+# 1. Create new post
+cp 05_TEMPLATES/post-template.adoc \
+   01_POSTS/2025-POST-ISE-003-troubleshooting-radius.adoc
+
+# 2. Write content
+vim 01_POSTS/2025-POST-ISE-003-troubleshooting-radius.adoc
+
+# 3. Preview locally
+./convert.sh
+firefox html_output/index.html
+
+# 4. When ready, commit and publish
+git add .
+git commit -m "Add RADIUS troubleshooting guide"
+git push
+# Then trigger GitHub Action
+----
+
+=== Use Case 2: Working on Draft
+
+[source,bash]
+----
+# 1. Continue draft
+vim 02_DRAFTS/2025-DRAFT-SEC-001-zero-trust-network-implementation.adoc
+
+# 2. Preview progress
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor \
+  -D html_output/drafts/ \
+  02_DRAFTS/*.adoc
+
+# 3. When complete, move to posts
+mv 02_DRAFTS/2025-DRAFT-SEC-001-*.adoc \
+   01_POSTS/2025-POST-SEC-001-zero-trust-network.adoc
+----
+
+=== Use Case 3: Creating Series
+
+[source,bash]
+----
+# 1. Plan series in 03_SERIES
+vim 03_SERIES/2025-SERIES-PYTHON-001-network-automation-mastery.adoc
+
+# 2. Write individual parts
+vim 01_POSTS/2025-POST-PYTHON-001-part1-fundamentals.adoc
+vim 01_POSTS/2025-POST-PYTHON-002-part2-device-communication.adoc
+
+# 3. Link them in series doc
+# 4. Convert and preview
+./convert.sh
+----
+
+=== Use Case 4: Adding Diagrams
+
+[source,bash]
+----
+# 1. Add diagram to assets
+cp ~/my-diagram.svg 04_ASSETS/
+
+# 2. Reference in post
+echo 'image::../04_ASSETS/my-diagram.svg[Architecture, 800, 600]' >> post.adoc
+
+# 3. Convert to see it embedded
+./convert.sh
+----
+
+== Current Content
+
+=== Published Posts (6)
+
+[options="header"]
+|===
+|Post |Topic |Status |HTML
+|2025-POST-ISE-001 |Nine Years of ISE |✓ Complete |link:html_output/2025-POST-ISE-001-nine-years-of-ise.html[View]
+|2025-POST-ISE-002 |ISE Automation Framework |✓ Complete |link:html_output/2025-POST-ISE-002-automation-framework.html[View]
+|2025-POST-DEV-001 |Network Engineer to Full-Stack |✓ Complete |link:html_output/2025-POST-DEV-001-network-engineer-to-fullstack.html[View]
+|2025-POST-LINUX-001 |Arch Linux Workstation |✓ Complete |link:html_output/2025-POST-LINUX-001-arch-linux-workstation.html[View]
+|2025-POST-VIM-001 |Neovim Complete IDE |✓ Complete |link:html_output/2025-POST-VIM-001-neovim-complete-ide.html[View]
+|2025-POST-INFRA-001 |Infrastructure as Code |✓ Complete |link:html_output/2025-POST-INFRA-001-infrastructure-as-code.html[View]
+|===
+
+=== Drafts (1)
+
+* Zero Trust Network Implementation (40% complete)
+
+=== Series (1)
+
+* Python Network Automation Mastery (8 parts planned)
+
+== Writing Workflow
+
+=== Daily Workflow
+
+[source,bash]
+----
+# Morning: Review and plan
+ls -la 02_DRAFTS/  # Check drafts
+grep -r "TODO" 01_POSTS/ 02_DRAFTS/  # Find TODOs
+
+# Write/Edit
+vim 02_DRAFTS/current-post.adoc
+
+# Preview
+./convert.sh
+firefox html_output/index.html
+
+# End of day: Commit
+git add .
+git commit -m "Progress on [topic]"
+git push
+----
+
+=== Publishing Checklist
+
+- [ ] Content technically accurate
+- [ ] Code examples tested
+- [ ] No sensitive information
+- [ ] Diagrams/assets included
+- [ ] Links working
+- [ ] Converted to HTML
+- [ ] Reviewed in browser
+- [ ] Committed to git
+- [ ] GitHub Action triggered
+
+== Technical Details
+
+=== AsciiDoc Features Used
+
+* Source code highlighting
+* Tables and diagrams
+* Cross-references
+* Table of contents
+* Admonitions (NOTE, TIP, WARNING)
+* Include files
+
+=== Naming Convention
+
+[source,text]
+----
+YYYY-POST-CATEGORY-NNN-description.adoc
+
+Categories:
+- ISE: Identity Services Engine
+- DEV: Development
+- SEC: Security
+- NET: Networking
+- LINUX: Linux/Unix
+- VIM: Vim/Neovim
+- PYTHON: Python
+- INFRA: Infrastructure
+----
+
+=== Conversion Tools
+
+[source,bash]
+----
+# Install asciidoctor
+gem install asciidoctor
+gem install asciidoctor-rouge  # Syntax highlighting
+
+# Location
+/home/evanusmodestus/.local/share/gem/ruby/3.4.0/bin/asciidoctor
+----
+
+== Maintenance
+
+=== Update HTML After Changes
+
+[source,bash]
+----
+# Always run after editing
+./convert.sh
+
+# This:
+# 1. Converts all .adoc to .html
+# 2. Updates index.html
+# 3. Preserves directory structure
+# 4. Links everything properly
+----
+
+=== Backup
+
+[source,bash]
+----
+# Regular backups
+tar -czf blog-backup-$(date +%Y%m%d).tar.gz \
+  01_POSTS/ 02_DRAFTS/ 03_SERIES/ 04_ASSETS/
+----
+
+== Problems This Solves
+
+1. **Knowledge Documentation**: 9 years of ISE experience documented
+2. **Portfolio Building**: Shows real production experience
+3. **Knowledge Sharing**: Helps others avoid my mistakes
+4. **Career Growth**: Documents journey from network to full-stack
+5. **Technical Writing**: Professional documentation practice
+
+== Next Steps
+
+1. Complete Zero Trust draft
+2. Start Python automation series Part 1
+3. Add more ISE troubleshooting guides
+4. Document Domus Digitalis architecture
+5. Create Terraform/Ansible tutorials
+
+---
+
+_Real production knowledge. No fluff._

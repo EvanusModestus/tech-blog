@@ -1,0 +1,119 @@
+= Zero Trust Network Architecture: ISE as the Policy Decision Point
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:status: DRAFT
+:completion: 40%
+:doctype: article
+:toc: left
+:icons: font
+
+[NOTE]
+====
+DRAFT STATUS: This post is actively being developed. 
+Current sections completed: Introduction, Architecture Overview
+Next: Implementation details, production examples
+====
+
+== Introduction
+
+After managing traditional perimeter-based security for years, the shift to Zero Trust fundamentally changed how we approach network security. ISE became our Policy Decision Point (PDP) in a comprehensive Zero Trust architecture.
+
+== Why Zero Trust Matters Now
+
+[quote, Personal Experience]
+____
+The 2020 remote work explosion broke our perimeter model overnight. We had to rebuild security from the ground up, assuming breach and verifying everything.
+____
+
+Traditional perimeter security failed when:
+
+* Users worked from anywhere
+* Applications moved to cloud
+* IoT devices proliferated
+* Lateral movement post-breach became common
+
+== ISE as Policy Decision Point
+
+=== Architecture Overview
+
+[source,text]
+----
+  Users/Devices
+       |
+       v
+  [Policy Enforcement Points]
+   Switches | Firewalls | Proxies
+       |
+       v
+  [Policy Decision Point]
+    Cisco ISE Cluster
+       |
+       v
+  [Policy Information Points]
+   AD | SIEM | MDM | Threat Intel
+----
+
+=== Core Components
+
+[source,yaml]
+----
+policy_decision_point:
+  ise_cluster:
+    nodes: 6
+    roles:
+      - policy_admin: 2
+      - monitoring: 2  
+      - policy_service: 2
+    
+policy_enforcement_points:
+  network_devices:
+    switches: 450
+    wireless_controllers: 12
+    firewalls: 8
+    vpn_concentrators: 4
+
+policy_information_points:
+  identity_sources:
+    - active_directory
+    - azure_ad
+    - okta
+  context_sources:
+    - crowdstrike_mdm
+    - splunk_siem
+    - threat_intelligence_feeds
+----
+
+== TODO: Implementation Details
+
+[TODO]
+====
+* [ ] Add pxGrid integration examples
+* [ ] Include Rapid Threat Containment workflows  
+* [ ] Document API integrations with SOAR
+* [ ] Add performance metrics from production
+====
+
+== TODO: Microsegmentation Strategy
+
+[OUTLINE]
+====
+1. TrustSec implementation
+2. Dynamic VLAN assignment
+3. SGT design patterns
+4. East-West traffic inspection
+====
+
+== Lessons Learned (In Progress)
+
+* Initial deployment issues with certificate management
+* Scale challenges with context sharing
+* Integration pain points with third-party systems
+
+[NOTE]
+====
+Need to add specific examples from the 2023 deployment
+====
+
+---
+_Draft in progress - Target completion: February 2025_

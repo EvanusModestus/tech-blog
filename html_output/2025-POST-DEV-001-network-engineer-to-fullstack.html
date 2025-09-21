@@ -437,6 +437,126 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge, pre.rouge .w {
+  color: #24292f;
+  background-color: #f6f8fa;
+}
+pre.rouge .k, pre.rouge .kd, pre.rouge .kn, pre.rouge .kp, pre.rouge .kr, pre.rouge .kt, pre.rouge .kv {
+  color: #cf222e;
+}
+pre.rouge .gr {
+  color: #f6f8fa;
+}
+pre.rouge .gd {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+pre.rouge .nb {
+  color: #953800;
+}
+pre.rouge .nc {
+  color: #953800;
+}
+pre.rouge .no {
+  color: #953800;
+}
+pre.rouge .nn {
+  color: #953800;
+}
+pre.rouge .sr {
+  color: #116329;
+}
+pre.rouge .na {
+  color: #116329;
+}
+pre.rouge .nt {
+  color: #116329;
+}
+pre.rouge .gi {
+  color: #116329;
+  background-color: #dafbe1;
+}
+pre.rouge .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .kc {
+  color: #0550ae;
+}
+pre.rouge .l, pre.rouge .ld, pre.rouge .m, pre.rouge .mb, pre.rouge .mf, pre.rouge .mh, pre.rouge .mi, pre.rouge .il, pre.rouge .mo, pre.rouge .mx {
+  color: #0550ae;
+}
+pre.rouge .sb {
+  color: #0550ae;
+}
+pre.rouge .bp {
+  color: #0550ae;
+}
+pre.rouge .ne {
+  color: #0550ae;
+}
+pre.rouge .nl {
+  color: #0550ae;
+}
+pre.rouge .py {
+  color: #0550ae;
+}
+pre.rouge .nv, pre.rouge .vc, pre.rouge .vg, pre.rouge .vi, pre.rouge .vm {
+  color: #0550ae;
+}
+pre.rouge .o, pre.rouge .ow {
+  color: #0550ae;
+}
+pre.rouge .gh {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .s, pre.rouge .sa, pre.rouge .sc, pre.rouge .dl, pre.rouge .sd, pre.rouge .s2, pre.rouge .se, pre.rouge .sh, pre.rouge .sx, pre.rouge .s1, pre.rouge .ss {
+  color: #0a3069;
+}
+pre.rouge .nd {
+  color: #8250df;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #8250df;
+}
+pre.rouge .err {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cm, pre.rouge .cp, pre.rouge .cpf, pre.rouge .c1, pre.rouge .cs {
+  color: #6e7781;
+}
+pre.rouge .gl {
+  color: #6e7781;
+}
+pre.rouge .gt {
+  color: #6e7781;
+}
+pre.rouge .ni {
+  color: #24292f;
+}
+pre.rouge .si {
+  color: #24292f;
+}
+pre.rouge .ge {
+  color: #24292f;
+  font-style: italic;
+}
+pre.rouge .gs {
+  color: #24292f;
+  font-weight: bold;
+}
+</style>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -449,42 +569,42 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_the_catalyst">The Catalyst</a></li>
-<li><a href="#_why_network_engineers_make_good_developers">Why Network Engineers Make Good Developers</a>
+<li><a href="#_the_catalyst">1. The Catalyst</a></li>
+<li><a href="#_why_network_engineers_make_good_developers">2. Why Network Engineers Make Good Developers</a>
 <ul class="sectlevel2">
-<li><a href="#_we_already_think_in_systems">We Already Think in Systems</a></li>
-<li><a href="#_protocol_knowledge_transfers_to_apis">Protocol Knowledge Transfers to APIs</a></li>
+<li><a href="#_we_already_think_in_systems">2.1. We Already Think in Systems</a></li>
+<li><a href="#_protocol_knowledge_transfers_to_apis">2.2. Protocol Knowledge Transfers to APIs</a></li>
 </ul>
 </li>
-<li><a href="#_building_domus_digitalis_architecture_decisions">Building Domus Digitalis: Architecture Decisions</a>
+<li><a href="#_building_domus_digitalis_architecture_decisions">3. Building Domus Digitalis: Architecture Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_the_stack_selection">The Stack Selection</a></li>
-<li><a href="#_database_design_thinking_in_tables_not_packets">Database Design: Thinking in Tables, Not Packets</a></li>
-<li><a href="#_caching_strategy_lessons_from_route_caching">Caching Strategy: Lessons from Route Caching</a></li>
+<li><a href="#_the_stack_selection">3.1. The Stack Selection</a></li>
+<li><a href="#_database_design_thinking_in_tables_not_packets">3.2. Database Design: Thinking in Tables, Not Packets</a></li>
+<li><a href="#_caching_strategy_lessons_from_route_caching">3.3. Caching Strategy: Lessons from Route Caching</a></li>
 </ul>
 </li>
-<li><a href="#_performance_optimization_network_principles_in_web_development">Performance Optimization: Network Principles in Web Development</a>
+<li><a href="#_performance_optimization_network_principles_in_web_development">4. Performance Optimization: Network Principles in Web Development</a>
 <ul class="sectlevel2">
-<li><a href="#_request_coalescing_like_multicast">Request Coalescing (Like Multicast)</a></li>
-<li><a href="#_load_balancing_like_ecmp">Load Balancing (Like ECMP)</a></li>
+<li><a href="#_request_coalescing_like_multicast">4.1. Request Coalescing (Like Multicast)</a></li>
+<li><a href="#_load_balancing_like_ecmp">4.2. Load Balancing (Like ECMP)</a></li>
 </ul>
 </li>
-<li><a href="#_deployment_infrastructure_as_code">Deployment: Infrastructure as Code</a></li>
-<li><a href="#_lessons_learned">Lessons Learned</a>
+<li><a href="#_deployment_infrastructure_as_code">5. Deployment: Infrastructure as Code</a></li>
+<li><a href="#_lessons_learned">6. Lessons Learned</a>
 <ul class="sectlevel2">
-<li><a href="#_what_networking_taught_me_about_development">What Networking Taught Me About Development</a></li>
-<li><a href="#_what_development_taught_me_about_networking">What Development Taught Me About Networking</a></li>
+<li><a href="#_what_networking_taught_me_about_development">6.1. What Networking Taught Me About Development</a></li>
+<li><a href="#_what_development_taught_me_about_networking">6.2. What Development Taught Me About Networking</a></li>
 </ul>
 </li>
-<li><a href="#_the_result_production_ready_application">The Result: Production-Ready Application</a></li>
-<li><a href="#_advice_for_network_engineers_considering_development">Advice for Network Engineers Considering Development</a>
+<li><a href="#_the_result_production_ready_application">7. The Result: Production-Ready Application</a></li>
+<li><a href="#_advice_for_network_engineers_considering_development">8. Advice for Network Engineers Considering Development</a>
 <ul class="sectlevel2">
-<li><a href="#_start_with_what_you_know">Start With What You Know</a></li>
-<li><a href="#_leverage_your_strengths">Leverage Your Strengths</a></li>
-<li><a href="#_build_something_real">Build Something Real</a></li>
+<li><a href="#_start_with_what_you_know">8.1. Start With What You Know</a></li>
+<li><a href="#_leverage_your_strengths">8.2. Leverage Your Strengths</a></li>
+<li><a href="#_build_something_real">8.3. Build Something Real</a></li>
 </ul>
 </li>
-<li><a href="#_conclusion">Conclusion</a></li>
+<li><a href="#_conclusion">9. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -501,7 +621,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_the_catalyst">The Catalyst</h2>
+<h2 id="_the_catalyst">1. The Catalyst</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In 2024, after eight years of managing network infrastructure, I found myself writing more Python scripts than configuring VLANs. The automation tools I&#8217;d built for ISE management had grown into full applications. It was time to formalize this transition.</p>
@@ -512,10 +632,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_why_network_engineers_make_good_developers">Why Network Engineers Make Good Developers</h2>
+<h2 id="_why_network_engineers_make_good_developers">2. Why Network Engineers Make Good Developers</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_we_already_think_in_systems">We Already Think in Systems</h3>
+<h3 id="_we_already_think_in_systems">2.1. We Already Think in Systems</h3>
 <div class="paragraph">
 <p>Network engineers inherently understand:</p>
 </div>
@@ -543,103 +663,103 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">// Network thinking applied to React state management
-const ConnectionManager = () =&gt; {
-  const [connections, setConnections] = useState(new Map());
-  const [retryQueue, setRetryQueue] = useState([]);
+<pre class="rouge highlight"><code data-lang="javascript"><span class="c1">// Network thinking applied to React state management</span>
+<span class="kd">const</span> <span class="nx">ConnectionManager</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">connections</span><span class="p">,</span> <span class="nx">setConnections</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="k">new</span> <span class="nc">Map</span><span class="p">());</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">retryQueue</span><span class="p">,</span> <span class="nx">setRetryQueue</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">([]);</span>
 
-  // Similar to OSPF adjacency formation
-  const establishConnection = async (endpoint) =&gt; {
-    const maxRetries = 3;
-    const backoffMs = [1000, 2000, 4000]; // Exponential backoff
+  <span class="c1">// Similar to OSPF adjacency formation</span>
+  <span class="kd">const</span> <span class="nx">establishConnection</span> <span class="o">=</span> <span class="k">async </span><span class="p">(</span><span class="nx">endpoint</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">maxRetries</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">backoffMs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">];</span> <span class="c1">// Exponential backoff</span>
 
-    for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
-      try {
-        const conn = await initiateConnection(endpoint);
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">attempt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">attempt</span> <span class="o">&lt;</span> <span class="nx">maxRetries</span><span class="p">;</span> <span class="nx">attempt</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">initiateConnection</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">);</span>
 
-        // Three-way handshake concept
-        await conn.syn();
-        await conn.synAck();
-        await conn.ack();
+        <span class="c1">// Three-way handshake concept</span>
+        <span class="k">await</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">syn</span><span class="p">();</span>
+        <span class="k">await</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">synAck</span><span class="p">();</span>
+        <span class="k">await</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">ack</span><span class="p">();</span>
 
-        setConnections(prev =&gt; new Map(prev).set(endpoint.id, conn));
-        return conn;
-      } catch (error) {
-        console.log(`Attempt ${attempt + 1} failed, backing off ${backoffMs[attempt]}ms`);
-        await new Promise(resolve =&gt; setTimeout(resolve, backoffMs[attempt]));
-      }
-    }
+        <span class="nf">setConnections</span><span class="p">(</span><span class="nx">prev</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">(</span><span class="nx">prev</span><span class="p">).</span><span class="nf">set</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">conn</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nx">conn</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Attempt </span><span class="p">${</span><span class="nx">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span><span class="s2"> failed, backing off </span><span class="p">${</span><span class="nx">backoffMs</span><span class="p">[</span><span class="nx">attempt</span><span class="p">]}</span><span class="s2">ms`</span><span class="p">);</span>
+        <span class="k">await</span> <span class="k">new</span> <span class="nc">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nf">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">backoffMs</span><span class="p">[</span><span class="nx">attempt</span><span class="p">]));</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
 
-    // Add to dead peer detection queue
-    setRetryQueue(prev =&gt; [...prev, endpoint]);
-  };
-};</code></pre>
+    <span class="c1">// Add to dead peer detection queue</span>
+    <span class="nf">setRetryQueue</span><span class="p">(</span><span class="nx">prev</span> <span class="o">=&gt;</span> <span class="p">[...</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">endpoint</span><span class="p">]);</span>
+  <span class="p">};</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_protocol_knowledge_transfers_to_apis">Protocol Knowledge Transfers to APIs</h3>
+<h3 id="_protocol_knowledge_transfers_to_apis">2.2. Protocol Knowledge Transfers to APIs</h3>
 <div class="paragraph">
 <p>Understanding network protocols provides insight into API design:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">// RESTful API design inspired by network protocols
-class APIClient {
-  constructor(baseURL) {
-    this.baseURL = baseURL;
-    this.timeout = 30000; // TCP-like timeout
-    this.maxRetries = 3;  // Similar to RADIUS retransmits
-  }
+<pre class="rouge highlight"><code data-lang="javascript"><span class="c1">// RESTful API design inspired by network protocols</span>
+<span class="kd">class</span> <span class="nc">APIClient</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">baseURL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">baseURL</span> <span class="o">=</span> <span class="nx">baseURL</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">;</span> <span class="c1">// TCP-like timeout</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">maxRetries</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>  <span class="c1">// Similar to RADIUS retransmits</span>
+  <span class="p">}</span>
 
-  async request(endpoint, options = {}) {
-    const { method = 'GET', body, headers = {} } = options;
+  <span class="k">async</span> <span class="nf">request</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">method</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">headers</span> <span class="o">=</span> <span class="p">{}</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
-    // Add request ID for tracking (like RADIUS Identifier)
-    const requestId = crypto.randomUUID();
-    headers['X-Request-ID'] = requestId;
+    <span class="c1">// Add request ID for tracking (like RADIUS Identifier)</span>
+    <span class="kd">const</span> <span class="nx">requestId</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">randomUUID</span><span class="p">();</span>
+    <span class="nx">headers</span><span class="p">[</span><span class="dl">'</span><span class="s1">X-Request-ID</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">requestId</span><span class="p">;</span>
 
-    // Implement circuit breaker pattern (like spanning-tree)
-    if (this.circuitBreaker.isOpen(endpoint)) {
-      throw new Error('Circuit breaker open for endpoint');
-    }
+    <span class="c1">// Implement circuit breaker pattern (like spanning-tree)</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">circuitBreaker</span><span class="p">.</span><span class="nf">isOpen</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Circuit breaker open for endpoint</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers
-        },
-        body: body ? JSON.stringify(body) : undefined,
-        signal: AbortSignal.timeout(this.timeout)
-      });
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="nx">baseURL</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="p">,</span>
+        <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+          <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span><span class="p">,</span>
+          <span class="p">...</span><span class="nx">headers</span>
+        <span class="p">},</span>
+        <span class="na">body</span><span class="p">:</span> <span class="nx">body</span> <span class="p">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span> <span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span>
+        <span class="na">signal</span><span class="p">:</span> <span class="nx">AbortSignal</span><span class="p">.</span><span class="nf">timeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">)</span>
+      <span class="p">});</span>
 
-      // Track metrics like SNMP counters
-      this.metrics.record({
-        endpoint,
-        status: response.status,
-        latency: performance.now() - startTime,
-        requestId
-      });
+      <span class="c1">// Track metrics like SNMP counters</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">metrics</span><span class="p">.</span><span class="nf">record</span><span class="p">({</span>
+        <span class="nx">endpoint</span><span class="p">,</span>
+        <span class="na">status</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
+        <span class="na">latency</span><span class="p">:</span> <span class="nx">performance</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">startTime</span><span class="p">,</span>
+        <span class="nx">requestId</span>
+      <span class="p">});</span>
 
-      return response.json();
-    } catch (error) {
-      this.circuitBreaker.recordFailure(endpoint);
-      throw error;
-    }
-  }
-}</code></pre>
+      <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nf">json</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">circuitBreaker</span><span class="p">.</span><span class="nf">recordFailure</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">);</span>
+      <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_building_domus_digitalis_architecture_decisions">Building Domus Digitalis: Architecture Decisions</h2>
+<h2 id="_building_domus_digitalis_architecture_decisions">3. Building Domus Digitalis: Architecture Decisions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_the_stack_selection">The Stack Selection</h3>
+<h3 id="_the_stack_selection">3.1. The Stack Selection</h3>
 <div class="paragraph">
 <p>Choosing the technology stack was influenced by my networking background:</p>
 </div>
@@ -691,322 +811,322 @@ class APIClient {
 </table>
 </div>
 <div class="sect2">
-<h3 id="_database_design_thinking_in_tables_not_packets">Database Design: Thinking in Tables, Not Packets</h3>
+<h3 id="_database_design_thinking_in_tables_not_packets">3.2. Database Design: Thinking in Tables, Not Packets</h3>
 <div class="paragraph">
 <p>The transition from network state tables to database schemas was surprisingly natural:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql">-- Network engineer's approach to database design
-CREATE TABLE projects (
-    id SERIAL PRIMARY KEY,  -- Like interface index
-    uuid UUID DEFAULT gen_random_uuid(), -- Unique identifier like MAC
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Network engineer's approach to database design</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">projects</span> <span class="p">(</span>
+    <span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>  <span class="c1">-- Like interface index</span>
+    <span class="n">uuid</span> <span class="n">UUID</span> <span class="k">DEFAULT</span> <span class="n">gen_random_uuid</span><span class="p">(),</span> <span class="c1">-- Unique identifier like MAC</span>
 
-    -- Core attributes (like interface properties)
-    name_en VARCHAR(255) NOT NULL,
-    description_en TEXT,
-    status VARCHAR(50) CHECK (status IN ('active', 'inactive', 'maintenance')),
+    <span class="c1">-- Core attributes (like interface properties)</span>
+    <span class="n">name_en</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">description_en</span> <span class="nb">TEXT</span><span class="p">,</span>
+    <span class="n">status</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">status</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">'active'</span><span class="p">,</span> <span class="s1">'inactive'</span><span class="p">,</span> <span class="s1">'maintenance'</span><span class="p">)),</span>
 
-    -- Multilingual support (like VLAN tagging)
-    name_es VARCHAR(255),
-    name_pt VARCHAR(255),
-    name_de VARCHAR(255),
+    <span class="c1">-- Multilingual support (like VLAN tagging)</span>
+    <span class="n">name_es</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
+    <span class="n">name_pt</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
+    <span class="n">name_de</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
 
-    -- Metadata (like SNMP counters)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_accessed TIMESTAMP,
-    access_count INTEGER DEFAULT 0,
+    <span class="c1">-- Metadata (like SNMP counters)</span>
+    <span class="n">created_at</span> <span class="nb">TIMESTAMP</span> <span class="k">DEFAULT</span> <span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+    <span class="n">updated_at</span> <span class="nb">TIMESTAMP</span> <span class="k">DEFAULT</span> <span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+    <span class="n">last_accessed</span> <span class="nb">TIMESTAMP</span><span class="p">,</span>
+    <span class="n">access_count</span> <span class="nb">INTEGER</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
 
-    -- Relationships (like routing tables)
-    category_id INTEGER REFERENCES categories(id),
-    owner_id INTEGER REFERENCES users(id),
+    <span class="c1">-- Relationships (like routing tables)</span>
+    <span class="n">category_id</span> <span class="nb">INTEGER</span> <span class="k">REFERENCES</span> <span class="n">categories</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+    <span class="n">owner_id</span> <span class="nb">INTEGER</span> <span class="k">REFERENCES</span> <span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
 
-    -- Performance indexes (like CEF/FIB tables)
-    INDEX idx_status (status),
-    INDEX idx_category (category_id),
-    INDEX idx_updated (updated_at DESC)
-);
+    <span class="c1">-- Performance indexes (like CEF/FIB tables)</span>
+    <span class="k">INDEX</span> <span class="n">idx_status</span> <span class="p">(</span><span class="n">status</span><span class="p">),</span>
+    <span class="k">INDEX</span> <span class="n">idx_category</span> <span class="p">(</span><span class="n">category_id</span><span class="p">),</span>
+    <span class="k">INDEX</span> <span class="n">idx_updated</span> <span class="p">(</span><span class="n">updated_at</span> <span class="k">DESC</span><span class="p">)</span>
+<span class="p">);</span>
 
--- Trigger for updates (like SNMP traps)
-CREATE TRIGGER update_projects_timestamp
-    BEFORE UPDATE ON projects
-    FOR EACH ROW
-    EXECUTE FUNCTION update_modified_column();</code></pre>
+<span class="c1">-- Trigger for updates (like SNMP traps)</span>
+<span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">update_projects_timestamp</span>
+    <span class="k">BEFORE</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">projects</span>
+    <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span>
+    <span class="k">EXECUTE</span> <span class="k">FUNCTION</span> <span class="n">update_modified_column</span><span class="p">();</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_caching_strategy_lessons_from_route_caching">Caching Strategy: Lessons from Route Caching</h3>
+<h3 id="_caching_strategy_lessons_from_route_caching">3.3. Caching Strategy: Lessons from Route Caching</h3>
 <div class="paragraph">
 <p>My experience with CEF (Cisco Express Forwarding) influenced the caching architecture:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">// Redis caching inspired by network route caching
-class CacheManager {
-  constructor(redisClient) {
-    this.redis = redisClient;
-    this.localCache = new Map(); // L1 cache (like FIB)
-    this.stats = {
-      hits: 0,
-      misses: 0,
-      evictions: 0
-    };
-  }
+<pre class="rouge highlight"><code data-lang="javascript"><span class="c1">// Redis caching inspired by network route caching</span>
+<span class="kd">class</span> <span class="nc">CacheManager</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">redisClient</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">redis</span> <span class="o">=</span> <span class="nx">redisClient</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">localCache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span> <span class="c1">// L1 cache (like FIB)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">stats</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">hits</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">misses</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">evictions</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
 
-  async get(key, options = {}) {
-    const { ttl = 300, fallback = null } = options;
+  <span class="k">async</span> <span class="nf">get</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">ttl</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="nx">fallback</span> <span class="o">=</span> <span class="kc">null</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
-    // Check L1 cache first (like checking FIB)
-    if (this.localCache.has(key)) {
-      this.stats.hits++;
-      return this.localCache.get(key).value;
-    }
+    <span class="c1">// Check L1 cache first (like checking FIB)</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">stats</span><span class="p">.</span><span class="nx">hits</span><span class="o">++</span><span class="p">;</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">key</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    // Check L2 cache (Redis, like checking RIB)
-    try {
-      const cached = await this.redis.get(key);
-      if (cached) {
-        this.stats.hits++;
-        // Populate L1 for next access
-        this.localCache.set(key, {
-          value: JSON.parse(cached),
-          expires: Date.now() + (ttl * 1000)
-        });
-        return JSON.parse(cached);
-      }
-    } catch (error) {
-      console.error('Redis error, falling back:', error);
-    }
+    <span class="c1">// Check L2 cache (Redis, like checking RIB)</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">redis</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+      <span class="k">if </span><span class="p">(</span><span class="nx">cached</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stats</span><span class="p">.</span><span class="nx">hits</span><span class="o">++</span><span class="p">;</span>
+        <span class="c1">// Populate L1 for next access</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="p">{</span>
+          <span class="na">value</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">),</span>
+          <span class="na">expires</span><span class="p">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="nx">ttl</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Redis error, falling back:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    // Cache miss (like route not found, need to compute)
-    this.stats.misses++;
+    <span class="c1">// Cache miss (like route not found, need to compute)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">stats</span><span class="p">.</span><span class="nx">misses</span><span class="o">++</span><span class="p">;</span>
 
-    if (fallback) {
-      const value = await fallback();
-      await this.set(key, value, ttl);
-      return value;
-    }
+    <span class="k">if </span><span class="p">(</span><span class="nx">fallback</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fallback</span><span class="p">();</span>
+      <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">ttl</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return null;
-  }
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
 
-  async set(key, value, ttl = 300) {
-    // Update both caches (like updating FIB and RIB)
-    this.localCache.set(key, {
-      value,
-      expires: Date.now() + (ttl * 1000)
-    });
+  <span class="k">async</span> <span class="nf">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">ttl</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Update both caches (like updating FIB and RIB)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">value</span><span class="p">,</span>
+      <span class="na">expires</span><span class="p">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="nx">ttl</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="p">});</span>
 
-    try {
-      await this.redis.setex(key, ttl, JSON.stringify(value));
-    } catch (error) {
-      console.error('Failed to set Redis cache:', error);
-    }
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">redis</span><span class="p">.</span><span class="nf">setex</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">ttl</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">value</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to set Redis cache:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    // Implement LRU eviction if needed (like CAM table overflow)
-    this.evictIfNeeded();
-  }
+    <span class="c1">// Implement LRU eviction if needed (like CAM table overflow)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nf">evictIfNeeded</span><span class="p">();</span>
+  <span class="p">}</span>
 
-  evictIfNeeded() {
-    const maxSize = 1000; // Like CAM table size limit
-    if (this.localCache.size &gt; maxSize) {
-      const sorted = Array.from(this.localCache.entries())
-        .sort((a, b) =&gt; a[1].expires - b[1].expires);
+  <span class="nf">evictIfNeeded</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">maxSize</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// Like CAM table size limit</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nx">size</span> <span class="o">&gt;</span> <span class="nx">maxSize</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">sorted</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="nf">entries</span><span class="p">())</span>
+        <span class="p">.</span><span class="nf">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">expires</span> <span class="o">-</span> <span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">expires</span><span class="p">);</span>
 
-      const toEvict = sorted.slice(0, 100); // Evict oldest 10%
-      toEvict.forEach(([key]) =&gt; {
-        this.localCache.delete(key);
-        this.stats.evictions++;
-      });
-    }
-  }
-}</code></pre>
+      <span class="kd">const</span> <span class="nx">toEvict</span> <span class="o">=</span> <span class="nx">sorted</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// Evict oldest 10%</span>
+      <span class="nx">toEvict</span><span class="p">.</span><span class="nf">forEach</span><span class="p">(([</span><span class="nx">key</span><span class="p">])</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">localCache</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stats</span><span class="p">.</span><span class="nx">evictions</span><span class="o">++</span><span class="p">;</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_performance_optimization_network_principles_in_web_development">Performance Optimization: Network Principles in Web Development</h2>
+<h2 id="_performance_optimization_network_principles_in_web_development">4. Performance Optimization: Network Principles in Web Development</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_request_coalescing_like_multicast">Request Coalescing (Like Multicast)</h3>
+<h3 id="_request_coalescing_like_multicast">4.1. Request Coalescing (Like Multicast)</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">// Prevent duplicate API calls using request coalescing
-class RequestCoalescer {
-  constructor() {
-    this.pending = new Map();
-  }
+<pre class="rouge highlight"><code data-lang="javascript"><span class="c1">// Prevent duplicate API calls using request coalescing</span>
+<span class="kd">class</span> <span class="nc">RequestCoalescer</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">pending</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+  <span class="p">}</span>
 
-  async fetch(key, fetcher) {
-    // If request is already pending, join it (like IGMP join)
-    if (this.pending.has(key)) {
-      return this.pending.get(key);
-    }
+  <span class="k">async</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">fetcher</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// If request is already pending, join it (like IGMP join)</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pending</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pending</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    // Start new request and allow others to join
-    const promise = fetcher().finally(() =&gt; {
-      this.pending.delete(key);
-    });
+    <span class="c1">// Start new request and allow others to join</span>
+    <span class="kd">const</span> <span class="nx">promise</span> <span class="o">=</span> <span class="nf">fetcher</span><span class="p">().</span><span class="k">finally</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">pending</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+    <span class="p">});</span>
 
-    this.pending.set(key, promise);
-    return promise;
-  }
-}
+    <span class="k">this</span><span class="p">.</span><span class="nx">pending</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">promise</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-// Usage in React component
-const useProjectData = (projectId) =&gt; {
-  const coalescer = useRef(new RequestCoalescer());
+<span class="c1">// Usage in React component</span>
+<span class="kd">const</span> <span class="nx">useProjectData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">projectId</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">coalescer</span> <span class="o">=</span> <span class="nf">useRef</span><span class="p">(</span><span class="k">new</span> <span class="nc">RequestCoalescer</span><span class="p">());</span>
 
-  return useQuery({
-    queryKey: ['project', projectId],
-    queryFn: () =&gt; coalescer.current.fetch(
-      `project-${projectId}`,
-      () =&gt; api.getProject(projectId)
-    ),
-    staleTime: 60000 // Like ARP cache timeout
-  });
-};</code></pre>
+  <span class="k">return</span> <span class="nf">useQuery</span><span class="p">({</span>
+    <span class="na">queryKey</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">project</span><span class="dl">'</span><span class="p">,</span> <span class="nx">projectId</span><span class="p">],</span>
+    <span class="na">queryFn</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">coalescer</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span>
+      <span class="s2">`project-</span><span class="p">${</span><span class="nx">projectId</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
+      <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">api</span><span class="p">.</span><span class="nf">getProject</span><span class="p">(</span><span class="nx">projectId</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="na">staleTime</span><span class="p">:</span> <span class="mi">60000</span> <span class="c1">// Like ARP cache timeout</span>
+  <span class="p">});</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_load_balancing_like_ecmp">Load Balancing (Like ECMP)</h3>
+<h3 id="_load_balancing_like_ecmp">4.2. Load Balancing (Like ECMP)</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">// Client-side load balancing inspired by ECMP
-class LoadBalancer {
-  constructor(endpoints) {
-    this.endpoints = endpoints;
-    this.healthChecks = new Map();
-    this.currentIndex = 0;
-  }
+<pre class="rouge highlight"><code data-lang="javascript"><span class="c1">// Client-side load balancing inspired by ECMP</span>
+<span class="kd">class</span> <span class="nc">LoadBalancer</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">endpoints</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">endpoints</span> <span class="o">=</span> <span class="nx">endpoints</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">healthChecks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
 
-  // Round-robin with health checking (like HSRP/VRRP)
-  async getHealthyEndpoint() {
-    const maxAttempts = this.endpoints.length;
+  <span class="c1">// Round-robin with health checking (like HSRP/VRRP)</span>
+  <span class="k">async</span> <span class="nf">getHealthyEndpoint</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">maxAttempts</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">endpoints</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
-    for (let i = 0; i &lt; maxAttempts; i++) {
-      const endpoint = this.endpoints[this.currentIndex];
-      this.currentIndex = (this.currentIndex + 1) % this.endpoints.length;
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">maxAttempts</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">endpoints</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span><span class="p">];</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="k">this</span><span class="p">.</span><span class="nx">endpoints</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
-      if (await this.isHealthy(endpoint)) {
-        return endpoint;
-      }
-    }
+      <span class="k">if </span><span class="p">(</span><span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nf">isHealthy</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">endpoint</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
 
-    throw new Error('No healthy endpoints available');
-  }
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">No healthy endpoints available</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  async isHealthy(endpoint) {
-    // Similar to ICMP health checks
-    try {
-      const response = await fetch(`${endpoint}/health`, {
-        method: 'HEAD',
-        signal: AbortSignal.timeout(3000)
-      });
-      return response.ok;
-    } catch {
-      return false;
-    }
-  }
-}</code></pre>
+  <span class="k">async</span> <span class="nf">isHealthy</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Similar to ICMP health checks</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">/health`</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">HEAD</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">signal</span><span class="p">:</span> <span class="nx">AbortSignal</span><span class="p">.</span><span class="nf">timeout</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+      <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deployment_infrastructure_as_code">Deployment: Infrastructure as Code</h2>
+<h2 id="_deployment_infrastructure_as_code">5. Deployment: Infrastructure as Code</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>My networking background made infrastructure as code intuitive:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"># docker-compose.yml - Like a network topology diagram
-version: '3.8'
+<pre class="rouge highlight"><code data-lang="yaml"><span class="c1"># docker-compose.yml - Like a network topology diagram</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.8'</span>
 
-services:
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: domus_dev
-      POSTGRES_USER: domus_user
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - backend_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U domus_user"]
-      interval: 10s  # Like BFD timers
-      timeout: 5s
-      retries: 5
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:16-alpine</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">POSTGRES_DB</span><span class="pi">:</span> <span class="s">domus_dev</span>
+      <span class="na">POSTGRES_USER</span><span class="pi">:</span> <span class="s">domus_user</span>
+      <span class="na">POSTGRES_PASSWORD</span><span class="pi">:</span> <span class="s">${DB_PASSWORD}</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">postgres_data:/var/lib/postgresql/data</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend_net</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD-SHELL"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">domus_user"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">10s</span>  <span class="c1"># Like BFD timers</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">5</span>
 
-  redis:
-    image: redis:7-alpine
-    command: redis-server --maxmemory 256mb --maxmemory-policy lru-ttl
-    networks:
-      - backend_net
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  <span class="na">redis</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redis:7-alpine</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --maxmemory 256mb --maxmemory-policy lru-ttl</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend_net</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">redis-cli"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">ping"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">10s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">5</span>
 
-  backend:
-    build: ./apps/backend
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql://domus_user:${DB_PASSWORD}@postgres:5432/domus_dev
-      REDIS_URL: redis://redis:6379
-    networks:
-      - backend_net
-      - frontend_net
-    restart: unless-stopped  # Like interface err-disable recovery
+  <span class="na">backend</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span> <span class="s">./apps/backend</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="na">postgres</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">service_healthy</span>
+      <span class="na">redis</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">service_healthy</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">DATABASE_URL</span><span class="pi">:</span> <span class="s">postgresql://domus_user:${DB_PASSWORD}@postgres:5432/domus_dev</span>
+      <span class="na">REDIS_URL</span><span class="pi">:</span> <span class="s">redis://redis:6379</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend_net</span>
+      <span class="pi">-</span> <span class="s">frontend_net</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>  <span class="c1"># Like interface err-disable recovery</span>
 
-  frontend:
-    build: ./apps/frontend
-    depends_on:
-      - backend
-    networks:
-      - frontend_net
-    ports:
-      - "3000:3000"  # Like NAT port mapping
+  <span class="na">frontend</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span> <span class="s">./apps/frontend</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend_net</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>  <span class="c1"># Like NAT port mapping</span>
 
-networks:
-  backend_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24  # Private network like RFC1918
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">backend_net</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+    <span class="na">ipam</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">subnet</span><span class="pi">:</span> <span class="s">172.20.0.0/24</span>  <span class="c1"># Private network like RFC1918</span>
 
-  frontend_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/24
+  <span class="na">frontend_net</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+    <span class="na">ipam</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">subnet</span><span class="pi">:</span> <span class="s">172.21.0.0/24</span>
 
-volumes:
-  postgres_data:
-  redis_data:</code></pre>
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">postgres_data</span><span class="pi">:</span>
+  <span class="na">redis_data</span><span class="pi">:</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lessons_learned">Lessons Learned</h2>
+<h2 id="_lessons_learned">6. Lessons Learned</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_what_networking_taught_me_about_development">What Networking Taught Me About Development</h3>
+<h3 id="_what_networking_taught_me_about_development">6.1. What Networking Taught Me About Development</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1028,7 +1148,7 @@ volumes:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_development_taught_me_about_networking">What Development Taught Me About Networking</h3>
+<h3 id="_what_development_taught_me_about_networking">6.2. What Development Taught Me About Networking</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1052,7 +1172,7 @@ volumes:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_the_result_production_ready_application">The Result: Production-Ready Application</h2>
+<h2 id="_the_result_production_ready_application">7. The Result: Production-Ready Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Domus Digitalis now handles:</p>
@@ -1085,10 +1205,10 @@ volumes:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_advice_for_network_engineers_considering_development">Advice for Network Engineers Considering Development</h2>
+<h2 id="_advice_for_network_engineers_considering_development">8. Advice for Network Engineers Considering Development</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_start_with_what_you_know">Start With What You Know</h3>
+<h3 id="_start_with_what_you_know">8.1. Start With What You Know</h3>
 <div class="paragraph">
 <p>Begin by automating your current work:</p>
 </div>
@@ -1113,7 +1233,7 @@ volumes:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_leverage_your_strengths">Leverage Your Strengths</h3>
+<h3 id="_leverage_your_strengths">8.2. Leverage Your Strengths</h3>
 <div class="paragraph">
 <p>Your networking background provides advantages:</p>
 </div>
@@ -1138,7 +1258,7 @@ volumes:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_build_something_real">Build Something Real</h3>
+<h3 id="_build_something_real">8.3. Build Something Real</h3>
 <div class="paragraph">
 <p>Don&#8217;t just follow tutorials—build something you&#8217;ll use:</p>
 </div>
@@ -1165,7 +1285,7 @@ volumes:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_conclusion">Conclusion</h2>
+<h2 id="_conclusion">9. Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The journey from network engineer to full-stack developer isn&#8217;t about leaving networking behind—it&#8217;s about expanding your capabilities. The same mindset that helps you design resilient networks will help you build robust applications.</p>
@@ -1195,5 +1315,8 @@ volumes:
 Last updated 2025-09-20 18:06:12 -0700
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="code-copy.js"></script>
 </body>
 </html>

@@ -437,6 +437,126 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge, pre.rouge .w {
+  color: #24292f;
+  background-color: #f6f8fa;
+}
+pre.rouge .k, pre.rouge .kd, pre.rouge .kn, pre.rouge .kp, pre.rouge .kr, pre.rouge .kt, pre.rouge .kv {
+  color: #cf222e;
+}
+pre.rouge .gr {
+  color: #f6f8fa;
+}
+pre.rouge .gd {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+pre.rouge .nb {
+  color: #953800;
+}
+pre.rouge .nc {
+  color: #953800;
+}
+pre.rouge .no {
+  color: #953800;
+}
+pre.rouge .nn {
+  color: #953800;
+}
+pre.rouge .sr {
+  color: #116329;
+}
+pre.rouge .na {
+  color: #116329;
+}
+pre.rouge .nt {
+  color: #116329;
+}
+pre.rouge .gi {
+  color: #116329;
+  background-color: #dafbe1;
+}
+pre.rouge .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .kc {
+  color: #0550ae;
+}
+pre.rouge .l, pre.rouge .ld, pre.rouge .m, pre.rouge .mb, pre.rouge .mf, pre.rouge .mh, pre.rouge .mi, pre.rouge .il, pre.rouge .mo, pre.rouge .mx {
+  color: #0550ae;
+}
+pre.rouge .sb {
+  color: #0550ae;
+}
+pre.rouge .bp {
+  color: #0550ae;
+}
+pre.rouge .ne {
+  color: #0550ae;
+}
+pre.rouge .nl {
+  color: #0550ae;
+}
+pre.rouge .py {
+  color: #0550ae;
+}
+pre.rouge .nv, pre.rouge .vc, pre.rouge .vg, pre.rouge .vi, pre.rouge .vm {
+  color: #0550ae;
+}
+pre.rouge .o, pre.rouge .ow {
+  color: #0550ae;
+}
+pre.rouge .gh {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .s, pre.rouge .sa, pre.rouge .sc, pre.rouge .dl, pre.rouge .sd, pre.rouge .s2, pre.rouge .se, pre.rouge .sh, pre.rouge .sx, pre.rouge .s1, pre.rouge .ss {
+  color: #0a3069;
+}
+pre.rouge .nd {
+  color: #8250df;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #8250df;
+}
+pre.rouge .err {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cm, pre.rouge .cp, pre.rouge .cpf, pre.rouge .c1, pre.rouge .cs {
+  color: #6e7781;
+}
+pre.rouge .gl {
+  color: #6e7781;
+}
+pre.rouge .gt {
+  color: #6e7781;
+}
+pre.rouge .ni {
+  color: #24292f;
+}
+pre.rouge .si {
+  color: #24292f;
+}
+pre.rouge .ge {
+  color: #24292f;
+  font-style: italic;
+}
+pre.rouge .gs {
+  color: #24292f;
+  font-weight: bold;
+}
+</style>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -449,48 +569,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_the_breaking_point">The Breaking Point</a></li>
-<li><a href="#_architecture_overview">Architecture Overview</a>
+<li><a href="#_the_breaking_point">1. The Breaking Point</a></li>
+<li><a href="#_architecture_overview">2. Architecture Overview</a>
 <ul class="sectlevel2">
-<li><a href="#_technology_stack">Technology Stack</a></li>
-<li><a href="#_workflow_architecture">Workflow Architecture</a></li>
+<li><a href="#_technology_stack">2.1. Technology Stack</a></li>
+<li><a href="#_workflow_architecture">2.2. Workflow Architecture</a></li>
 </ul>
 </li>
-<li><a href="#_terraform_infrastructure_state_management">Terraform: Infrastructure State Management</a>
+<li><a href="#_terraform_infrastructure_state_management">3. Terraform: Infrastructure State Management</a>
 <ul class="sectlevel2">
-<li><a href="#_provider_configuration">Provider Configuration</a></li>
-<li><a href="#_network_device_management">Network Device Management</a></li>
-<li><a href="#_vlan_management">VLAN Management</a></li>
-<li><a href="#_load_balancer_configuration">Load Balancer Configuration</a></li>
+<li><a href="#_provider_configuration">3.1. Provider Configuration</a></li>
+<li><a href="#_network_device_management">3.2. Network Device Management</a></li>
+<li><a href="#_vlan_management">3.3. VLAN Management</a></li>
+<li><a href="#_load_balancer_configuration">3.4. Load Balancer Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_ansible_configuration_deployment">Ansible: Configuration Deployment</a>
+<li><a href="#_ansible_configuration_deployment">4. Ansible: Configuration Deployment</a>
 <ul class="sectlevel2">
-<li><a href="#_dynamic_inventory">Dynamic Inventory</a></li>
-<li><a href="#_switch_configuration_playbook">Switch Configuration Playbook</a></li>
-<li><a href="#_configuration_templates">Configuration Templates</a></li>
+<li><a href="#_dynamic_inventory">4.1. Dynamic Inventory</a></li>
+<li><a href="#_switch_configuration_playbook">4.2. Switch Configuration Playbook</a></li>
+<li><a href="#_configuration_templates">4.3. Configuration Templates</a></li>
 </ul>
 </li>
-<li><a href="#_cicd_pipeline">CI/CD Pipeline</a>
+<li><a href="#_cicd_pipeline">5. CI/CD Pipeline</a>
 <ul class="sectlevel2">
-<li><a href="#_gitlab_ci_configuration">GitLab CI Configuration</a></li>
-<li><a href="#_testing_framework">Testing Framework</a></li>
+<li><a href="#_gitlab_ci_configuration">5.1. GitLab CI Configuration</a></li>
+<li><a href="#_testing_framework">5.2. Testing Framework</a></li>
 </ul>
 </li>
-<li><a href="#_monitoring_and_observability">Monitoring and Observability</a>
+<li><a href="#_monitoring_and_observability">6. Monitoring and Observability</a>
 <ul class="sectlevel2">
-<li><a href="#_prometheus_metrics">Prometheus Metrics</a></li>
+<li><a href="#_prometheus_metrics">6.1. Prometheus Metrics</a></li>
 </ul>
 </li>
-<li><a href="#_results_and_metrics">Results and Metrics</a></li>
-<li><a href="#_lessons_learned">Lessons Learned</a>
+<li><a href="#_results_and_metrics">7. Results and Metrics</a></li>
+<li><a href="#_lessons_learned">8. Lessons Learned</a>
 <ul class="sectlevel2">
-<li><a href="#_what_worked">What Worked</a></li>
-<li><a href="#_challenges_overcome">Challenges Overcome</a></li>
+<li><a href="#_what_worked">8.1. What Worked</a></li>
+<li><a href="#_challenges_overcome">8.2. Challenges Overcome</a></li>
 </ul>
 </li>
-<li><a href="#_future_enhancements">Future Enhancements</a></li>
-<li><a href="#_conclusion">Conclusion</a></li>
+<li><a href="#_future_enhancements">9. Future Enhancements</a></li>
+<li><a href="#_conclusion">10. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -507,7 +627,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_the_breaking_point">The Breaking Point</h2>
+<h2 id="_the_breaking_point">1. The Breaking Point</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In 2022, our network had grown to:
@@ -525,45 +645,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_architecture_overview">Architecture Overview</h2>
+<h2 id="_architecture_overview">2. Architecture Overview</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_technology_stack">Technology Stack</h3>
+<h3 id="_technology_stack">2.1. Technology Stack</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml">infrastructure_stack:
-  state_management:
-    tool: Terraform
-    version: 1.6.x
-    backend: S3 with DynamoDB locking
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">infrastructure_stack</span><span class="pi">:</span>
+  <span class="na">state_management</span><span class="pi">:</span>
+    <span class="na">tool</span><span class="pi">:</span> <span class="s">Terraform</span>
+    <span class="na">version</span><span class="pi">:</span> <span class="s">1.6.x</span>
+    <span class="na">backend</span><span class="pi">:</span> <span class="s">S3 with DynamoDB locking</span>
 
-  configuration_management:
-    tool: Ansible
-    version: 2.16.x
-    inventory: Dynamic from Netbox
+  <span class="na">configuration_management</span><span class="pi">:</span>
+    <span class="na">tool</span><span class="pi">:</span> <span class="s">Ansible</span>
+    <span class="na">version</span><span class="pi">:</span> <span class="s">2.16.x</span>
+    <span class="na">inventory</span><span class="pi">:</span> <span class="s">Dynamic from Netbox</span>
 
-  source_control:
-    platform: GitLab
-    branching: GitFlow
+  <span class="na">source_control</span><span class="pi">:</span>
+    <span class="na">platform</span><span class="pi">:</span> <span class="s">GitLab</span>
+    <span class="na">branching</span><span class="pi">:</span> <span class="s">GitFlow</span>
 
-  ci_cd:
-    pipeline: GitLab CI
-    stages: [validate, plan, test, deploy]
+  <span class="na">ci_cd</span><span class="pi">:</span>
+    <span class="na">pipeline</span><span class="pi">:</span> <span class="s">GitLab CI</span>
+    <span class="na">stages</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">validate</span><span class="pi">,</span> <span class="nv">plan</span><span class="pi">,</span> <span class="nv">test</span><span class="pi">,</span> <span class="nv">deploy</span><span class="pi">]</span>
 
-  monitoring:
-    observability: Prometheus + Grafana
-    logging: ELK Stack
-    alerting: PagerDuty
+  <span class="na">monitoring</span><span class="pi">:</span>
+    <span class="na">observability</span><span class="pi">:</span> <span class="s">Prometheus + Grafana</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="s">ELK Stack</span>
+    <span class="na">alerting</span><span class="pi">:</span> <span class="s">PagerDuty</span>
 
-  documentation:
-    api_docs: OpenAPI/Swagger
-    runbooks: Confluence
-    diagrams: Diagrams as Code (Python)</code></pre>
+  <span class="na">documentation</span><span class="pi">:</span>
+    <span class="na">api_docs</span><span class="pi">:</span> <span class="s">OpenAPI/Swagger</span>
+    <span class="na">runbooks</span><span class="pi">:</span> <span class="s">Confluence</span>
+    <span class="na">diagrams</span><span class="pi">:</span> <span class="s">Diagrams as Code (Python)</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_workflow_architecture">Workflow Architecture</h3>
+<h3 id="_workflow_architecture">2.2. Workflow Architecture</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="asciidoc">Developer → Git Push → CI Pipeline → Terraform Plan → Review → Apply → Ansible Deploy
@@ -575,576 +695,576 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_terraform_infrastructure_state_management">Terraform: Infrastructure State Management</h2>
+<h2 id="_terraform_infrastructure_state_management">3. Terraform: Infrastructure State Management</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_provider_configuration">Provider Configuration</h3>
+<h3 id="_provider_configuration">3.1. Provider Configuration</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="hcl"># terraform/providers.tf - Multi-vendor provider setup
-terraform {
-  required_version = "&gt;= 1.6.0"
+<pre class="rouge highlight"><code data-lang="hcl"><span class="c1"># terraform/providers.tf - Multi-vendor provider setup</span>
+<span class="nx">terraform</span> <span class="p">{</span>
+  <span class="nx">required_version</span> <span class="o">=</span> <span class="s2">"&gt;= 1.6.0"</span>
 
-  required_providers {
-    cisco = {
-      source  = "CiscoDevNet/cisco"
-      version = "~&gt; 0.8.0"
-    }
+  <span class="nx">required_providers</span> <span class="p">{</span>
+    <span class="nx">cisco</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">source</span>  <span class="o">=</span> <span class="s2">"CiscoDevNet/cisco"</span>
+      <span class="nx">version</span> <span class="o">=</span> <span class="s2">"~&gt; 0.8.0"</span>
+    <span class="p">}</span>
 
-    fortios = {
-      source  = "fortinetdev/fortios"
-      version = "~&gt; 1.18.0"
-    }
+    <span class="nx">fortios</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">source</span>  <span class="o">=</span> <span class="s2">"fortinetdev/fortios"</span>
+      <span class="nx">version</span> <span class="o">=</span> <span class="s2">"~&gt; 1.18.0"</span>
+    <span class="p">}</span>
 
-    panos = {
-      source  = "PaloAltoNetworks/panos"
-      version = "~&gt; 1.11.0"
-    }
+    <span class="nx">panos</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">source</span>  <span class="o">=</span> <span class="s2">"PaloAltoNetworks/panos"</span>
+      <span class="nx">version</span> <span class="o">=</span> <span class="s2">"~&gt; 1.11.0"</span>
+    <span class="p">}</span>
 
-    netbox = {
-      source  = "e-breuninger/netbox"
-      version = "~&gt; 3.7.0"
-    }
+    <span class="nx">netbox</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">source</span>  <span class="o">=</span> <span class="s2">"e-breuninger/netbox"</span>
+      <span class="nx">version</span> <span class="o">=</span> <span class="s2">"~&gt; 3.7.0"</span>
+    <span class="p">}</span>
 
-    vault = {
-      source  = "hashicorp/vault"
-      version = "~&gt; 3.23.0"
-    }
-  }
+    <span class="nx">vault</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">source</span>  <span class="o">=</span> <span class="s2">"hashicorp/vault"</span>
+      <span class="nx">version</span> <span class="o">=</span> <span class="s2">"~&gt; 3.23.0"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
-  backend "s3" {
-    bucket         = "network-terraform-state"
-    key            = "production/terraform.tfstate"
-    region         = "us-east-1"
-    encrypt        = true
-    dynamodb_table = "terraform-state-lock"
-  }
-}
+  <span class="nx">backend</span> <span class="s2">"s3"</span> <span class="p">{</span>
+    <span class="nx">bucket</span>         <span class="o">=</span> <span class="s2">"network-terraform-state"</span>
+    <span class="nx">key</span>            <span class="o">=</span> <span class="s2">"production/terraform.tfstate"</span>
+    <span class="nx">region</span>         <span class="o">=</span> <span class="s2">"us-east-1"</span>
+    <span class="nx">encrypt</span>        <span class="o">=</span> <span class="kc">true</span>
+    <span class="nx">dynamodb_table</span> <span class="o">=</span> <span class="s2">"terraform-state-lock"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-# Provider configurations with credential management
-provider "cisco" {
-  alias = "ise"
+<span class="c1"># Provider configurations with credential management</span>
+<span class="nx">provider</span> <span class="s2">"cisco"</span> <span class="p">{</span>
+  <span class="nx">alias</span> <span class="o">=</span> <span class="s2">"ise"</span>
 
-  host     = var.ise_host
-  username = data.vault_generic_secret.cisco.data["username"]
-  password = data.vault_generic_secret.cisco.data["password"]
-}
+  <span class="nx">host</span>     <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">ise_host</span>
+  <span class="nx">username</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">vault_generic_secret</span><span class="p">.</span><span class="nx">cisco</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="s2">"username"</span><span class="p">]</span>
+  <span class="nx">password</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">vault_generic_secret</span><span class="p">.</span><span class="nx">cisco</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="s2">"password"</span><span class="p">]</span>
+<span class="p">}</span>
 
-provider "netbox" {
-  server_url = var.netbox_url
-  api_token  = data.vault_generic_secret.netbox.data["token"]
-}</code></pre>
+<span class="nx">provider</span> <span class="s2">"netbox"</span> <span class="p">{</span>
+  <span class="nx">server_url</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">netbox_url</span>
+  <span class="nx">api_token</span>  <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">vault_generic_secret</span><span class="p">.</span><span class="nx">netbox</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="s2">"token"</span><span class="p">]</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_network_device_management">Network Device Management</h3>
+<h3 id="_network_device_management">3.2. Network Device Management</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="hcl"># terraform/modules/network_device/main.tf
-resource "netbox_device" "switch" {
-  for_each = var.switches
+<pre class="rouge highlight"><code data-lang="hcl"><span class="c1"># terraform/modules/network_device/main.tf</span>
+<span class="nx">resource</span> <span class="s2">"netbox_device"</span> <span class="s2">"switch"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">switches</span>
 
-  name            = each.key
-  device_type_id  = data.netbox_device_type.catalyst_9300.id
-  role_id        = data.netbox_device_role.access_switch.id
-  site_id        = data.netbox_site.site[each.value.location].id
-  status         = "active"
+  <span class="nx">name</span>            <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">key</span>
+  <span class="nx">device_type_id</span>  <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">netbox_device_type</span><span class="p">.</span><span class="nx">catalyst_9300</span><span class="p">.</span><span class="nx">id</span>
+  <span class="nx">role_id</span>        <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">netbox_device_role</span><span class="p">.</span><span class="nx">access_switch</span><span class="p">.</span><span class="nx">id</span>
+  <span class="nx">site_id</span>        <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">netbox_site</span><span class="p">.</span><span class="nx">site</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">location</span><span class="p">].</span><span class="nx">id</span>
+  <span class="nx">status</span>         <span class="o">=</span> <span class="s2">"active"</span>
 
-  primary_ip4 = netbox_ip_address.management[each.key].id
+  <span class="nx">primary_ip4</span> <span class="o">=</span> <span class="nx">netbox_ip_address</span><span class="p">.</span><span class="nx">management</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">id</span>
 
-  custom_fields = {
-    automation_enabled = true
-    configuration_template = each.value.template
-    vlan_range = each.value.vlan_range
-  }
+  <span class="nx">custom_fields</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">automation_enabled</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="nx">configuration_template</span> <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">template</span>
+    <span class="nx">vlan_range</span> <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">vlan_range</span>
+  <span class="p">}</span>
 
-  tags = [
-    "terraform-managed",
-    "production",
-    each.value.location
-  ]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"terraform-managed"</span><span class="p">,</span>
+    <span class="s2">"production"</span><span class="p">,</span>
+    <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">location</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 
-resource "netbox_ip_address" "management" {
-  for_each = var.switches
+<span class="nx">resource</span> <span class="s2">"netbox_ip_address"</span> <span class="s2">"management"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">switches</span>
 
-  ip_address = each.value.management_ip
-  status     = "active"
-  role       = "management"
+  <span class="nx">ip_address</span> <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">management_ip</span>
+  <span class="nx">status</span>     <span class="o">=</span> <span class="s2">"active"</span>
+  <span class="nx">role</span>       <span class="o">=</span> <span class="s2">"management"</span>
 
-  object_type = "dcim.interface"
-  object_id   = netbox_interface.management[each.key].id
+  <span class="nx">object_type</span> <span class="o">=</span> <span class="s2">"dcim.interface"</span>
+  <span class="nx">object_id</span>   <span class="o">=</span> <span class="nx">netbox_interface</span><span class="err">.</span><span class="nx">management</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">id</span>
 
-  tags = ["management", "terraform"]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"management"</span><span class="p">,</span> <span class="s2">"terraform"</span><span class="p">]</span>
+<span class="p">}</span>
 
-resource "netbox_interface" "management" {
-  for_each = var.switches
+<span class="nx">resource</span> <span class="s2">"netbox_interface"</span> <span class="s2">"management"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">switches</span>
 
-  device_id = netbox_device.switch[each.key].id
-  name      = "Management1"
-  type      = "1000base-t"
-  enabled   = true
-  mode      = "access"
+  <span class="nx">device_id</span> <span class="o">=</span> <span class="nx">netbox_device</span><span class="p">.</span><span class="nx">switch</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">id</span>
+  <span class="nx">name</span>      <span class="o">=</span> <span class="s2">"Management1"</span>
+  <span class="nx">type</span>      <span class="o">=</span> <span class="s2">"1000base-t"</span>
+  <span class="nx">enabled</span>   <span class="o">=</span> <span class="kc">true</span>
+  <span class="nx">mode</span>      <span class="o">=</span> <span class="s2">"access"</span>
 
-  tags = ["management"]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"management"</span><span class="p">]</span>
+<span class="p">}</span>
 
-# Generate Ansible inventory from Netbox
-resource "local_file" "ansible_inventory" {
-  filename = "../ansible/inventory/dynamic_hosts.yml"
+<span class="c1"># Generate Ansible inventory from Netbox</span>
+<span class="nx">resource</span> <span class="s2">"local_file"</span> <span class="s2">"ansible_inventory"</span> <span class="p">{</span>
+  <span class="nx">filename</span> <span class="o">=</span> <span class="s2">"../ansible/inventory/dynamic_hosts.yml"</span>
 
-  content = yamlencode({
-    all = {
-      children = {
-        switches = {
-          hosts = {
-            for name, device in netbox_device.switch :
-            name =&gt; {
-              ansible_host = device.primary_ip4
-              site         = device.site_id
-              role         = device.role_id
-              template     = device.custom_fields.configuration_template
-            }
-          }
-        }
-      }
-    }
-  })
-}</code></pre>
+  <span class="nx">content</span> <span class="o">=</span> <span class="nx">yamlencode</span><span class="p">({</span>
+    <span class="nx">all</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">children</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">switches</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="nx">hosts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">for</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">device</span> <span class="nx">in</span> <span class="nx">netbox_device</span><span class="p">.</span><span class="nx">switch</span> <span class="o">:</span>
+            <span class="nx">name</span> <span class="o">=&gt;</span> <span class="p">{</span>
+              <span class="nx">ansible_host</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">primary_ip4</span>
+              <span class="nx">site</span>         <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">site_id</span>
+              <span class="nx">role</span>         <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">role_id</span>
+              <span class="nx">template</span>     <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">custom_fields</span><span class="p">.</span><span class="nx">configuration_template</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_vlan_management">VLAN Management</h3>
+<h3 id="_vlan_management">3.3. VLAN Management</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="hcl"># terraform/modules/vlan/main.tf
-variable "vlans" {
-  description = "VLAN definitions"
-  type = map(object({
-    id          = number
-    name        = string
-    description = string
-    site        = string
-    subnet      = string
-    gateway     = string
-  }))
-}
+<pre class="rouge highlight"><code data-lang="hcl"><span class="c1"># terraform/modules/vlan/main.tf</span>
+<span class="nx">variable</span> <span class="s2">"vlans"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="o">=</span> <span class="s2">"VLAN definitions"</span>
+  <span class="nx">type</span> <span class="o">=</span> <span class="nx">map</span><span class="p">(</span><span class="nx">object</span><span class="p">({</span>
+    <span class="nx">id</span>          <span class="o">=</span> <span class="nx">number</span>
+    <span class="nx">name</span>        <span class="o">=</span> <span class="nx">string</span>
+    <span class="nx">description</span> <span class="o">=</span> <span class="nx">string</span>
+    <span class="nx">site</span>        <span class="o">=</span> <span class="nx">string</span>
+    <span class="nx">subnet</span>      <span class="o">=</span> <span class="nx">string</span>
+    <span class="nx">gateway</span>     <span class="o">=</span> <span class="nx">string</span>
+  <span class="err">}))</span>
+<span class="p">}</span>
 
-resource "netbox_vlan" "vlan" {
-  for_each = var.vlans
+<span class="nx">resource</span> <span class="s2">"netbox_vlan"</span> <span class="s2">"vlan"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">vlans</span>
 
-  vid         = each.value.id
-  name        = each.value.name
-  description = each.value.description
-  site_id     = data.netbox_site.site[each.value.site].id
-  status      = "active"
+  <span class="nx">vid</span>         <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">id</span>
+  <span class="nx">name</span>        <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">name</span>
+  <span class="nx">description</span> <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">description</span>
+  <span class="nx">site_id</span>     <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">netbox_site</span><span class="p">.</span><span class="nx">site</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">site</span><span class="p">].</span><span class="nx">id</span>
+  <span class="nx">status</span>      <span class="o">=</span> <span class="s2">"active"</span>
 
-  tags = ["terraform", "production"]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"terraform"</span><span class="p">,</span> <span class="s2">"production"</span><span class="p">]</span>
+<span class="p">}</span>
 
-resource "netbox_prefix" "subnet" {
-  for_each = var.vlans
+<span class="nx">resource</span> <span class="s2">"netbox_prefix"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">vlans</span>
 
-  prefix      = each.value.subnet
-  vlan_id     = netbox_vlan.vlan[each.key].id
-  site_id     = data.netbox_site.site[each.value.site].id
-  status      = "active"
-  is_pool     = false
+  <span class="nx">prefix</span>      <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">subnet</span>
+  <span class="nx">vlan_id</span>     <span class="o">=</span> <span class="nx">netbox_vlan</span><span class="p">.</span><span class="nx">vlan</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">id</span>
+  <span class="nx">site_id</span>     <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">netbox_site</span><span class="p">.</span><span class="nx">site</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">site</span><span class="p">].</span><span class="nx">id</span>
+  <span class="nx">status</span>      <span class="o">=</span> <span class="s2">"active"</span>
+  <span class="nx">is_pool</span>     <span class="o">=</span> <span class="kc">false</span>
 
-  description = "VLAN ${each.value.id} - ${each.value.name}"
+  <span class="nx">description</span> <span class="o">=</span> <span class="s2">"VLAN ${each.value.id} - ${each.value.name}"</span>
 
-  tags = ["terraform", "production"]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"terraform"</span><span class="p">,</span> <span class="s2">"production"</span><span class="p">]</span>
+<span class="p">}</span>
 
-resource "netbox_ip_address" "gateway" {
-  for_each = var.vlans
+<span class="nx">resource</span> <span class="s2">"netbox_ip_address"</span> <span class="s2">"gateway"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">vlans</span>
 
-  ip_address  = each.value.gateway
-  status      = "active"
-  role        = "anycast"
-  description = "Gateway for VLAN ${each.value.id}"
+  <span class="nx">ip_address</span>  <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">gateway</span>
+  <span class="nx">status</span>      <span class="o">=</span> <span class="s2">"active"</span>
+  <span class="nx">role</span>        <span class="o">=</span> <span class="s2">"anycast"</span>
+  <span class="nx">description</span> <span class="o">=</span> <span class="s2">"Gateway for VLAN ${each.value.id}"</span>
 
-  object_type = "ipam.vlan"
-  object_id   = netbox_vlan.vlan[each.key].id
+  <span class="nx">object_type</span> <span class="o">=</span> <span class="s2">"ipam.vlan"</span>
+  <span class="nx">object_id</span>   <span class="o">=</span> <span class="nx">netbox_vlan</span><span class="err">.</span><span class="nx">vlan</span><span class="p">[</span><span class="nx">each</span><span class="p">.</span><span class="nx">key</span><span class="p">].</span><span class="nx">id</span>
 
-  tags = ["gateway", "terraform"]
-}
+  <span class="nx">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"gateway"</span><span class="p">,</span> <span class="s2">"terraform"</span><span class="p">]</span>
+<span class="p">}</span>
 
-# Output for Ansible consumption
-output "vlan_configuration" {
-  value = {
-    for key, vlan in var.vlans : key =&gt; {
-      id      = vlan.id
-      name    = vlan.name
-      subnet  = vlan.subnet
-      gateway = vlan.gateway
-    }
-  }
-}</code></pre>
+<span class="c1"># Output for Ansible consumption</span>
+<span class="nx">output</span> <span class="s2">"vlan_configuration"</span> <span class="p">{</span>
+  <span class="nx">value</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">vlan</span> <span class="nx">in</span> <span class="nx">var</span><span class="p">.</span><span class="nx">vlans</span> <span class="o">:</span> <span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">id</span>      <span class="o">=</span> <span class="nx">vlan</span><span class="p">.</span><span class="nx">id</span>
+      <span class="nx">name</span>    <span class="o">=</span> <span class="nx">vlan</span><span class="p">.</span><span class="nx">name</span>
+      <span class="nx">subnet</span>  <span class="o">=</span> <span class="nx">vlan</span><span class="p">.</span><span class="nx">subnet</span>
+      <span class="nx">gateway</span> <span class="o">=</span> <span class="nx">vlan</span><span class="p">.</span><span class="nx">gateway</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_load_balancer_configuration">Load Balancer Configuration</h3>
+<h3 id="_load_balancer_configuration">3.4. Load Balancer Configuration</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="hcl"># terraform/modules/f5/main.tf
-resource "bigip_ltm_pool" "web_pool" {
-  name                = "/Common/web_pool_${var.environment}"
-  load_balancing_mode = "round-robin"
-  monitors            = ["/Common/http"]
-  allow_snat          = "yes"
-  allow_nat           = "yes"
-}
+<pre class="rouge highlight"><code data-lang="hcl"><span class="c1"># terraform/modules/f5/main.tf</span>
+<span class="nx">resource</span> <span class="s2">"bigip_ltm_pool"</span> <span class="s2">"web_pool"</span> <span class="p">{</span>
+  <span class="nx">name</span>                <span class="o">=</span> <span class="s2">"/Common/web_pool_${var.environment}"</span>
+  <span class="nx">load_balancing_mode</span> <span class="o">=</span> <span class="s2">"round-robin"</span>
+  <span class="nx">monitors</span>            <span class="o">=</span> <span class="p">[</span><span class="s2">"/Common/http"</span><span class="p">]</span>
+  <span class="nx">allow_snat</span>          <span class="o">=</span> <span class="s2">"yes"</span>
+  <span class="nx">allow_nat</span>           <span class="o">=</span> <span class="s2">"yes"</span>
+<span class="p">}</span>
 
-resource "bigip_ltm_pool_attachment" "web_servers" {
-  for_each = var.web_servers
+<span class="nx">resource</span> <span class="s2">"bigip_ltm_pool_attachment"</span> <span class="s2">"web_servers"</span> <span class="p">{</span>
+  <span class="nx">for_each</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">web_servers</span>
 
-  pool               = bigip_ltm_pool.web_pool.name
-  node               = each.value.ip
-  port               = each.value.port
-  connection_limit   = 100
-  connection_rate_limit = 100
-  dynamic_ratio      = 1
-  priority_group     = each.value.priority
-}
+  <span class="nx">pool</span>               <span class="o">=</span> <span class="nx">bigip_ltm_pool</span><span class="p">.</span><span class="nx">web_pool</span><span class="p">.</span><span class="nx">name</span>
+  <span class="nx">node</span>               <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">ip</span>
+  <span class="nx">port</span>               <span class="o">=</span> <span class="nx">each</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">port</span>
+  <span class="nx">connection_limit</span>   <span class="o">=</span> <span class="mi">100</span>
+  <span class="nx">connection_rate_limit</span> <span class="o">=</span> <span class="mi">100</span>
+  <span class="nx">dynamic_ratio</span>      <span class="o">=</span> <span class="mi">1</span>
+  <span class="nx">priority_group</span>     <span class="o">=</span> <span class="nx">each</span><span class="err">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">priority</span>
+<span class="p">}</span>
 
-resource "bigip_ltm_virtual_server" "web_vs" {
-  name        = "/Common/vs_web_${var.environment}"
-  port        = 443
-  destination = var.vip_address
-  pool        = bigip_ltm_pool.web_pool.name
+<span class="nx">resource</span> <span class="s2">"bigip_ltm_virtual_server"</span> <span class="s2">"web_vs"</span> <span class="p">{</span>
+  <span class="nx">name</span>        <span class="o">=</span> <span class="s2">"/Common/vs_web_${var.environment}"</span>
+  <span class="nx">port</span>        <span class="o">=</span> <span class="mi">443</span>
+  <span class="nx">destination</span> <span class="o">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">vip_address</span>
+  <span class="nx">pool</span>        <span class="o">=</span> <span class="nx">bigip_ltm_pool</span><span class="p">.</span><span class="nx">web_pool</span><span class="p">.</span><span class="nx">name</span>
 
-  ip_protocol             = "tcp"
-  source_address_translation = "automap"
+  <span class="nx">ip_protocol</span>             <span class="o">=</span> <span class="s2">"tcp"</span>
+  <span class="nx">source_address_translation</span> <span class="o">=</span> <span class="s2">"automap"</span>
 
-  profiles = [
-    "/Common/tcp",
-    "/Common/http",
-    bigip_ltm_profile_client_ssl.web_ssl.name
-  ]
+  <span class="nx">profiles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"/Common/tcp"</span><span class="p">,</span>
+    <span class="s2">"/Common/http"</span><span class="p">,</span>
+    <span class="nx">bigip_ltm_profile_client_ssl</span><span class="p">.</span><span class="nx">web_ssl</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">]</span>
 
-  persistence_profiles = [
-    "/Common/cookie"
-  ]
+  <span class="nx">persistence_profiles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"/Common/cookie"</span>
+  <span class="p">]</span>
 
-  irules = [
-    bigip_ltm_irule.security_headers.name
-  ]
-}
+  <span class="nx">irules</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nx">bigip_ltm_irule</span><span class="p">.</span><span class="nx">security_headers</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 
-resource "bigip_ltm_irule" "security_headers" {
-  name  = "/Common/security_headers_${var.environment}"
-  irule = file("${path.module}/irules/security_headers.tcl")
-}
+<span class="nx">resource</span> <span class="s2">"bigip_ltm_irule"</span> <span class="s2">"security_headers"</span> <span class="p">{</span>
+  <span class="nx">name</span>  <span class="o">=</span> <span class="s2">"/Common/security_headers_${var.environment}"</span>
+  <span class="nx">irule</span> <span class="o">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"${path.module}/irules/security_headers.tcl"</span><span class="p">)</span>
+<span class="p">}</span>
 
-resource "bigip_ltm_profile_client_ssl" "web_ssl" {
-  name          = "/Common/clientssl_web_${var.environment}"
-  cert          = "/Common/web_cert.crt"
-  key           = "/Common/web_key.key"
-  chain         = "/Common/intermediate.crt"
-  ciphers       = "TLS13:TLS12+HIGH:!RSA:!aNULL:!eNULL:!3DES"
+<span class="nx">resource</span> <span class="s2">"bigip_ltm_profile_client_ssl"</span> <span class="s2">"web_ssl"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="o">=</span> <span class="s2">"/Common/clientssl_web_${var.environment}"</span>
+  <span class="nx">cert</span>          <span class="o">=</span> <span class="s2">"/Common/web_cert.crt"</span>
+  <span class="nx">key</span>           <span class="o">=</span> <span class="s2">"/Common/web_key.key"</span>
+  <span class="nx">chain</span>         <span class="o">=</span> <span class="s2">"/Common/intermediate.crt"</span>
+  <span class="nx">ciphers</span>       <span class="o">=</span> <span class="s2">"TLS13:TLS12+HIGH:!RSA:!aNULL:!eNULL:!3DES"</span>
 
-  server_name = var.domain_name
-  sni_require = true
-  sni_default = true
-}</code></pre>
+  <span class="nx">server_name</span> <span class="o">=</span> <span class="nx">var</span><span class="err">.</span><span class="nx">domain_name</span>
+  <span class="nx">sni_require</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="nx">sni_default</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ansible_configuration_deployment">Ansible: Configuration Deployment</h2>
+<h2 id="_ansible_configuration_deployment">4. Ansible: Configuration Deployment</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_dynamic_inventory">Dynamic Inventory</h3>
+<h3 id="_dynamic_inventory">4.1. Dynamic Inventory</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python">#!/usr/bin/env python3
+<pre class="rouge highlight"><code data-lang="python"><span class="c1">#!/usr/bin/env python3
 # ansible/inventory/netbox_inventory.py - Dynamic inventory from Netbox
-import json
-import requests
-from typing import Dict, List
+</span><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-class NetboxInventory:
-    """Generate Ansible inventory from Netbox"""
+<span class="k">class</span> <span class="nc">NetboxInventory</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Generate Ansible inventory from Netbox</span><span class="sh">"""</span>
 
-    def __init__(self):
-        self.netbox_url = os.getenv("NETBOX_URL")
-        self.netbox_token = os.getenv("NETBOX_TOKEN")
-        self.inventory = {
-            "_meta": {"hostvars": {}},
-            "all": {"children": ["ungrouped"]}
-        }
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">netbox_url</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETBOX_URL</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">netbox_token</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETBOX_TOKEN</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">inventory</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">_meta</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">hostvars</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}},</span>
+            <span class="sh">"</span><span class="s">all</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">children</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">ungrouped</span><span class="sh">"</span><span class="p">]}</span>
+        <span class="p">}</span>
 
-    def get_devices(self) -&gt; List[Dict]:
-        """Fetch devices from Netbox"""
-        headers = {"Authorization": f"Token {self.netbox_token}"}
-        response = requests.get(
-            f"{self.netbox_url}/api/dcim/devices/",
-            headers=headers,
-            params={"status": "active", "has_primary_ip": "true"}
-        )
-        return response.json()["results"]
+    <span class="k">def</span> <span class="nf">get_devices</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Fetch devices from Netbox</span><span class="sh">"""</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Token </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">netbox_token</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">netbox_url</span><span class="si">}</span><span class="s">/api/dcim/devices/</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">active</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">has_primary_ip</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">true</span><span class="sh">"</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="sh">"</span><span class="s">results</span><span class="sh">"</span><span class="p">]</span>
 
-    def build_inventory(self):
-        """Build Ansible inventory structure"""
-        devices = self.get_devices()
+    <span class="k">def</span> <span class="nf">build_inventory</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Build Ansible inventory structure</span><span class="sh">"""</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_devices</span><span class="p">()</span>
 
-        for device in devices:
-            # Skip non-network devices
-            if not device.get("custom_fields", {}).get("automation_enabled"):
-                continue
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="c1"># Skip non-network devices
+</span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">device</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">custom_fields</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">automation_enabled</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
 
-            hostname = device["name"]
-            ip = device["primary_ip"]["address"].split('/')[0]
+            <span class="n">hostname</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">primary_ip</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">address</span><span class="sh">"</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">/</span><span class="sh">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-            # Device-specific variables
-            self.inventory["_meta"]["hostvars"][hostname] = {
-                "ansible_host": ip,
-                "ansible_network_os": self._get_network_os(device),
-                "ansible_connection": "network_cli",
-                "device_role": device["device_role"]["slug"],
-                "site": device["site"]["slug"],
-                "platform": device["platform"]["slug"] if device.get("platform") else None,
-                "configuration_template": device["custom_fields"].get("configuration_template"),
-                "vlans": self._get_vlans(device),
-            }
+            <span class="c1"># Device-specific variables
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">[</span><span class="sh">"</span><span class="s">_meta</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">hostvars</span><span class="sh">"</span><span class="p">][</span><span class="n">hostname</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">ansible_host</span><span class="sh">"</span><span class="p">:</span> <span class="n">ip</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">ansible_network_os</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_network_os</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">ansible_connection</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">network_cli</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">device_role</span><span class="sh">"</span><span class="p">:</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">device_role</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">site</span><span class="sh">"</span><span class="p">:</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">site</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">platform</span><span class="sh">"</span><span class="p">:</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">platform</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">]</span> <span class="k">if</span> <span class="n">device</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">platform</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">configuration_template</span><span class="sh">"</span><span class="p">:</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">custom_fields</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">configuration_template</span><span class="sh">"</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">vlans</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_vlans</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">}</span>
 
-            # Group by device role
-            role = device["device_role"]["slug"]
-            if role not in self.inventory:
-                self.inventory[role] = {"hosts": []}
-            self.inventory[role]["hosts"].append(hostname)
+            <span class="c1"># Group by device role
+</span>            <span class="n">role</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">device_role</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">[</span><span class="n">role</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">hosts</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="sh">"</span><span class="s">hosts</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
 
-            # Group by site
-            site = f"site_{device['site']['slug']}"
-            if site not in self.inventory:
-                self.inventory[site] = {"hosts": []}
-            self.inventory[site]["hosts"].append(hostname)
+            <span class="c1"># Group by site
+</span>            <span class="n">site</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">site_</span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">site</span><span class="sh">'</span><span class="p">][</span><span class="sh">'</span><span class="s">slug</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
+            <span class="k">if</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">hosts</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">[</span><span class="n">site</span><span class="p">][</span><span class="sh">"</span><span class="s">hosts</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
 
-    def _get_network_os(self, device: Dict) -&gt; str:
-        """Determine network OS from platform"""
-        platform = device.get("platform", {}).get("slug", "")
+    <span class="k">def</span> <span class="nf">_get_network_os</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Determine network OS from platform</span><span class="sh">"""</span>
+        <span class="n">platform</span> <span class="o">=</span> <span class="n">device</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">platform</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
 
-        os_mapping = {
-            "cisco-ios": "ios",
-            "cisco-nxos": "nxos",
-            "cisco-iosxe": "iosxe",
-            "arista-eos": "eos",
-            "juniper-junos": "junos",
-            "paloalto-panos": "panos"
-        }
+        <span class="n">os_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">cisco-ios</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">ios</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">cisco-nxos</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">nxos</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">cisco-iosxe</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">iosxe</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">arista-eos</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">eos</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">juniper-junos</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">junos</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">paloalto-panos</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">panos</span><span class="sh">"</span>
+        <span class="p">}</span>
 
-        return os_mapping.get(platform, "ios")
+        <span class="k">return</span> <span class="n">os_mapping</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="sh">"</span><span class="s">ios</span><span class="sh">"</span><span class="p">)</span>
 
-    def _get_vlans(self, device: Dict) -&gt; List[Dict]:
-        """Get VLANs assigned to device"""
-        headers = {"Authorization": f"Token {self.netbox_token}"}
-        response = requests.get(
-            f"{self.netbox_url}/api/ipam/vlans/",
-            headers=headers,
-            params={"site_id": device["site"]["id"]}
-        )
+    <span class="k">def</span> <span class="nf">_get_vlans</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Get VLANs assigned to device</span><span class="sh">"""</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Token </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">netbox_token</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">netbox_url</span><span class="si">}</span><span class="s">/api/ipam/vlans/</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">site_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">site</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">]}</span>
+        <span class="p">)</span>
 
-        vlans = []
-        for vlan in response.json()["results"]:
-            vlans.append({
-                "id": vlan["vid"],
-                "name": vlan["name"],
-                "description": vlan["description"]
-            })
+        <span class="n">vlans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">vlan</span> <span class="ow">in</span> <span class="n">response</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="sh">"</span><span class="s">results</span><span class="sh">"</span><span class="p">]:</span>
+            <span class="n">vlans</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                <span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">vid</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">]</span>
+            <span class="p">})</span>
 
-        return vlans
+        <span class="k">return</span> <span class="n">vlans</span>
 
-    def generate(self) -&gt; str:
-        """Generate inventory JSON"""
-        self.build_inventory()
-        return json.dumps(self.inventory, indent=2)
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Generate inventory JSON</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">build_inventory</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">inventory</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-if __name__ == "__main__":
-    inventory = NetboxInventory()
-    print(inventory.generate())</code></pre>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">inventory</span> <span class="o">=</span> <span class="nc">NetboxInventory</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">inventory</span><span class="p">.</span><span class="nf">generate</span><span class="p">())</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_switch_configuration_playbook">Switch Configuration Playbook</h3>
+<h3 id="_switch_configuration_playbook">4.2. Switch Configuration Playbook</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"># ansible/playbooks/configure_switches.yml
----
-- name: Configure Access Switches
-  hosts: access_switch
-  gather_facts: no
+<pre class="rouge highlight"><code data-lang="yaml"><span class="c1"># ansible/playbooks/configure_switches.yml</span>
+<span class="nn">---</span>
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure Access Switches</span>
+  <span class="na">hosts</span><span class="pi">:</span> <span class="s">access_switch</span>
+  <span class="na">gather_facts</span><span class="pi">:</span> <span class="s">no</span>
 
-  vars:
-    configuration_backup_dir: "{{ playbook_dir }}/../backups"
+  <span class="na">vars</span><span class="pi">:</span>
+    <span class="na">configuration_backup_dir</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">}}/../backups"</span>
 
-  pre_tasks:
-    - name: Create backup directory
-      delegate_to: localhost
-      file:
-        path: "{{ configuration_backup_dir }}"
-        state: directory
-        mode: '0755'
+  <span class="na">pre_tasks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create backup directory</span>
+      <span class="na">delegate_to</span><span class="pi">:</span> <span class="s">localhost</span>
+      <span class="na">file</span><span class="pi">:</span>
+        <span class="na">path</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">configuration_backup_dir</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">state</span><span class="pi">:</span> <span class="s">directory</span>
+        <span class="na">mode</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0755'</span>
 
-    - name: Backup current configuration
-      cisco.ios.ios_config:
-        backup: yes
-        backup_options:
-          filename: "{{ inventory_hostname }}_{{ ansible_date_time.date }}.cfg"
-          dir_path: "{{ configuration_backup_dir }}"
-      register: backup_result
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Backup current configuration</span>
+      <span class="na">cisco.ios.ios_config</span><span class="pi">:</span>
+        <span class="na">backup</span><span class="pi">:</span> <span class="s">yes</span>
+        <span class="na">backup_options</span><span class="pi">:</span>
+          <span class="na">filename</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}_{{</span><span class="nv"> </span><span class="s">ansible_date_time.date</span><span class="nv"> </span><span class="s">}}.cfg"</span>
+          <span class="na">dir_path</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">configuration_backup_dir</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">register</span><span class="pi">:</span> <span class="s">backup_result</span>
 
-  tasks:
-    - name: Configure hostname and domain
-      cisco.ios.ios_system:
-        hostname: "{{ inventory_hostname }}"
-        domain_name: "{{ domain_name }}"
-        lookup_enabled: no
+  <span class="na">tasks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure hostname and domain</span>
+      <span class="na">cisco.ios.ios_system</span><span class="pi">:</span>
+        <span class="na">hostname</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">domain_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">domain_name</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">lookup_enabled</span><span class="pi">:</span> <span class="s">no</span>
 
-    - name: Configure management interface
-      cisco.ios.ios_l3_interface:
-        name: "{{ management_interface | default('Vlan99') }}"
-        ipv4: "{{ ansible_host }}/{{ management_netmask }}"
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure management interface</span>
+      <span class="na">cisco.ios.ios_l3_interface</span><span class="pi">:</span>
+        <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">management_interface</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default('Vlan99')</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">ipv4</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">ansible_host</span><span class="nv"> </span><span class="s">}}/{{</span><span class="nv"> </span><span class="s">management_netmask</span><span class="nv"> </span><span class="s">}}"</span>
 
-    - name: Configure NTP servers
-      cisco.ios.ios_ntp:
-        server: "{{ item }}"
-        source_int: "{{ management_interface | default('Vlan99') }}"
-        logging: true
-      loop: "{{ ntp_servers }}"
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure NTP servers</span>
+      <span class="na">cisco.ios.ios_ntp</span><span class="pi">:</span>
+        <span class="na">server</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">source_int</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">management_interface</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default('Vlan99')</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">logging</span><span class="pi">:</span> <span class="kc">true</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">ntp_servers</span><span class="nv"> </span><span class="s">}}"</span>
 
-    - name: Configure TACACS+ servers
-      cisco.ios.ios_aaa_server:
-        name: "{{ item.name }}"
-        server_type: tacacs+
-        address: "{{ item.address }}"
-        key: "{{ tacacs_key }}"
-        timeout: 5
-      loop: "{{ tacacs_servers }}"
-      no_log: true
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure TACACS+ servers</span>
+      <span class="na">cisco.ios.ios_aaa_server</span><span class="pi">:</span>
+        <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">server_type</span><span class="pi">:</span> <span class="s">tacacs+</span>
+        <span class="na">address</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.address</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">key</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">tacacs_key</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">timeout</span><span class="pi">:</span> <span class="m">5</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">tacacs_servers</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">no_log</span><span class="pi">:</span> <span class="kc">true</span>
 
-    - name: Configure AAA
-      cisco.ios.ios_config:
-        lines:
-          - aaa new-model
-          - aaa authentication login default group tacacs+ local
-          - aaa authorization exec default group tacacs+ local
-          - aaa accounting exec default start-stop group tacacs+
-          - aaa accounting commands 15 default start-stop group tacacs+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure AAA</span>
+      <span class="na">cisco.ios.ios_config</span><span class="pi">:</span>
+        <span class="na">lines</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="s">aaa new-model</span>
+          <span class="pi">-</span> <span class="s">aaa authentication login default group tacacs+ local</span>
+          <span class="pi">-</span> <span class="s">aaa authorization exec default group tacacs+ local</span>
+          <span class="pi">-</span> <span class="s">aaa accounting exec default start-stop group tacacs+</span>
+          <span class="pi">-</span> <span class="s">aaa accounting commands 15 default start-stop group tacacs+</span>
 
-    - name: Configure VLANs
-      cisco.ios.ios_vlans:
-        config:
-          - vlan_id: "{{ item.id }}"
-            name: "{{ item.name }}"
-            state: active
-      loop: "{{ vlans }}"
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure VLANs</span>
+      <span class="na">cisco.ios.ios_vlans</span><span class="pi">:</span>
+        <span class="na">config</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">vlan_id</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.id</span><span class="nv"> </span><span class="s">}}"</span>
+            <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}"</span>
+            <span class="na">state</span><span class="pi">:</span> <span class="s">active</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">vlans</span><span class="nv"> </span><span class="s">}}"</span>
 
-    - name: Configure trunk ports
-      cisco.ios.ios_l2_interface:
-        name: "{{ item.interface }}"
-        mode: trunk
-        native_vlan: "{{ native_vlan | default(1) }}"
-        trunk_allowed_vlans: "{{ item.allowed_vlans | default('all') }}"
-      loop: "{{ trunk_ports }}"
-      when: trunk_ports is defined
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure trunk ports</span>
+      <span class="na">cisco.ios.ios_l2_interface</span><span class="pi">:</span>
+        <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.interface</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">mode</span><span class="pi">:</span> <span class="s">trunk</span>
+        <span class="na">native_vlan</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">native_vlan</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default(1)</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">trunk_allowed_vlans</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.allowed_vlans</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default('all')</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">trunk_ports</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">when</span><span class="pi">:</span> <span class="s">trunk_ports is defined</span>
 
-    - name: Configure access ports
-      cisco.ios.ios_l2_interface:
-        name: "{{ item.interface }}"
-        mode: access
-        access_vlan: "{{ item.vlan }}"
-      loop: "{{ access_ports }}"
-      when: access_ports is defined
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure access ports</span>
+      <span class="na">cisco.ios.ios_l2_interface</span><span class="pi">:</span>
+        <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.interface</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">mode</span><span class="pi">:</span> <span class="s">access</span>
+        <span class="na">access_vlan</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item.vlan</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">access_ports</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">when</span><span class="pi">:</span> <span class="s">access_ports is defined</span>
 
-    - name: Configure spanning-tree
-      cisco.ios.ios_config:
-        lines:
-          - spanning-tree mode rapid-pvst
-          - spanning-tree portfast edge default
-          - spanning-tree portfast edge bpduguard default
-          - spanning-tree vlan 1-4094 priority "{{ stp_priority | default(32768) }}"
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure spanning-tree</span>
+      <span class="na">cisco.ios.ios_config</span><span class="pi">:</span>
+        <span class="na">lines</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="s">spanning-tree mode rapid-pvst</span>
+          <span class="pi">-</span> <span class="s">spanning-tree portfast edge default</span>
+          <span class="pi">-</span> <span class="s">spanning-tree portfast edge bpduguard default</span>
+          <span class="pi">-</span> <span class="s">spanning-tree vlan 1-4094 priority "{{ stp_priority | default(32768) }}"</span>
 
-    - name: Configure SNMP
-      cisco.ios.ios_snmp_server:
-        config:
-          communities:
-            - name: "{{ snmp_ro_community }}"
-              ro: true
-          hosts:
-            - host: "{{ item }}"
-              community: "{{ snmp_ro_community }}"
-              version: "2c"
-              traps: true
-      loop: "{{ snmp_servers }}"
-      no_log: true
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure SNMP</span>
+      <span class="na">cisco.ios.ios_snmp_server</span><span class="pi">:</span>
+        <span class="na">config</span><span class="pi">:</span>
+          <span class="na">communities</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">snmp_ro_community</span><span class="nv"> </span><span class="s">}}"</span>
+              <span class="na">ro</span><span class="pi">:</span> <span class="kc">true</span>
+          <span class="na">hosts</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+              <span class="na">community</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">snmp_ro_community</span><span class="nv"> </span><span class="s">}}"</span>
+              <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2c"</span>
+              <span class="na">traps</span><span class="pi">:</span> <span class="kc">true</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">snmp_servers</span><span class="nv"> </span><span class="s">}}"</span>
+      <span class="na">no_log</span><span class="pi">:</span> <span class="kc">true</span>
 
-    - name: Configure logging
-      cisco.ios.ios_logging:
-        dest: host
-        name: "{{ item }}"
-        level: informational
-        facility: local7
-      loop: "{{ syslog_servers }}"
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Configure logging</span>
+      <span class="na">cisco.ios.ios_logging</span><span class="pi">:</span>
+        <span class="na">dest</span><span class="pi">:</span> <span class="s">host</span>
+        <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">level</span><span class="pi">:</span> <span class="s">informational</span>
+        <span class="na">facility</span><span class="pi">:</span> <span class="s">local7</span>
+      <span class="na">loop</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">syslog_servers</span><span class="nv"> </span><span class="s">}}"</span>
 
-    - name: Apply security hardening
-      cisco.ios.ios_config:
-        src: templates/security_hardening.j2
-      notify: save_configuration
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Apply security hardening</span>
+      <span class="na">cisco.ios.ios_config</span><span class="pi">:</span>
+        <span class="na">src</span><span class="pi">:</span> <span class="s">templates/security_hardening.j2</span>
+      <span class="na">notify</span><span class="pi">:</span> <span class="s">save_configuration</span>
 
-    - name: Verify configuration
-      cisco.ios.ios_command:
-        commands:
-          - show vlan brief
-          - show interfaces status
-          - show spanning-tree summary
-          - show logging
-      register: verification
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Verify configuration</span>
+      <span class="na">cisco.ios.ios_command</span><span class="pi">:</span>
+        <span class="na">commands</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="s">show vlan brief</span>
+          <span class="pi">-</span> <span class="s">show interfaces status</span>
+          <span class="pi">-</span> <span class="s">show spanning-tree summary</span>
+          <span class="pi">-</span> <span class="s">show logging</span>
+      <span class="na">register</span><span class="pi">:</span> <span class="s">verification</span>
 
-    - name: Generate compliance report
-      template:
-        src: compliance_report.j2
-        dest: "{{ playbook_dir }}/../reports/{{ inventory_hostname }}_compliance.txt"
-      delegate_to: localhost
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Generate compliance report</span>
+      <span class="na">template</span><span class="pi">:</span>
+        <span class="na">src</span><span class="pi">:</span> <span class="s">compliance_report.j2</span>
+        <span class="na">dest</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">}}/../reports/{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}_compliance.txt"</span>
+      <span class="na">delegate_to</span><span class="pi">:</span> <span class="s">localhost</span>
 
-  handlers:
-    - name: save_configuration
-      cisco.ios.ios_config:
-        save_when: modified
+  <span class="na">handlers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">save_configuration</span>
+      <span class="na">cisco.ios.ios_config</span><span class="pi">:</span>
+        <span class="na">save_when</span><span class="pi">:</span> <span class="s">modified</span>
 
-  post_tasks:
-    - name: Validate configuration
-      include_tasks: validate_switch.yml
+  <span class="na">post_tasks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Validate configuration</span>
+      <span class="na">include_tasks</span><span class="pi">:</span> <span class="s">validate_switch.yml</span>
 
-    - name: Send notification
-      mail:
-        to: "{{ notification_email }}"
-        subject: "Switch Configuration Complete - {{ inventory_hostname }}"
-        body: |
-          Switch configuration completed successfully.
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Send notification</span>
+      <span class="na">mail</span><span class="pi">:</span>
+        <span class="na">to</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">notification_email</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">subject</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Switch</span><span class="nv"> </span><span class="s">Configuration</span><span class="nv"> </span><span class="s">Complete</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}"</span>
+        <span class="na">body</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">Switch configuration completed successfully.</span>
 
-          Device: {{ inventory_hostname }}
-          IP: {{ ansible_host }}
-          Site: {{ site }}
-          Backup: {{ backup_result.backup_path }}
+          <span class="s">Device: {{ inventory_hostname }}</span>
+          <span class="s">IP: {{ ansible_host }}</span>
+          <span class="s">Site: {{ site }}</span>
+          <span class="s">Backup: {{ backup_result.backup_path }}</span>
 
-          VLANs configured: {{ vlans | length }}
-          Trunk ports: {{ trunk_ports | default([]) | length }}
-          Access ports: {{ access_ports | default([]) | length }}
-      delegate_to: localhost
-      when: notification_email is defined</code></pre>
+          <span class="s">VLANs configured: {{ vlans | length }}</span>
+          <span class="s">Trunk ports: {{ trunk_ports | default([]) | length }}</span>
+          <span class="s">Access ports: {{ access_ports | default([]) | length }}</span>
+      <span class="na">delegate_to</span><span class="pi">:</span> <span class="s">localhost</span>
+      <span class="na">when</span><span class="pi">:</span> <span class="s">notification_email is defined</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_templates">Configuration Templates</h3>
+<h3 id="_configuration_templates">4.3. Configuration Templates</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="jinja2">{# templates/security_hardening.j2 - Security baseline configuration #}
@@ -1255,427 +1375,427 @@ archive
 </div>
 </div>
 <div class="sect1">
-<h2 id="_cicd_pipeline">CI/CD Pipeline</h2>
+<h2 id="_cicd_pipeline">5. CI/CD Pipeline</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_gitlab_ci_configuration">GitLab CI Configuration</h3>
+<h3 id="_gitlab_ci_configuration">5.1. GitLab CI Configuration</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"># .gitlab-ci.yml - Network automation pipeline
-stages:
-  - validate
-  - plan
-  - test
-  - deploy
-  - verify
+<pre class="rouge highlight"><code data-lang="yaml"><span class="c1"># .gitlab-ci.yml - Network automation pipeline</span>
+<span class="na">stages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">validate</span>
+  <span class="pi">-</span> <span class="s">plan</span>
+  <span class="pi">-</span> <span class="s">test</span>
+  <span class="pi">-</span> <span class="s">deploy</span>
+  <span class="pi">-</span> <span class="s">verify</span>
 
-variables:
-  TF_ROOT: ${CI_PROJECT_DIR}/terraform
-  ANSIBLE_ROOT: ${CI_PROJECT_DIR}/ansible
+<span class="na">variables</span><span class="pi">:</span>
+  <span class="na">TF_ROOT</span><span class="pi">:</span> <span class="s">${CI_PROJECT_DIR}/terraform</span>
+  <span class="na">ANSIBLE_ROOT</span><span class="pi">:</span> <span class="s">${CI_PROJECT_DIR}/ansible</span>
 
-before_script:
-  - export VAULT_ADDR=${VAULT_ADDR}
-  - export VAULT_TOKEN=${VAULT_TOKEN}
-  - export NETBOX_URL=${NETBOX_URL}
-  - export NETBOX_TOKEN=${NETBOX_TOKEN}
+<span class="na">before_script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">export VAULT_ADDR=${VAULT_ADDR}</span>
+  <span class="pi">-</span> <span class="s">export VAULT_TOKEN=${VAULT_TOKEN}</span>
+  <span class="pi">-</span> <span class="s">export NETBOX_URL=${NETBOX_URL}</span>
+  <span class="pi">-</span> <span class="s">export NETBOX_TOKEN=${NETBOX_TOKEN}</span>
 
-# Validation Stage
-terraform-validate:
-  stage: validate
-  image: hashicorp/terraform:1.6
-  script:
-    - cd ${TF_ROOT}
-    - terraform init -backend=false
-    - terraform validate
-    - terraform fmt -check=true -diff=true
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="c1"># Validation Stage</span>
+<span class="na">terraform-validate</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">validate</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">hashicorp/terraform:1.6</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${TF_ROOT}</span>
+    <span class="pi">-</span> <span class="s">terraform init -backend=false</span>
+    <span class="pi">-</span> <span class="s">terraform validate</span>
+    <span class="pi">-</span> <span class="s">terraform fmt -check=true -diff=true</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-ansible-lint:
-  stage: validate
-  image: quay.io/ansible/creator-ee:latest
-  script:
-    - cd ${ANSIBLE_ROOT}
-    - ansible-lint playbooks/
-    - ansible-playbook playbooks/*.yml --syntax-check
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="na">ansible-lint</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">validate</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">quay.io/ansible/creator-ee:latest</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${ANSIBLE_ROOT}</span>
+    <span class="pi">-</span> <span class="s">ansible-lint playbooks/</span>
+    <span class="pi">-</span> <span class="s">ansible-playbook playbooks/*.yml --syntax-check</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-yaml-lint:
-  stage: validate
-  image: python:3.11
-  script:
-    - pip install yamllint
-    - yamllint -c .yamllint ${ANSIBLE_ROOT}
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="na">yaml-lint</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">validate</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">python:3.11</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">pip install yamllint</span>
+    <span class="pi">-</span> <span class="s">yamllint -c .yamllint ${ANSIBLE_ROOT}</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-# Planning Stage
-terraform-plan:
-  stage: plan
-  image: hashicorp/terraform:1.6
-  script:
-    - cd ${TF_ROOT}
-    - terraform init
-    - terraform plan -out=tfplan
-    - terraform show -no-color tfplan &gt; plan.txt
-  artifacts:
-    paths:
-      - ${TF_ROOT}/tfplan
-      - ${TF_ROOT}/plan.txt
-    expire_in: 7 days
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="c1"># Planning Stage</span>
+<span class="na">terraform-plan</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">plan</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">hashicorp/terraform:1.6</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${TF_ROOT}</span>
+    <span class="pi">-</span> <span class="s">terraform init</span>
+    <span class="pi">-</span> <span class="s">terraform plan -out=tfplan</span>
+    <span class="pi">-</span> <span class="s">terraform show -no-color tfplan &gt; plan.txt</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">${TF_ROOT}/tfplan</span>
+      <span class="pi">-</span> <span class="s">${TF_ROOT}/plan.txt</span>
+    <span class="na">expire_in</span><span class="pi">:</span> <span class="s">7 days</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-review-plan:
-  stage: plan
-  image: alpine:latest
-  dependencies:
-    - terraform-plan
-  script:
-    - cat ${TF_ROOT}/plan.txt
-    # Post plan to merge request as comment
-    - |
-      curl -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
-        -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-        -H "Content-Type: application/json" \
-        -d "{\"body\": \"## Terraform Plan\n\`\`\`\n$(cat ${TF_ROOT}/plan.txt)\n\`\`\`\"}"
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="na">review-plan</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">plan</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">alpine:latest</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">terraform-plan</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cat ${TF_ROOT}/plan.txt</span>
+    <span class="c1"># Post plan to merge request as comment</span>
+    <span class="pi">-</span> <span class="pi">|</span>
+      <span class="s">curl -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \</span>
+        <span class="s">-H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \</span>
+        <span class="s">-H "Content-Type: application/json" \</span>
+        <span class="s">-d "{\"body\": \"## Terraform Plan\n\`\`\`\n$(cat ${TF_ROOT}/plan.txt)\n\`\`\`\"}"</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-# Test Stage
-test-inventory:
-  stage: test
-  image: quay.io/ansible/creator-ee:latest
-  script:
-    - cd ${ANSIBLE_ROOT}
-    - python inventory/netbox_inventory.py --list &gt; inventory.json
-    - ansible-inventory -i inventory/netbox_inventory.py --list
-    - ansible-inventory -i inventory/netbox_inventory.py --graph
-  artifacts:
-    paths:
-      - ${ANSIBLE_ROOT}/inventory.json
-    expire_in: 1 day
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+<span class="c1"># Test Stage</span>
+<span class="na">test-inventory</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">test</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">quay.io/ansible/creator-ee:latest</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${ANSIBLE_ROOT}</span>
+    <span class="pi">-</span> <span class="s">python inventory/netbox_inventory.py --list &gt; inventory.json</span>
+    <span class="pi">-</span> <span class="s">ansible-inventory -i inventory/netbox_inventory.py --list</span>
+    <span class="pi">-</span> <span class="s">ansible-inventory -i inventory/netbox_inventory.py --graph</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">${ANSIBLE_ROOT}/inventory.json</span>
+    <span class="na">expire_in</span><span class="pi">:</span> <span class="s">1 day</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
 
-dry-run:
-  stage: test
-  image: quay.io/ansible/creator-ee:latest
-  script:
-    - cd ${ANSIBLE_ROOT}
-    - ansible-playbook playbooks/configure_switches.yml --check --diff
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
-  when: manual
+<span class="na">dry-run</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">test</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">quay.io/ansible/creator-ee:latest</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${ANSIBLE_ROOT}</span>
+    <span class="pi">-</span> <span class="s">ansible-playbook playbooks/configure_switches.yml --check --diff</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_MERGE_REQUEST_ID'</span>
+  <span class="na">when</span><span class="pi">:</span> <span class="s">manual</span>
 
-# Deploy Stage
-terraform-apply:
-  stage: deploy
-  image: hashicorp/terraform:1.6
-  script:
-    - cd ${TF_ROOT}
-    - terraform init
-    - terraform apply tfplan
-  dependencies:
-    - terraform-plan
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-  when: manual
-  environment:
-    name: production
-    url: https://netbox.company.com
+<span class="c1"># Deploy Stage</span>
+<span class="na">terraform-apply</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">deploy</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">hashicorp/terraform:1.6</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${TF_ROOT}</span>
+    <span class="pi">-</span> <span class="s">terraform init</span>
+    <span class="pi">-</span> <span class="s">terraform apply tfplan</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">terraform-plan</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_COMMIT_BRANCH</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">"main"'</span>
+  <span class="na">when</span><span class="pi">:</span> <span class="s">manual</span>
+  <span class="na">environment</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">production</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s">https://netbox.company.com</span>
 
-ansible-deploy:
-  stage: deploy
-  image: quay.io/ansible/creator-ee:latest
-  script:
-    - cd ${ANSIBLE_ROOT}
-    - ansible-playbook playbooks/configure_switches.yml -v
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-  when: manual
-  environment:
-    name: production
+<span class="na">ansible-deploy</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">deploy</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">quay.io/ansible/creator-ee:latest</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${ANSIBLE_ROOT}</span>
+    <span class="pi">-</span> <span class="s">ansible-playbook playbooks/configure_switches.yml -v</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_COMMIT_BRANCH</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">"main"'</span>
+  <span class="na">when</span><span class="pi">:</span> <span class="s">manual</span>
+  <span class="na">environment</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">production</span>
 
-# Verification Stage
-verify-deployment:
-  stage: verify
-  image: python:3.11
-  script:
-    - pip install requests pytest pytest-html
-    - cd ${CI_PROJECT_DIR}/tests
-    - pytest test_network.py --html=report.html --self-contained-html
-  artifacts:
-    paths:
-      - tests/report.html
-    reports:
-      junit: tests/report.xml
-    expire_in: 30 days
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+<span class="c1"># Verification Stage</span>
+<span class="na">verify-deployment</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">verify</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">python:3.11</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">pip install requests pytest pytest-html</span>
+    <span class="pi">-</span> <span class="s">cd ${CI_PROJECT_DIR}/tests</span>
+    <span class="pi">-</span> <span class="s">pytest test_network.py --html=report.html --self-contained-html</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">tests/report.html</span>
+    <span class="na">reports</span><span class="pi">:</span>
+      <span class="na">junit</span><span class="pi">:</span> <span class="s">tests/report.xml</span>
+    <span class="na">expire_in</span><span class="pi">:</span> <span class="s">30 days</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_COMMIT_BRANCH</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">"main"'</span>
 
-compliance-check:
-  stage: verify
-  image: quay.io/ansible/creator-ee:latest
-  script:
-    - cd ${ANSIBLE_ROOT}
-    - ansible-playbook playbooks/compliance_check.yml
-    - python scripts/generate_compliance_report.py
-  artifacts:
-    paths:
-      - ${ANSIBLE_ROOT}/reports/
-    expire_in: 30 days
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'</code></pre>
+<span class="na">compliance-check</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">verify</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">quay.io/ansible/creator-ee:latest</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">cd ${ANSIBLE_ROOT}</span>
+    <span class="pi">-</span> <span class="s">ansible-playbook playbooks/compliance_check.yml</span>
+    <span class="pi">-</span> <span class="s">python scripts/generate_compliance_report.py</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">${ANSIBLE_ROOT}/reports/</span>
+    <span class="na">expire_in</span><span class="pi">:</span> <span class="s">30 days</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">if</span><span class="pi">:</span> <span class="s1">'</span><span class="s">$CI_COMMIT_BRANCH</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">"main"'</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testing_framework">Testing Framework</h3>
+<h3 id="_testing_framework">5.2. Testing Framework</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"># tests/test_network.py - Network validation tests
-import pytest
-import requests
-from netmiko import ConnectHandler
-from typing import Dict, List
+<pre class="rouge highlight"><code data-lang="python"><span class="c1"># tests/test_network.py - Network validation tests
+</span><span class="kn">import</span> <span class="n">pytest</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">netmiko</span> <span class="kn">import</span> <span class="n">ConnectHandler</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-class TestNetworkDeployment:
-    """Validate network configuration deployment"""
+<span class="k">class</span> <span class="nc">TestNetworkDeployment</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Validate network configuration deployment</span><span class="sh">"""</span>
 
-    @pytest.fixture(scope="module")
-    def devices(self) -&gt; List[Dict]:
-        """Get device list from Netbox"""
-        response = requests.get(
-            f"{os.getenv('NETBOX_URL')}/api/dcim/devices/",
-            headers={"Authorization": f"Token {os.getenv('NETBOX_TOKEN')}"},
-            params={"status": "active", "role": "access_switch"}
-        )
-        return response.json()["results"]
+    <span class="nd">@pytest.fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="sh">"</span><span class="s">module</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">devices</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Get device list from Netbox</span><span class="sh">"""</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">'</span><span class="s">NETBOX_URL</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="s">/api/dcim/devices/</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Token </span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">'</span><span class="s">NETBOX_TOKEN</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">},</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">active</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">access_switch</span><span class="sh">"</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="sh">"</span><span class="s">results</span><span class="sh">"</span><span class="p">]</span>
 
-    def test_device_reachability(self, devices):
-        """Test all devices are reachable"""
-        for device in devices:
-            ip = device["primary_ip"]["address"].split('/')[0]
-            response = subprocess.run(
-                ["ping", "-c", "3", "-W", "2", ip],
-                capture_output=True
-            )
-            assert response.returncode == 0, f"Device {device['name']} not reachable"
+    <span class="k">def</span> <span class="nf">test_device_reachability</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Test all devices are reachable</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">primary_ip</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">address</span><span class="sh">"</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">/</span><span class="sh">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="sh">"</span><span class="s">ping</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">3</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-W</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">2</span><span class="sh">"</span><span class="p">,</span> <span class="n">ip</span><span class="p">],</span>
+                <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span>
+            <span class="p">)</span>
+            <span class="k">assert</span> <span class="n">response</span><span class="p">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Device </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s"> not reachable</span><span class="sh">"</span>
 
-    def test_ssh_connectivity(self, devices):
-        """Test SSH connectivity to devices"""
-        for device in devices:
-            conn = ConnectHandler(
-                device_type="cisco_ios",
-                host=device["primary_ip"]["address"].split('/')[0],
-                username=os.getenv("NETWORK_USERNAME"),
-                password=os.getenv("NETWORK_PASSWORD"),
-                timeout=10
-            )
-            output = conn.send_command("show version")
-            assert "Cisco" in output, f"Unexpected output from {device['name']}"
-            conn.disconnect()
+    <span class="k">def</span> <span class="nf">test_ssh_connectivity</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Test SSH connectivity to devices</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="nc">ConnectHandler</span><span class="p">(</span>
+                <span class="n">device_type</span><span class="o">=</span><span class="sh">"</span><span class="s">cisco_ios</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">host</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">primary_ip</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">address</span><span class="sh">"</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">/</span><span class="sh">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETWORK_USERNAME</span><span class="sh">"</span><span class="p">),</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETWORK_PASSWORD</span><span class="sh">"</span><span class="p">),</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+            <span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show version</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="sh">"</span><span class="s">Cisco</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Unexpected output from </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    def test_vlan_configuration(self, devices):
-        """Verify VLAN configuration"""
-        expected_vlans = self._get_expected_vlans()
+    <span class="k">def</span> <span class="nf">test_vlan_configuration</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Verify VLAN configuration</span><span class="sh">"""</span>
+        <span class="n">expected_vlans</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_expected_vlans</span><span class="p">()</span>
 
-        for device in devices:
-            conn = self._connect_device(device)
-            output = conn.send_command("show vlan brief")
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_connect_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show vlan brief</span><span class="sh">"</span><span class="p">)</span>
 
-            for vlan in expected_vlans[device["site"]["slug"]]:
-                assert str(vlan["id"]) in output, \
-                    f"VLAN {vlan['id']} missing on {device['name']}"
-                assert vlan["name"] in output, \
-                    f"VLAN {vlan['name']} missing on {device['name']}"
+            <span class="k">for</span> <span class="n">vlan</span> <span class="ow">in</span> <span class="n">expected_vlans</span><span class="p">[</span><span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">site</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">]]:</span>
+                <span class="k">assert</span> <span class="nf">str</span><span class="p">(</span><span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">])</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                    <span class="sa">f</span><span class="sh">"</span><span class="s">VLAN </span><span class="si">{</span><span class="n">vlan</span><span class="p">[</span><span class="sh">'</span><span class="s">id</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s"> missing on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
+                <span class="k">assert</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                    <span class="sa">f</span><span class="sh">"</span><span class="s">VLAN </span><span class="si">{</span><span class="n">vlan</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s"> missing on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    def test_ntp_synchronization(self, devices):
-        """Verify NTP synchronization"""
-        for device in devices:
-            conn = self._connect_device(device)
-            output = conn.send_command("show ntp status")
+    <span class="k">def</span> <span class="nf">test_ntp_synchronization</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Verify NTP synchronization</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_connect_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show ntp status</span><span class="sh">"</span><span class="p">)</span>
 
-            assert "Clock is synchronized" in output, \
-                f"NTP not synchronized on {device['name']}"
+            <span class="k">assert</span> <span class="sh">"</span><span class="s">Clock is synchronized</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="sh">"</span><span class="s">NTP not synchronized on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    def test_spanning_tree(self, devices):
-        """Verify spanning-tree configuration"""
-        for device in devices:
-            conn = self._connect_device(device)
-            output = conn.send_command("show spanning-tree summary")
+    <span class="k">def</span> <span class="nf">test_spanning_tree</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Verify spanning-tree configuration</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_connect_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show spanning-tree summary</span><span class="sh">"</span><span class="p">)</span>
 
-            assert "RSTP" in output or "rapid-pvst" in output, \
-                f"Rapid spanning-tree not configured on {device['name']}"
+            <span class="k">assert</span> <span class="sh">"</span><span class="s">RSTP</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">output</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">rapid-pvst</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="sh">"</span><span class="s">Rapid spanning-tree not configured on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
 
-            assert "Loopguard Default" in output, \
-                f"Loopguard not enabled on {device['name']}"
+            <span class="k">assert</span> <span class="sh">"</span><span class="s">Loopguard Default</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                <span class="sa">f</span><span class="sh">"</span><span class="s">Loopguard not enabled on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    def test_security_hardening(self, devices):
-        """Verify security configurations"""
-        security_checks = [
-            ("show ip ssh", "SSH Enabled - version 2"),
-            ("show running-config | include ^no service", "no service pad"),
-            ("show archive", "Archive feature not enabled")
-        ]
+    <span class="k">def</span> <span class="nf">test_security_hardening</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Verify security configurations</span><span class="sh">"""</span>
+        <span class="n">security_checks</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="sh">"</span><span class="s">show ip ssh</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">SSH Enabled - version 2</span><span class="sh">"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sh">"</span><span class="s">show running-config | include ^no service</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">no service pad</span><span class="sh">"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sh">"</span><span class="s">show archive</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Archive feature not enabled</span><span class="sh">"</span><span class="p">)</span>
+        <span class="p">]</span>
 
-        for device in devices:
-            conn = self._connect_device(device)
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_connect_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-            for command, expected in security_checks:
-                output = conn.send_command(command)
-                assert expected in output, \
-                    f"Security check failed on {device['name']}: {expected}"
+            <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">security_checks</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> \
+                    <span class="sa">f</span><span class="sh">"</span><span class="s">Security check failed on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="sh">"</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    @pytest.mark.performance
-    def test_interface_errors(self, devices):
-        """Check for interface errors"""
-        for device in devices:
-            conn = self._connect_device(device)
-            output = conn.send_command("show interfaces | include error")
+    <span class="nd">@pytest.mark.performance</span>
+    <span class="k">def</span> <span class="nf">test_interface_errors</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Check for interface errors</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_connect_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show interfaces | include error</span><span class="sh">"</span><span class="p">)</span>
 
-            lines = output.split('\n')
-            for line in lines:
-                if "error" in line.lower():
-                    # Parse error counts
-                    parts = line.split()
-                    if len(parts) &gt;= 2 and parts[0].isdigit():
-                        error_count = int(parts[0])
-                        assert error_count == 0, \
-                            f"Interface errors detected on {device['name']}: {line}"
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">output</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">.</span><span class="nf">lower</span><span class="p">():</span>
+                    <span class="c1"># Parse error counts
+</span>                    <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">isdigit</span><span class="p">():</span>
+                        <span class="n">error_count</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="k">assert</span> <span class="n">error_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> \
+                            <span class="sa">f</span><span class="sh">"</span><span class="s">Interface errors detected on </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="sh">"</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-    def _connect_device(self, device: Dict) -&gt; ConnectHandler:
-        """Helper to connect to device"""
-        return ConnectHandler(
-            device_type="cisco_ios",
-            host=device["primary_ip"]["address"].split('/')[0],
-            username=os.getenv("NETWORK_USERNAME"),
-            password=os.getenv("NETWORK_PASSWORD")
-        )
+    <span class="k">def</span> <span class="nf">_connect_device</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectHandler</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Helper to connect to device</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="nc">ConnectHandler</span><span class="p">(</span>
+            <span class="n">device_type</span><span class="o">=</span><span class="sh">"</span><span class="s">cisco_ios</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">"</span><span class="s">primary_ip</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">address</span><span class="sh">"</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">/</span><span class="sh">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETWORK_USERNAME</span><span class="sh">"</span><span class="p">),</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">NETWORK_PASSWORD</span><span class="sh">"</span><span class="p">)</span>
+        <span class="p">)</span>
 
-    def _get_expected_vlans(self) -&gt; Dict[str, List]:
-        """Get expected VLANs from Netbox"""
-        response = requests.get(
-            f"{os.getenv('NETBOX_URL')}/api/ipam/vlans/",
-            headers={"Authorization": f"Token {os.getenv('NETBOX_TOKEN')}"}
-        )
+    <span class="k">def</span> <span class="nf">_get_expected_vlans</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Get expected VLANs from Netbox</span><span class="sh">"""</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">'</span><span class="s">NETBOX_URL</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="s">/api/ipam/vlans/</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Token </span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">'</span><span class="s">NETBOX_TOKEN</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+        <span class="p">)</span>
 
-        vlans_by_site = {}
-        for vlan in response.json()["results"]:
-            site = vlan["site"]["slug"]
-            if site not in vlans_by_site:
-                vlans_by_site[site] = []
+        <span class="n">vlans_by_site</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">vlan</span> <span class="ow">in</span> <span class="n">response</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="sh">"</span><span class="s">results</span><span class="sh">"</span><span class="p">]:</span>
+            <span class="n">site</span> <span class="o">=</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">site</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">slug</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vlans_by_site</span><span class="p">:</span>
+                <span class="n">vlans_by_site</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-            vlans_by_site[site].append({
-                "id": vlan["vid"],
-                "name": vlan["name"]
-            })
+            <span class="n">vlans_by_site</span><span class="p">[</span><span class="n">site</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span>
+                <span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">vid</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">vlan</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>
+            <span class="p">})</span>
 
-        return vlans_by_site</code></pre>
+        <span class="k">return</span> <span class="n">vlans_by_site</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_monitoring_and_observability">Monitoring and Observability</h2>
+<h2 id="_monitoring_and_observability">6. Monitoring and Observability</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_prometheus_metrics">Prometheus Metrics</h3>
+<h3 id="_prometheus_metrics">6.1. Prometheus Metrics</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"># monitoring/network_exporter.py - Custom Prometheus exporter
-from prometheus_client import start_http_server, Gauge, Counter
-import time
-from netmiko import ConnectHandler
+<pre class="rouge highlight"><code data-lang="python"><span class="c1"># monitoring/network_exporter.py - Custom Prometheus exporter
+</span><span class="kn">from</span> <span class="n">prometheus_client</span> <span class="kn">import</span> <span class="n">start_http_server</span><span class="p">,</span> <span class="n">Gauge</span><span class="p">,</span> <span class="n">Counter</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">netmiko</span> <span class="kn">import</span> <span class="n">ConnectHandler</span>
 
-# Define metrics
-interface_status = Gauge('network_interface_status',
-                        'Interface operational status',
-                        ['device', 'interface'])
+<span class="c1"># Define metrics
+</span><span class="n">interface_status</span> <span class="o">=</span> <span class="nc">Gauge</span><span class="p">(</span><span class="sh">'</span><span class="s">network_interface_status</span><span class="sh">'</span><span class="p">,</span>
+                        <span class="sh">'</span><span class="s">Interface operational status</span><span class="sh">'</span><span class="p">,</span>
+                        <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">])</span>
 
-interface_traffic_in = Counter('network_interface_bytes_received',
-                              'Interface bytes received',
-                              ['device', 'interface'])
+<span class="n">interface_traffic_in</span> <span class="o">=</span> <span class="nc">Counter</span><span class="p">(</span><span class="sh">'</span><span class="s">network_interface_bytes_received</span><span class="sh">'</span><span class="p">,</span>
+                              <span class="sh">'</span><span class="s">Interface bytes received</span><span class="sh">'</span><span class="p">,</span>
+                              <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">])</span>
 
-interface_traffic_out = Counter('network_interface_bytes_transmitted',
-                               'Interface bytes transmitted',
-                               ['device', 'interface'])
+<span class="n">interface_traffic_out</span> <span class="o">=</span> <span class="nc">Counter</span><span class="p">(</span><span class="sh">'</span><span class="s">network_interface_bytes_transmitted</span><span class="sh">'</span><span class="p">,</span>
+                               <span class="sh">'</span><span class="s">Interface bytes transmitted</span><span class="sh">'</span><span class="p">,</span>
+                               <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">])</span>
 
-cpu_utilization = Gauge('network_device_cpu_percent',
-                       'Device CPU utilization',
-                       ['device'])
+<span class="n">cpu_utilization</span> <span class="o">=</span> <span class="nc">Gauge</span><span class="p">(</span><span class="sh">'</span><span class="s">network_device_cpu_percent</span><span class="sh">'</span><span class="p">,</span>
+                       <span class="sh">'</span><span class="s">Device CPU utilization</span><span class="sh">'</span><span class="p">,</span>
+                       <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">])</span>
 
-memory_utilization = Gauge('network_device_memory_percent',
-                          'Device memory utilization',
-                          ['device'])
+<span class="n">memory_utilization</span> <span class="o">=</span> <span class="nc">Gauge</span><span class="p">(</span><span class="sh">'</span><span class="s">network_device_memory_percent</span><span class="sh">'</span><span class="p">,</span>
+                          <span class="sh">'</span><span class="s">Device memory utilization</span><span class="sh">'</span><span class="p">,</span>
+                          <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">])</span>
 
-config_changes = Counter('network_config_changes_total',
-                        'Configuration changes detected',
-                        ['device'])
+<span class="n">config_changes</span> <span class="o">=</span> <span class="nc">Counter</span><span class="p">(</span><span class="sh">'</span><span class="s">network_config_changes_total</span><span class="sh">'</span><span class="p">,</span>
+                        <span class="sh">'</span><span class="s">Configuration changes detected</span><span class="sh">'</span><span class="p">,</span>
+                        <span class="p">[</span><span class="sh">'</span><span class="s">device</span><span class="sh">'</span><span class="p">])</span>
 
-def collect_metrics():
-    """Collect metrics from network devices"""
-    devices = get_devices_from_netbox()
+<span class="k">def</span> <span class="nf">collect_metrics</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">Collect metrics from network devices</span><span class="sh">"""</span>
+    <span class="n">devices</span> <span class="o">=</span> <span class="nf">get_devices_from_netbox</span><span class="p">()</span>
 
-    for device in devices:
-        try:
-            conn = connect_to_device(device)
+    <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="nf">connect_to_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-            # Collect interface stats
-            interfaces = conn.send_command("show interfaces", use_textfsm=True)
-            for intf in interfaces:
-                interface_status.labels(
-                    device=device['name'],
-                    interface=intf['interface']
-                ).set(1 if intf['link_status'] == 'up' else 0)
+            <span class="c1"># Collect interface stats
+</span>            <span class="n">interfaces</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show interfaces</span><span class="sh">"</span><span class="p">,</span> <span class="n">use_textfsm</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">intf</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="p">:</span>
+                <span class="n">interface_status</span><span class="p">.</span><span class="nf">labels</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">],</span>
+                    <span class="n">interface</span><span class="o">=</span><span class="n">intf</span><span class="p">[</span><span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">]</span>
+                <span class="p">).</span><span class="nf">set</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">intf</span><span class="p">[</span><span class="sh">'</span><span class="s">link_status</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">up</span><span class="sh">'</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
 
-                interface_traffic_in.labels(
-                    device=device['name'],
-                    interface=intf['interface']
-                )._value.set(int(intf.get('input_bytes', 0)))
+                <span class="n">interface_traffic_in</span><span class="p">.</span><span class="nf">labels</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">],</span>
+                    <span class="n">interface</span><span class="o">=</span><span class="n">intf</span><span class="p">[</span><span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">]</span>
+                <span class="p">).</span><span class="n">_value</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">intf</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">input_bytes</span><span class="sh">'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
 
-                interface_traffic_out.labels(
-                    device=device['name'],
-                    interface=intf['interface']
-                )._value.set(int(intf.get('output_bytes', 0)))
+                <span class="n">interface_traffic_out</span><span class="p">.</span><span class="nf">labels</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">],</span>
+                    <span class="n">interface</span><span class="o">=</span><span class="n">intf</span><span class="p">[</span><span class="sh">'</span><span class="s">interface</span><span class="sh">'</span><span class="p">]</span>
+                <span class="p">).</span><span class="n">_value</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">intf</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">output_bytes</span><span class="sh">'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
 
-            # Collect CPU/Memory
-            cpu = parse_cpu_output(conn.send_command("show processes cpu"))
-            cpu_utilization.labels(device=device['name']).set(cpu)
+            <span class="c1"># Collect CPU/Memory
+</span>            <span class="n">cpu</span> <span class="o">=</span> <span class="nf">parse_cpu_output</span><span class="p">(</span><span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show processes cpu</span><span class="sh">"</span><span class="p">))</span>
+            <span class="n">cpu_utilization</span><span class="p">.</span><span class="nf">labels</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]).</span><span class="nf">set</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span>
 
-            memory = parse_memory_output(conn.send_command("show memory"))
-            memory_utilization.labels(device=device['name']).set(memory)
+            <span class="n">memory</span> <span class="o">=</span> <span class="nf">parse_memory_output</span><span class="p">(</span><span class="n">conn</span><span class="p">.</span><span class="nf">send_command</span><span class="p">(</span><span class="sh">"</span><span class="s">show memory</span><span class="sh">"</span><span class="p">))</span>
+            <span class="n">memory_utilization</span><span class="p">.</span><span class="nf">labels</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]).</span><span class="nf">set</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span>
 
-            conn.disconnect()
+            <span class="n">conn</span><span class="p">.</span><span class="nf">disconnect</span><span class="p">()</span>
 
-        except Exception as e:
-            logger.error(f"Failed to collect metrics from {device['name']}: {e}")
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Failed to collect metrics from </span><span class="si">{</span><span class="n">device</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
 
-if __name__ == "__main__":
-    start_http_server(9100)
-    while True:
-        collect_metrics()
-        time.sleep(60)</code></pre>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">start_http_server</span><span class="p">(</span><span class="mi">9100</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="nf">collect_metrics</span><span class="p">()</span>
+        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_results_and_metrics">Results and Metrics</h2>
+<h2 id="_results_and_metrics">7. Results and Metrics</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>After 18 months of Infrastructure as Code:</p>
@@ -1749,10 +1869,10 @@ if __name__ == "__main__":
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lessons_learned">Lessons Learned</h2>
+<h2 id="_lessons_learned">8. Lessons Learned</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_what_worked">What Worked</h3>
+<h3 id="_what_worked">8.1. What Worked</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1774,7 +1894,7 @@ if __name__ == "__main__":
 </div>
 </div>
 <div class="sect2">
-<h3 id="_challenges_overcome">Challenges Overcome</h3>
+<h3 id="_challenges_overcome">8.2. Challenges Overcome</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1798,7 +1918,7 @@ if __name__ == "__main__":
 </div>
 </div>
 <div class="sect1">
-<h2 id="_future_enhancements">Future Enhancements</h2>
+<h2 id="_future_enhancements">9. Future Enhancements</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We&#8217;re currently working on:</p>
@@ -1825,7 +1945,7 @@ if __name__ == "__main__":
 </div>
 </div>
 <div class="sect1">
-<h2 id="_conclusion">Conclusion</h2>
+<h2 id="_conclusion">10. Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Infrastructure as Code transformed our network operations from a bottleneck to a competitive advantage. The initial investment in tooling and training paid for itself within six months through reduced outages and faster deployments.</p>
@@ -1855,5 +1975,8 @@ if __name__ == "__main__":
 Last updated 2025-09-20 18:26:21 -0700
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="code-copy.js"></script>
 </body>
 </html>
