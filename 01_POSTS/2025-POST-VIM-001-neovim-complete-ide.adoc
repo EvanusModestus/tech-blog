@@ -1,0 +1,1211 @@
+= Neovim as a Complete IDE: From Network Configs to React Components
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:keywords: Neovim, Vim, IDE, LSP, Development Environment, Text Editor
+:description: How I transformed Neovim into a complete IDE that handles everything from Cisco configurations to TypeScript development
+:doctype: article
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+After years of bouncing between VSCode, IntelliJ, and Sublime Text, I've settled on Neovim as my primary IDE. This isn't about minimalism or terminal purism—it's about building an editor that understands my workflow across network engineering and full-stack development.
+--
+
+== Introduction
+
+My Neovim journey started with a simple need: editing router configurations over SSH. Three years later, it's replaced every IDE I've used. This setup handles Terraform deployments, React applications, Python automation, and even helps write technical documentation.
+
+This guide shares my complete Neovim configuration, optimized for engineers who work across multiple domains. Every plugin and keybinding serves a specific purpose learned from thousands of hours of real work.
+
+== Core Philosophy
+
+=== Speed Over Features
+
+My configuration priorities:
+1. **Startup time < 50ms**: Fast enough for quick edits
+2. **Responsive editing**: No lag, even in 10,000+ line files
+3. **Predictable behavior**: Consistency across file types
+4. **Extensible**: Easy to add new languages/tools
+
+=== The Configuration Structure
+
+[source,lua]
+----
+-- ~/.config/nvim/init.lua structure
+--[[
+nvim/
+├── init.lua                 -- Entry point
+├── lua/
+│   ├── core/
+│   │   ├── options.lua     -- Editor options
+│   │   ├── keymaps.lua     -- Global keybindings
+│   │   └── autocmds.lua    -- Auto commands
+│   ├── plugins/
+│   │   ├── init.lua        -- Plugin manager setup
+│   │   ├── lsp/            -- Language server configs
+│   │   ├── completion/     -- Completion setup
+│   │   ├── telescope/      -- Fuzzy finding
+│   │   ├── treesitter/     -- Syntax highlighting
+│   │   └── ui/             -- UI enhancements
+│   └── custom/
+│       ├── snippets/       -- Custom snippets
+│       └── functions/      -- Utility functions
+]]--
+
+-- Bootstrap lazy.nvim plugin manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Load configurations
+require("core.options")
+require("core.keymaps")
+require("core.autocmds")
+require("plugins")
+----
+
+== Core Configuration
+
+=== Editor Options
+
+[source,lua]
+----
+-- lua/core/options.lua - Optimized editor settings
+local opt = vim.opt
+
+-- Performance
+opt.updatetime = 100          -- Faster completion
+opt.timeoutlen = 300          -- Faster key sequence completion
+opt.redrawtime = 1500         -- Time before stopping syntax highlight
+opt.lazyredraw = true         -- Don't redraw during macros
+
+-- Display
+opt.number = true             -- Line numbers
+opt.relativenumber = true     -- Relative line numbers
+opt.signcolumn = "yes"        -- Always show sign column
+opt.colorcolumn = "80,120"    -- Visual guides
+opt.wrap = false              -- No line wrap
+opt.scrolloff = 8             -- Keep 8 lines visible
+opt.sidescrolloff = 8         -- Keep 8 columns visible
+
+-- Indentation
+opt.expandtab = true          -- Spaces instead of tabs
+opt.shiftwidth = 2            -- Size of indent
+opt.tabstop = 2               -- Size of tab
+opt.smartindent = true        -- Smart auto indenting
+opt.breakindent = true        -- Wrapped lines continue indent
+
+-- Search
+opt.ignorecase = true         -- Case insensitive search
+opt.smartcase = true          -- Unless uppercase in search
+opt.hlsearch = false          -- Don't highlight search results
+opt.incsearch = true          -- Show search results while typing
+
+-- Files
+opt.backup = false            -- No backup files
+opt.writebackup = false       -- No backup before overwriting
+opt.swapfile = false          -- No swap files
+opt.undofile = true           -- Persistent undo
+opt.undodir = vim.fn.expand("~/.config/nvim/undo")
+
+-- Splits
+opt.splitbelow = true         -- Horizontal splits below
+opt.splitright = true         -- Vertical splits to right
+
+-- Completion
+opt.completeopt = { "menu", "menuone", "noselect" }
+opt.pumheight = 10            -- Limit completion menu height
+
+-- Clipboard
+opt.clipboard = "unnamedplus" -- Use system clipboard
+
+-- Performance: Disable built-in plugins
+local disabled_built_ins = {
+  "netrw", "netrwPlugin", "netrwSettings", "netrwFileHandlers",
+  "gzip", "zip", "zipPlugin", "tar", "tarPlugin",
+  "getscript", "getscriptPlugin", "vimball", "vimballPlugin",
+  "2html_plugin", "logipat", "rrhelper", "spellfile_plugin",
+  "matchit", "matchparen"
+}
+
+for _, plugin in pairs(disabled_built_ins) do
+  vim.g["loaded_" .. plugin] = 1
+end
+----
+
+=== Key Mappings
+
+[source,lua]
+----
+-- lua/core/keymaps.lua - Practical keybindings
+local keymap = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+-- Set leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Better navigation
+keymap("n", "<C-h>", "<C-w>h", opts)  -- Navigate windows
+keymap("n", "<C-j>", "<C-w>j", opts)
+keymap("n", "<C-k>", "<C-w>k", opts)
+keymap("n", "<C-l>", "<C-w>l", opts)
+
+-- Resize windows
+keymap("n", "<C-Up>", ":resize +2<CR>", opts)
+keymap("n", "<C-Down>", ":resize -2<CR>", opts)
+keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
+keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
+
+-- Buffer navigation
+keymap("n", "<S-l>", ":bnext<CR>", opts)
+keymap("n", "<S-h>", ":bprevious<CR>", opts)
+keymap("n", "<leader>bd", ":bdelete<CR>", opts)
+
+-- Stay in visual mode when indenting
+keymap("v", "<", "<gv", opts)
+keymap("v", ">", ">gv", opts)
+
+-- Move text up and down
+keymap("v", "J", ":move '>+1<CR>gv=gv", opts)
+keymap("v", "K", ":move '<-2<CR>gv=gv", opts)
+
+-- Better paste (don't yank replaced text)
+keymap("v", "p", '"_dP', opts)
+
+-- Quick save and quit
+keymap("n", "<leader>w", ":w<CR>", opts)
+keymap("n", "<leader>q", ":q<CR>", opts)
+keymap("n", "<leader>Q", ":qa!<CR>", opts)
+
+-- Terminal
+keymap("n", "<leader>tt", ":terminal<CR>", opts)
+keymap("t", "<Esc>", "<C-\\><C-n>", opts)
+
+-- Quick fix list
+keymap("n", "<leader>co", ":copen<CR>", opts)
+keymap("n", "<leader>cc", ":cclose<CR>", opts)
+keymap("n", "[q", ":cprev<CR>", opts)
+keymap("n", "]q", ":cnext<CR>", opts)
+----
+
+== Plugin Configuration
+
+=== Plugin Manager Setup
+
+[source,lua]
+----
+-- lua/plugins/init.lua - Lazy.nvim plugin configuration
+return require("lazy").setup({
+  -- Core plugins
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("plugins.treesitter")
+    end,
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "folke/neodev.nvim",
+    },
+    config = function()
+      require("plugins.lsp")
+    end,
+  },
+
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
+    },
+    config = function()
+      require("plugins.completion")
+    end,
+  },
+
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-fzf-native.nvim",
+    },
+    config = function()
+      require("plugins.telescope")
+    end,
+  },
+
+  -- Git integration
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup({
+        current_line_blame = true,
+        current_line_blame_opts = { delay = 100 },
+      })
+    end,
+  },
+
+  {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" },
+  },
+
+  -- File explorer
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("plugins.nvim-tree")
+    end,
+  },
+
+  -- UI enhancements
+  {
+    "nvim-lualine/lualine.nvim",
+    config = function()
+      require("plugins.lualine")
+    end,
+  },
+
+  {
+    "akinsho/bufferline.nvim",
+    config = function()
+      require("bufferline").setup({
+        options = {
+          diagnostics = "nvim_lsp",
+          offsets = { { filetype = "NvimTree", text = "File Explorer" } },
+        },
+      })
+    end,
+  },
+
+  -- Productivity
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("plugins.harpoon")
+    end,
+  },
+
+  {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup()
+    end,
+  },
+
+  {
+    "windwp/nvim-autopairs",
+    config = function()
+      require("nvim-autopairs").setup()
+    end,
+  },
+
+  {
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
+  },
+
+  -- Debugging
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      require("plugins.dap")
+    end,
+  },
+
+  -- Language specific
+  { "hashivim/vim-terraform", ft = "terraform" },
+  { "pearofducks/ansible-vim", ft = "yaml.ansible" },
+  { "chr4/nginx.vim", ft = "nginx" },
+
+  -- Colorscheme
+  {
+    "folke/tokyonight.nvim",
+    priority = 1000,
+    config = function()
+      vim.cmd([[colorscheme tokyonight-night]])
+    end,
+  },
+}, {
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin",
+      },
+    },
+  },
+})
+----
+
+=== Language Server Protocol (LSP)
+
+[source,lua]
+----
+-- lua/plugins/lsp/init.lua - LSP configuration
+local lspconfig = require("lspconfig")
+local mason = require("mason")
+local mason_lspconfig = require("mason-lspconfig")
+
+-- Setup Mason
+mason.setup({
+  ui = {
+    border = "rounded",
+    icons = {
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗",
+    },
+  },
+})
+
+-- Auto-install servers
+mason_lspconfig.setup({
+  ensure_installed = {
+    "lua_ls",        -- Lua
+    "tsserver",      -- TypeScript/JavaScript
+    "pyright",       -- Python
+    "rust_analyzer", -- Rust
+    "gopls",         -- Go
+    "bashls",        -- Bash
+    "yamlls",        -- YAML
+    "jsonls",        -- JSON
+    "html",          -- HTML
+    "cssls",         -- CSS
+    "tailwindcss",   -- Tailwind
+    "dockerls",      -- Docker
+    "terraformls",   -- Terraform
+    "ansiblels",     -- Ansible
+  },
+  automatic_installation = true,
+})
+
+-- LSP keybindings
+local on_attach = function(client, bufnr)
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
+  -- Navigation
+  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+
+  -- Workspace
+  vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+
+  -- Actions
+  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
+  vim.keymap.set("n", "<leader>f", function()
+    vim.lsp.buf.format({ async = true })
+  end, bufopts)
+
+  -- Diagnostics
+  vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, bufopts)
+  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, bufopts)
+  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, bufopts)
+  vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, bufopts)
+
+  -- Enable completion triggered by <c-x><c-o>
+  if client.server_capabilities.completionProvider then
+    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+  end
+
+  -- Enable format on save
+  if client.server_capabilities.documentFormattingProvider then
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ async = false })
+      end,
+    })
+  end
+end
+
+-- Capabilities for nvim-cmp
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- Server-specific configurations
+local servers = {
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        diagnostics = { globals = { "vim" } },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false,
+        },
+        telemetry = { enable = false },
+      },
+    },
+  },
+
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          typeCheckingMode = "basic",
+        },
+      },
+    },
+  },
+
+  tsserver = {
+    settings = {
+      typescript = {
+        inlayHints = {
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+    },
+  },
+
+  yamlls = {
+    settings = {
+      yaml = {
+        schemas = {
+          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+          ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json"] = "*.ansible.yml",
+          kubernetes = "*.k8s.yaml",
+        },
+      },
+    },
+  },
+}
+
+-- Setup servers
+mason_lspconfig.setup_handlers({
+  function(server_name)
+    lspconfig[server_name].setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = servers[server_name] and servers[server_name].settings or {},
+    })
+  end,
+})
+
+-- Diagnostic configuration
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = "●",
+    source = "if_many",
+  },
+  float = {
+    source = "always",
+    border = "rounded",
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+-- Diagnostic signs
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+----
+
+=== Completion Setup
+
+[source,lua]
+----
+-- lua/plugins/completion.lua - nvim-cmp configuration
+local cmp = require("cmp")
+local luasnip = require("luasnip")
+
+-- Load friendly snippets
+require("luasnip.loaders.from_vscode").lazy_load()
+
+-- Custom snippets for network engineering
+luasnip.add_snippets("cisco", {
+  luasnip.snippet("vlan", {
+    luasnip.text_node("vlan "),
+    luasnip.insert_node(1, "100"),
+    luasnip.text_node({ "", " name " }),
+    luasnip.insert_node(2, "VLAN_NAME"),
+  }),
+
+  luasnip.snippet("int", {
+    luasnip.text_node("interface "),
+    luasnip.insert_node(1, "GigabitEthernet1/0/1"),
+    luasnip.text_node({ "", " description " }),
+    luasnip.insert_node(2, "DESCRIPTION"),
+    luasnip.text_node({ "", " switchport mode " }),
+    luasnip.choice_node(3, {
+      luasnip.text_node("access"),
+      luasnip.text_node("trunk"),
+    }),
+  }),
+})
+
+-- Setup completion
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+
+  mapping = cmp.mapping.preset.insert({
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+  }),
+
+  sources = cmp.config.sources({
+    { name = "nvim_lsp", priority = 1000 },
+    { name = "luasnip", priority = 750 },
+    { name = "buffer", priority = 500 },
+    { name = "path", priority = 250 },
+  }),
+
+  formatting = {
+    format = function(entry, vim_item)
+      -- Icons for completion items
+      local kind_icons = {
+        Text = "",
+        Method = "󰆧",
+        Function = "󰊕",
+        Constructor = "",
+        Field = "󰇽",
+        Variable = "󰂡",
+        Class = "󰠱",
+        Interface = "",
+        Module = "",
+        Property = "󰜢",
+        Unit = "",
+        Value = "󰎠",
+        Enum = "",
+        Keyword = "󰌋",
+        Snippet = "",
+        Color = "󰏘",
+        File = "󰈙",
+        Reference = "",
+        Folder = "󰉋",
+        EnumMember = "",
+        Constant = "󰏿",
+        Struct = "",
+        Event = "",
+        Operator = "󰆕",
+        TypeParameter = "󰅲",
+      }
+
+      vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
+
+      -- Source
+      vim_item.menu = ({
+        nvim_lsp = "[LSP]",
+        luasnip = "[Snippet]",
+        buffer = "[Buffer]",
+        path = "[Path]",
+      })[entry.source.name]
+
+      return vim_item
+    end,
+  },
+
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+})
+
+-- Command line completion
+cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "path" },
+  }, {
+    { name = "cmdline" },
+  }),
+})
+
+-- Search completion
+cmp.setup.cmdline({ "/", "?" }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = "buffer" },
+  },
+})
+----
+
+=== Fuzzy Finding with Telescope
+
+[source,lua]
+----
+-- lua/plugins/telescope.lua - Telescope configuration
+local telescope = require("telescope")
+local actions = require("telescope.actions")
+
+telescope.setup({
+  defaults = {
+    prompt_prefix = " ",
+    selection_caret = " ",
+    path_display = { "truncate" },
+
+    mappings = {
+      i = {
+        ["<C-n>"] = actions.move_selection_next,
+        ["<C-p>"] = actions.move_selection_previous,
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-c>"] = actions.close,
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+      },
+    },
+
+    file_ignore_patterns = {
+      "node_modules",
+      ".git/",
+      "target/",
+      "dist/",
+      "build/",
+      "__pycache__",
+      "*.pyc",
+      "*.pyo",
+      "*.swp",
+      "*.bak",
+      ".DS_Store",
+    },
+
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--hidden",
+      "--glob=!.git",
+    },
+  },
+
+  pickers = {
+    find_files = {
+      find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
+    },
+
+    buffers = {
+      show_all_buffers = true,
+      sort_lastused = true,
+    },
+  },
+
+  extensions = {
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case",
+    },
+  },
+})
+
+-- Load extensions
+telescope.load_extension("fzf")
+
+-- Keymaps
+local keymap = vim.keymap.set
+local builtin = require("telescope.builtin")
+
+keymap("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+keymap("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
+keymap("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
+keymap("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
+keymap("n", "<leader>fc", builtin.commands, { desc = "Commands" })
+keymap("n", "<leader>fo", builtin.oldfiles, { desc = "Recent files" })
+keymap("n", "<leader>fm", builtin.marks, { desc = "Marks" })
+
+-- Git pickers
+keymap("n", "<leader>gc", builtin.git_commits, { desc = "Git commits" })
+keymap("n", "<leader>gb", builtin.git_branches, { desc = "Git branches" })
+keymap("n", "<leader>gs", builtin.git_status, { desc = "Git status" })
+keymap("n", "<leader>gS", builtin.git_stash, { desc = "Git stash" })
+
+-- LSP pickers
+keymap("n", "<leader>lr", builtin.lsp_references, { desc = "LSP references" })
+keymap("n", "<leader>ls", builtin.lsp_document_symbols, { desc = "Document symbols" })
+keymap("n", "<leader>lS", builtin.lsp_workspace_symbols, { desc = "Workspace symbols" })
+keymap("n", "<leader>ld", builtin.diagnostics, { desc = "Diagnostics" })
+
+-- Custom pickers for network configs
+keymap("n", "<leader>nc", function()
+  builtin.find_files({
+    prompt_title = "Network Configs",
+    cwd = "~/network-configs",
+    find_command = { "fd", "--type", "f", "-e", "cfg", "-e", "conf", "-e", "txt" },
+  })
+end, { desc = "Network configs" })
+----
+
+== Specialized Configurations
+
+=== Network Engineering Setup
+
+[source,lua]
+----
+-- lua/custom/network.lua - Network engineering specific configs
+local M = {}
+
+-- Cisco IOS syntax highlighting
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.cfg", "*.conf", "*.ios" },
+  callback = function()
+    vim.bo.filetype = "cisco"
+    vim.bo.commentstring = "! %s"
+  end,
+})
+
+-- Network-specific abbreviations
+vim.cmd([[
+  iabbrev vlan vlan
+  iabbrev int interface
+  iabbrev gig GigabitEthernet
+  iabbrev ten TenGigabitEthernet
+  iabbrev lo Loopback
+  iabbrev desc description
+  iabbrev swp switchport
+  iabbrev stp spanning-tree
+]])
+
+-- Quick templates for common configs
+M.insert_vlan_config = function()
+  local vlan_id = vim.fn.input("VLAN ID: ")
+  local vlan_name = vim.fn.input("VLAN Name: ")
+
+  local config = string.format([[
+vlan %s
+ name %s
+!]], vlan_id, vlan_name)
+
+  vim.api.nvim_put(vim.split(config, "\n"), "l", true, true)
+end
+
+-- ISE RADIUS configuration generator
+M.generate_ise_config = function()
+  local ise_ip = vim.fn.input("ISE IP: ")
+  local radius_key = vim.fn.input("RADIUS Key: ")
+
+  local config = string.format([[
+! ISE RADIUS Configuration
+radius server ISE-01
+ address ipv4 %s auth-port 1812 acct-port 1813
+ key %s
+ timeout 5
+ retransmit 2
+!
+aaa group server radius ISE-GROUP
+ server name ISE-01
+!
+aaa authentication dot1x default group ISE-GROUP
+aaa authorization network default group ISE-GROUP
+aaa accounting dot1x default start-stop group ISE-GROUP
+!
+dot1x system-auth-control
+!]], ise_ip, radius_key)
+
+  vim.api.nvim_put(vim.split(config, "\n"), "l", true, true)
+end
+
+-- Keymaps
+vim.keymap.set("n", "<leader>nv", M.insert_vlan_config, { desc = "Insert VLAN config" })
+vim.keymap.set("n", "<leader>ni", M.generate_ise_config, { desc = "Generate ISE config" })
+
+return M
+----
+
+=== Full-Stack Development
+
+[source,lua]
+----
+-- lua/custom/fullstack.lua - Full-stack development helpers
+local M = {}
+
+-- React component template
+M.create_react_component = function()
+  local component_name = vim.fn.input("Component name: ")
+
+  local template = string.format([[
+import React from 'react';
+import { %sProps } from './types';
+import styles from './%s.module.css';
+
+export const %s: React.FC<%sProps> = ({ }) => {
+  return (
+    <div className={styles.container}>
+      <h1>%s Component</h1>
+    </div>
+  );
+};
+
+export default %s;
+]], component_name, component_name, component_name, component_name, component_name, component_name)
+
+  vim.api.nvim_put(vim.split(template, "\n"), "l", true, true)
+end
+
+-- Express route template
+M.create_express_route = function()
+  local route_name = vim.fn.input("Route name: ")
+
+  local template = string.format([[
+const express = require('express');
+const router = express.Router();
+
+/**
+ * @route   GET /api/%s
+ * @desc    Get all %s
+ * @access  Public
+ */
+router.get('/', async (req, res) => {
+  try {
+    // Implementation here
+    res.json({ message: 'GET %s' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/**
+ * @route   POST /api/%s
+ * @desc    Create new %s
+ * @access  Private
+ */
+router.post('/', async (req, res) => {
+  try {
+    // Implementation here
+    res.status(201).json({ message: 'Created %s' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+module.exports = router;
+]], route_name, route_name, route_name, route_name, route_name, route_name)
+
+  vim.api.nvim_put(vim.split(template, "\n"), "l", true, true)
+end
+
+-- Database migration template
+M.create_migration = function()
+  local table_name = vim.fn.input("Table name: ")
+  local timestamp = os.date("%Y%m%d%H%M%S")
+
+  local template = string.format([[
+-- Migration: %s_create_%s_table.sql
+-- Created: %s
+
+-- Up Migration
+CREATE TABLE IF NOT EXISTS %s (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes
+CREATE INDEX idx_%s_created_at ON %s(created_at);
+
+-- Trigger for updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_%s_updated_at
+    BEFORE UPDATE ON %s
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Down Migration
+-- DROP TABLE IF EXISTS %s CASCADE;
+]], timestamp, table_name, os.date("%Y-%m-%d %H:%M:%S"),
+    table_name, table_name, table_name, table_name, table_name, table_name)
+
+  vim.api.nvim_put(vim.split(template, "\n"), "l", true, true)
+end
+
+-- Keymaps
+vim.keymap.set("n", "<leader>rc", M.create_react_component, { desc = "React component" })
+vim.keymap.set("n", "<leader>re", M.create_express_route, { desc = "Express route" })
+vim.keymap.set("n", "<leader>rm", M.create_migration, { desc = "DB migration" })
+
+return M
+----
+
+== Performance Optimization
+
+=== Startup Time Analysis
+
+[source,lua]
+----
+-- lua/core/performance.lua - Performance monitoring
+local M = {}
+
+-- Measure startup time
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local stats = require("lazy").stats()
+    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+    print("⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms")
+  end,
+})
+
+-- Profile slow operations
+M.profile = function(fn, name)
+  local start = vim.loop.hrtime()
+  fn()
+  local duration = (vim.loop.hrtime() - start) / 1000000 -- Convert to ms
+  print(string.format("%s took %.2fms", name or "Operation", duration))
+end
+
+-- Optimize large file handling
+vim.api.nvim_create_autocmd({ "BufReadPre" }, {
+  callback = function()
+    local max_filesize = 100 * 1024 -- 100 KB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(0))
+
+    if ok and stats and stats.size > max_filesize then
+      -- Disable features for large files
+      vim.b.large_file = true
+      vim.cmd("syntax off")
+      vim.opt_local.undofile = false
+      vim.opt_local.swapfile = false
+      vim.opt_local.foldmethod = "manual"
+      print("Large file detected - optimizations applied")
+    end
+  end,
+})
+
+return M
+----
+
+== Daily Workflow Integration
+
+=== Project-Specific Configurations
+
+[source,lua]
+----
+-- .nvim.lua in project root - Project-specific settings
+-- Automatically loaded by exrc option
+
+-- ISE automation project settings
+if vim.fn.getcwd():match("ise%-automation") then
+  vim.opt_local.shiftwidth = 4
+  vim.opt_local.tabstop = 4
+
+  -- Python-specific settings
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "python",
+    callback = function()
+      vim.opt_local.colorcolumn = "88"  -- Black formatter line length
+    end,
+  })
+end
+
+-- Domus Digitalis project settings
+if vim.fn.getcwd():match("domus%-digitalis") then
+  -- TypeScript/React settings
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "typescript", "typescriptreact" },
+    callback = function()
+      vim.opt_local.shiftwidth = 2
+      vim.opt_local.tabstop = 2
+    end,
+  })
+
+  -- Auto-format on save with Prettier
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
+    command = "silent !prettier --write %",
+  })
+end
+----
+
+=== Session Management
+
+[source,lua]
+----
+-- lua/core/sessions.lua - Workspace session management
+local M = {}
+
+local session_dir = vim.fn.stdpath("data") .. "/sessions"
+vim.fn.mkdir(session_dir, "p")
+
+M.save_session = function()
+  local session_name = vim.fn.input("Session name: ")
+  if session_name == "" then return end
+
+  local session_file = session_dir .. "/" .. session_name .. ".vim"
+  vim.cmd("mksession! " .. session_file)
+  print("Session saved: " .. session_name)
+end
+
+M.load_session = function()
+  local sessions = vim.fn.glob(session_dir .. "/*.vim", false, true)
+
+  if #sessions == 0 then
+    print("No sessions found")
+    return
+  end
+
+  vim.ui.select(sessions, {
+    prompt = "Select session:",
+    format_item = function(item)
+      return vim.fn.fnamemodify(item, ":t:r")
+    end,
+  }, function(choice)
+    if choice then
+      vim.cmd("source " .. choice)
+      print("Session loaded: " .. vim.fn.fnamemodify(choice, ":t:r"))
+    end
+  end)
+end
+
+-- Keymaps
+vim.keymap.set("n", "<leader>ss", M.save_session, { desc = "Save session" })
+vim.keymap.set("n", "<leader>sl", M.load_session, { desc = "Load session" })
+
+return M
+----
+
+== Troubleshooting
+
+=== Common Issues and Solutions
+
+[source,lua]
+----
+-- lua/core/health.lua - Health check for configuration
+local M = {}
+
+M.check = function()
+  local health = vim.health or require("health")
+
+  health.report_start("Neovim Configuration")
+
+  -- Check Neovim version
+  if vim.fn.has("nvim-0.9") == 1 then
+    health.report_ok("Neovim version 0.9+")
+  else
+    health.report_error("Neovim 0.9+ required")
+  end
+
+  -- Check required binaries
+  local binaries = {
+    "git", "rg", "fd", "node", "npm", "python3", "gcc"
+  }
+
+  for _, binary in ipairs(binaries) do
+    if vim.fn.executable(binary) == 1 then
+      health.report_ok(binary .. " found")
+    else
+      health.report_warn(binary .. " not found")
+    end
+  end
+
+  -- Check clipboard
+  if vim.fn.has("clipboard") == 1 then
+    health.report_ok("Clipboard support")
+  else
+    health.report_warn("No clipboard support")
+  end
+
+  -- Check Python provider
+  if vim.fn.has("python3") == 1 then
+    health.report_ok("Python 3 provider")
+  else
+    health.report_warn("Python 3 provider not configured")
+  end
+end
+
+return M
+----
+
+== Conclusion
+
+This Neovim configuration has evolved through thousands of hours of real work. It handles everything from editing Cisco configurations over SSH to developing modern React applications. The key is building incrementally—start with basics and add features as you need them.
+
+The investment in learning Neovim pays dividends. The same editor that manages my network infrastructure also builds my full-stack applications. The muscle memory transfers across domains, and the customization possibilities are endless.
+
+For engineers straddling multiple technical domains, Neovim provides the flexibility to adapt to any workflow while maintaining consistency and speed.
+
+---
+
+_Next post: "Automating ISE with Python: Building a Production Management Framework" - Deep dive into the Python automation framework I've built for managing enterprise ISE deployments._
+
+[.small]
+--
+*About the Author*: Evan Rosado uses Neovim for everything from network automation to full-stack development. After three years of continuous refinement, his configuration handles any technical challenge thrown at it.
+--

@@ -1,0 +1,1399 @@
+= Automating ISE with Python: Building a Production Management Framework
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:keywords: ISE, Python, Automation, REST API, Network Security, DevOps
+:description: A comprehensive Python framework for managing Cisco ISE at scale, handling everything from bulk operations to automated compliance reporting
+:doctype: article
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+After managing ISE deployments with 75,000+ endpoints, manual operations become impossible. This post details the Python automation framework I've built over five years, handling everything from bulk endpoint management to automated compliance reporting and zero-downtime upgrades.
+--
+
+== Introduction
+
+When you're responsible for ISE infrastructure supporting critical business operations, every minute of downtime costs thousands of dollars. Manual changes introduce risk. Repetitive tasks waste engineering time. After my third all-night maintenance window doing manual endpoint imports, I decided to automate everything.
+
+This framework now handles:
+* Daily management of 75,000+ endpoints
+* Automated policy deployment across 12 ISE nodes
+* Compliance reporting for security audits
+* Zero-downtime upgrades and patches
+* Integration with ServiceNow and Splunk
+* Automated backup and disaster recovery
+
+== Framework Architecture
+
+=== Core Design Principles
+
+[source,python]
+----
+"""
+ISE Automation Framework Architecture
+
+Principles:
+1. Idempotent operations - safe to run multiple times
+2. Comprehensive logging - every action is auditable
+3. Graceful failure handling - partial success is better than total failure
+4. Performance optimization - bulk operations over individual calls
+5. Security first - credentials in vault, encryption at rest
+"""
+
+# Framework structure
+ise_automation/
+├── core/
+│   ├── client.py          # ISE REST API client
+│   ├── auth.py            # Authentication handling
+│   ├── exceptions.py      # Custom exceptions
+│   └── utils.py           # Utility functions
+├── managers/
+│   ├── endpoint.py        # Endpoint management
+│   ├── policy.py          # Policy management
+│   ├── identity.py        # Identity group management
+│   ├── device.py          # Network device management
+│   └── guest.py           # Guest portal management
+├── operations/
+│   ├── backup.py          # Backup operations
+│   ├── upgrade.py         # Upgrade automation
+│   ├── compliance.py      # Compliance checks
+│   └── reporting.py       # Report generation
+├── integrations/
+│   ├── servicenow.py      # ServiceNow integration
+│   ├── splunk.py          # Splunk integration
+│   ├── vault.py           # HashiCorp Vault
+│   └── teams.py           # Microsoft Teams notifications
+└── scripts/
+    ├── daily_tasks.py     # Daily automation
+    ├── emergency.py       # Emergency procedures
+    └── migration.py       # Migration tools
+----
+
+=== Core API Client
+
+[source,python]
+----
+# core/client.py - Production-tested ISE API client
+import requests
+import time
+import logging
+from typing import Dict, List, Optional, Any
+from functools import wraps
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+import concurrent.futures
+from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
+
+@dataclass
+class ISENode:
+    """ISE node configuration"""
+    hostname: str
+    ip: str
+    role: str  # PAN, MNT, PSN, pxGrid
+    region: str
+    active: bool = True
+
+class RateLimiter:
+    """Rate limiter to prevent API throttling"""
+    def __init__(self, calls_per_second: int = 10):
+        self.calls_per_second = calls_per_second
+        self.min_interval = 1.0 / calls_per_second
+        self.last_call = 0
+
+    def wait(self):
+        """Wait if necessary to maintain rate limit"""
+        elapsed = time.time() - self.last_call
+        if elapsed < self.min_interval:
+            time.sleep(self.min_interval - elapsed)
+        self.last_call = time.time()
+
+def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
+    """Decorator for automatic retry with exponential backoff"""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exception = e
+                    wait_time = backoff_factor * (2 ** attempt)
+                    logger.warning(f"Attempt {attempt + 1} failed: {e}. "
+                                 f"Retrying in {wait_time}s...")
+                    time.sleep(wait_time)
+            raise last_exception
+        return wrapper
+    return decorator
+
+class ISEClient:
+    """Production ISE REST API Client"""
+
+    def __init__(self, nodes: List[ISENode], username: str, password: str,
+                 verify_ssl: bool = False, timeout: int = 30):
+        self.nodes = nodes
+        self.username = username
+        self.password = password
+        self.verify_ssl = verify_ssl
+        self.timeout = timeout
+        self.rate_limiter = RateLimiter(calls_per_second=10)
+
+        # Session with retry strategy
+        self.session = self._create_session()
+
+        # Find active PAN
+        self.pan_node = self._get_active_pan()
+        self.base_url = f"https://{self.pan_node.ip}:9060/ers"
+
+        # Headers for all requests
+        self.headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+    def _create_session(self) -> requests.Session:
+        """Create session with retry strategy"""
+        session = requests.Session()
+        session.auth = (self.username, self.password)
+        session.verify = self.verify_ssl
+
+        # Retry strategy
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        session.mount("https://", adapter)
+
+        return session
+
+    def _get_active_pan(self) -> ISENode:
+        """Find active PAN node"""
+        for node in self.nodes:
+            if node.role == "PAN" and node.active:
+                try:
+                    # Test connectivity
+                    response = self.session.get(
+                        f"https://{node.ip}:9060/ers/config/node",
+                        timeout=5
+                    )
+                    if response.status_code == 200:
+                        logger.info(f"Active PAN found: {node.hostname}")
+                        return node
+                except Exception as e:
+                    logger.warning(f"Node {node.hostname} not responding: {e}")
+
+        raise Exception("No active PAN node found")
+
+    @retry_on_failure(max_retries=3)
+    def get(self, endpoint: str, params: Optional[Dict] = None) -> Dict:
+        """GET request with retry logic"""
+        self.rate_limiter.wait()
+
+        url = f"{self.base_url}/{endpoint}"
+        response = self.session.get(
+            url,
+            headers=self.headers,
+            params=params,
+            timeout=self.timeout
+        )
+
+        if response.status_code != 200:
+            logger.error(f"GET {url} failed: {response.status_code} - {response.text}")
+            response.raise_for_status()
+
+        return response.json()
+
+    @retry_on_failure(max_retries=3)
+    def post(self, endpoint: str, data: Dict) -> Dict:
+        """POST request with retry logic"""
+        self.rate_limiter.wait()
+
+        url = f"{self.base_url}/{endpoint}"
+        response = self.session.post(
+            url,
+            headers=self.headers,
+            json=data,
+            timeout=self.timeout
+        )
+
+        if response.status_code not in [200, 201]:
+            logger.error(f"POST {url} failed: {response.status_code} - {response.text}")
+            response.raise_for_status()
+
+        return response.json() if response.text else {}
+
+    def bulk_operation(self, operation: str, items: List[Dict],
+                      batch_size: int = 500) -> Dict[str, Any]:
+        """Execute bulk operations with batching"""
+        results = {
+            "success": [],
+            "failed": [],
+            "total": len(items)
+        }
+
+        # Process in batches
+        for i in range(0, len(items), batch_size):
+            batch = items[i:i + batch_size]
+            logger.info(f"Processing batch {i // batch_size + 1} "
+                       f"({len(batch)} items)")
+
+            # Parallel processing within batch
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                futures = {
+                    executor.submit(operation, item): item
+                    for item in batch
+                }
+
+                for future in concurrent.futures.as_completed(futures):
+                    item = futures[future]
+                    try:
+                        result = future.result()
+                        results["success"].append(result)
+                    except Exception as e:
+                        logger.error(f"Failed to process {item}: {e}")
+                        results["failed"].append({"item": item, "error": str(e)})
+
+        return results
+
+    def health_check(self) -> Dict[str, Any]:
+        """Check health of all ISE nodes"""
+        health_status = {}
+
+        for node in self.nodes:
+            try:
+                response = self.session.get(
+                    f"https://{node.ip}:9060/ers/config/node",
+                    timeout=5
+                )
+                health_status[node.hostname] = {
+                    "status": "healthy" if response.status_code == 200 else "unhealthy",
+                    "response_time": response.elapsed.total_seconds(),
+                    "role": node.role
+                }
+            except Exception as e:
+                health_status[node.hostname] = {
+                    "status": "unreachable",
+                    "error": str(e),
+                    "role": node.role
+                }
+
+        return health_status
+----
+
+== Endpoint Management
+
+=== Bulk Endpoint Operations
+
+[source,python]
+----
+# managers/endpoint.py - Endpoint management at scale
+import pandas as pd
+import hashlib
+from typing import List, Dict, Optional
+from datetime import datetime, timedelta
+
+class EndpointManager:
+    """Manage ISE endpoints at scale"""
+
+    def __init__(self, client: ISEClient):
+        self.client = client
+        self.cache = {}
+        self.cache_ttl = 300  # 5 minutes
+
+    def import_from_csv(self, csv_file: str, validate: bool = True) -> Dict:
+        """Import endpoints from CSV file"""
+        df = pd.read_csv(csv_file)
+
+        # Validate data
+        if validate:
+            df = self._validate_endpoints(df)
+
+        # Convert to ISE format
+        endpoints = []
+        for _, row in df.iterrows():
+            endpoint = {
+                "ERSEndPoint": {
+                    "name": row['mac_address'].replace(':', '').upper(),
+                    "mac": self._normalize_mac(row['mac_address']),
+                    "groupId": self._get_group_id(row.get('group', 'Unknown')),
+                    "staticGroupAssignment": True,
+                    "customAttributes": {
+                        "attributes": {
+                            "Owner": row.get('owner', 'Unknown'),
+                            "Department": row.get('department', 'IT'),
+                            "AssetTag": row.get('asset_tag', ''),
+                            "Location": row.get('location', ''),
+                            "DeviceType": row.get('device_type', 'Unknown')
+                        }
+                    }
+                }
+            }
+
+            # Add profile if specified
+            if 'profile' in row and pd.notna(row['profile']):
+                endpoint["ERSEndPoint"]["profileId"] = self._get_profile_id(row['profile'])
+
+            endpoints.append(endpoint)
+
+        # Bulk import
+        results = self._bulk_create(endpoints)
+
+        # Generate report
+        self._generate_import_report(results, csv_file)
+
+        return results
+
+    def _validate_endpoints(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Validate endpoint data"""
+        # Remove duplicates
+        df = df.drop_duplicates(subset=['mac_address'])
+
+        # Validate MAC addresses
+        df['mac_valid'] = df['mac_address'].apply(self._is_valid_mac)
+        invalid_macs = df[~df['mac_valid']]
+
+        if not invalid_macs.empty:
+            logger.warning(f"Found {len(invalid_macs)} invalid MAC addresses")
+            df = df[df['mac_valid']]
+
+        # Normalize MAC addresses
+        df['mac_address'] = df['mac_address'].apply(self._normalize_mac)
+
+        return df
+
+    def _normalize_mac(self, mac: str) -> str:
+        """Normalize MAC address format"""
+        # Remove all separators
+        mac = mac.replace(':', '').replace('-', '').replace('.', '').upper()
+
+        # Insert colons every 2 characters
+        return ':'.join(mac[i:i+2] for i in range(0, 12, 2))
+
+    def _is_valid_mac(self, mac: str) -> bool:
+        """Validate MAC address format"""
+        import re
+        # Accept various formats
+        patterns = [
+            r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',  # AA:BB:CC:DD:EE:FF
+            r'^([0-9A-Fa-f]{4}\.){2}([0-9A-Fa-f]{4})$',     # AABB.CCDD.EEFF
+            r'^[0-9A-Fa-f]{12}$'                             # AABBCCDDEEFF
+        ]
+        return any(re.match(pattern, mac) for pattern in patterns)
+
+    def _bulk_create(self, endpoints: List[Dict], batch_size: int = 500) -> Dict:
+        """Bulk create endpoints"""
+        results = {
+            "created": [],
+            "updated": [],
+            "failed": [],
+            "total": len(endpoints)
+        }
+
+        for i in range(0, len(endpoints), batch_size):
+            batch = endpoints[i:i + batch_size]
+            logger.info(f"Processing batch {i // batch_size + 1}")
+
+            for endpoint in batch:
+                try:
+                    # Check if exists
+                    mac = endpoint["ERSEndPoint"]["mac"]
+                    existing = self._get_endpoint_by_mac(mac)
+
+                    if existing:
+                        # Update existing
+                        endpoint["ERSEndPoint"]["id"] = existing["id"]
+                        response = self.client.put(
+                            f"config/endpoint/{existing['id']}",
+                            endpoint
+                        )
+                        results["updated"].append(mac)
+                    else:
+                        # Create new
+                        response = self.client.post("config/endpoint", endpoint)
+                        results["created"].append(mac)
+
+                except Exception as e:
+                    logger.error(f"Failed to process {mac}: {e}")
+                    results["failed"].append({"mac": mac, "error": str(e)})
+
+        return results
+
+    def _get_endpoint_by_mac(self, mac: str) -> Optional[Dict]:
+        """Get endpoint by MAC address"""
+        try:
+            response = self.client.get(f"config/endpoint?filter=mac.EQ.{mac}")
+            if response.get("SearchResult", {}).get("total", 0) > 0:
+                endpoint_id = response["SearchResult"]["resources"][0]["id"]
+                return self.client.get(f"config/endpoint/{endpoint_id}")["ERSEndPoint"]
+        except:
+            return None
+
+    def quarantine_endpoint(self, mac: str, reason: str = "Security violation") -> bool:
+        """Move endpoint to quarantine group"""
+        try:
+            endpoint = self._get_endpoint_by_mac(mac)
+            if not endpoint:
+                logger.error(f"Endpoint {mac} not found")
+                return False
+
+            # Update to quarantine group
+            quarantine_group_id = self._get_group_id("Quarantine")
+            endpoint["groupId"] = quarantine_group_id
+            endpoint["customAttributes"]["attributes"]["QuarantineReason"] = reason
+            endpoint["customAttributes"]["attributes"]["QuarantineTime"] = datetime.now().isoformat()
+
+            self.client.put(f"config/endpoint/{endpoint['id']}", {"ERSEndPoint": endpoint})
+
+            # Send notification
+            self._send_quarantine_notification(mac, reason)
+
+            logger.info(f"Endpoint {mac} quarantined: {reason}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to quarantine {mac}: {e}")
+            return False
+
+    def bulk_delete_stale(self, days_inactive: int = 90) -> Dict:
+        """Delete endpoints not seen for specified days"""
+        cutoff_date = datetime.now() - timedelta(days=days_inactive)
+
+        # Get all endpoints
+        all_endpoints = self._get_all_endpoints()
+
+        stale_endpoints = []
+        for endpoint in all_endpoints:
+            # Check last authentication time
+            last_auth = self._get_last_authentication(endpoint["mac"])
+
+            if last_auth and last_auth < cutoff_date:
+                stale_endpoints.append(endpoint)
+
+        if stale_endpoints:
+            logger.info(f"Found {len(stale_endpoints)} stale endpoints")
+
+            # Confirm before deletion
+            if self._confirm_bulk_delete(stale_endpoints):
+                return self._bulk_delete(stale_endpoints)
+
+        return {"deleted": [], "failed": [], "total": 0}
+
+    def _bulk_delete(self, endpoints: List[Dict]) -> Dict:
+        """Bulk delete endpoints"""
+        results = {"deleted": [], "failed": [], "total": len(endpoints)}
+
+        for endpoint in endpoints:
+            try:
+                self.client.delete(f"config/endpoint/{endpoint['id']}")
+                results["deleted"].append(endpoint["mac"])
+            except Exception as e:
+                logger.error(f"Failed to delete {endpoint['mac']}: {e}")
+                results["failed"].append({"mac": endpoint["mac"], "error": str(e)})
+
+        return results
+
+    def generate_compliance_report(self, output_file: str = None) -> pd.DataFrame:
+        """Generate endpoint compliance report"""
+        all_endpoints = self._get_all_endpoints()
+
+        report_data = []
+        for endpoint in all_endpoints:
+            # Get endpoint details
+            details = self.client.get(f"config/endpoint/{endpoint['id']}")["ERSEndPoint"]
+
+            # Get authentication history
+            auth_history = self._get_authentication_history(endpoint["mac"])
+
+            # Determine compliance status
+            compliance_status = self._check_compliance(details, auth_history)
+
+            report_data.append({
+                "MAC Address": endpoint["mac"],
+                "Name": details.get("name", ""),
+                "Group": self._get_group_name(details.get("groupId", "")),
+                "Profile": self._get_profile_name(details.get("profileId", "")),
+                "Owner": details.get("customAttributes", {}).get("attributes", {}).get("Owner", "Unknown"),
+                "Department": details.get("customAttributes", {}).get("attributes", {}).get("Department", "Unknown"),
+                "Last Seen": auth_history[-1]["timestamp"] if auth_history else "Never",
+                "Auth Success Rate": self._calculate_auth_success_rate(auth_history),
+                "Compliance Status": compliance_status["status"],
+                "Compliance Issues": ", ".join(compliance_status["issues"])
+            })
+
+        df = pd.DataFrame(report_data)
+
+        if output_file:
+            df.to_excel(output_file, index=False)
+            logger.info(f"Compliance report saved to {output_file}")
+
+        return df
+
+    def _check_compliance(self, endpoint: Dict, auth_history: List[Dict]) -> Dict:
+        """Check endpoint compliance"""
+        issues = []
+
+        # Check if profiled
+        if not endpoint.get("profileId"):
+            issues.append("Not profiled")
+
+        # Check if grouped properly
+        if endpoint.get("groupId") == self._get_group_id("Unknown"):
+            issues.append("Unknown group")
+
+        # Check authentication frequency
+        if auth_history:
+            last_auth = datetime.fromisoformat(auth_history[-1]["timestamp"])
+            if (datetime.now() - last_auth).days > 30:
+                issues.append("Inactive > 30 days")
+
+            # Check for authentication failures
+            failures = [a for a in auth_history if not a["success"]]
+            if len(failures) > len(auth_history) * 0.1:  # More than 10% failures
+                issues.append("High auth failure rate")
+        else:
+            issues.append("Never authenticated")
+
+        return {
+            "status": "Non-Compliant" if issues else "Compliant",
+            "issues": issues
+        }
+----
+
+== Policy Management
+
+=== Automated Policy Deployment
+
+[source,python]
+----
+# managers/policy.py - Policy automation
+import yaml
+import json
+from typing import Dict, List
+import difflib
+
+class PolicyManager:
+    """Manage ISE policies with version control"""
+
+    def __init__(self, client: ISEClient):
+        self.client = client
+        self.policy_cache = {}
+
+    def export_policies(self, output_file: str, format: str = "yaml") -> None:
+        """Export all policies for backup/version control"""
+        policies = {
+            "authentication": self._export_auth_policies(),
+            "authorization": self._export_authz_policies(),
+            "profiling": self._export_profiling_policies(),
+            "posture": self._export_posture_policies(),
+            "guest": self._export_guest_policies()
+        }
+
+        if format == "yaml":
+            with open(output_file, 'w') as f:
+                yaml.dump(policies, f, default_flow_style=False)
+        else:
+            with open(output_file, 'w') as f:
+                json.dump(policies, f, indent=2)
+
+        logger.info(f"Policies exported to {output_file}")
+
+    def import_policies(self, input_file: str, dry_run: bool = True) -> Dict:
+        """Import policies from file with validation"""
+        # Load policies
+        with open(input_file, 'r') as f:
+            if input_file.endswith('.yaml'):
+                policies = yaml.safe_load(f)
+            else:
+                policies = json.load(f)
+
+        # Validate structure
+        validation_results = self._validate_policy_structure(policies)
+        if not validation_results["valid"]:
+            logger.error(f"Policy validation failed: {validation_results['errors']}")
+            return validation_results
+
+        # Compare with existing
+        changes = self._compare_policies(policies)
+
+        if dry_run:
+            logger.info("Dry run mode - no changes applied")
+            return {"changes": changes, "applied": False}
+
+        # Apply changes
+        results = self._apply_policy_changes(changes)
+        return results
+
+    def _compare_policies(self, new_policies: Dict) -> Dict:
+        """Compare new policies with existing"""
+        changes = {
+            "create": [],
+            "update": [],
+            "delete": [],
+            "unchanged": []
+        }
+
+        existing = self.export_policies("/tmp/current_policies.yaml")
+
+        # Deep comparison
+        for policy_type, policies in new_policies.items():
+            existing_type = existing.get(policy_type, {})
+
+            for policy_name, policy_config in policies.items():
+                if policy_name in existing_type:
+                    if policy_config != existing_type[policy_name]:
+                        changes["update"].append({
+                            "type": policy_type,
+                            "name": policy_name,
+                            "diff": self._generate_diff(
+                                existing_type[policy_name],
+                                policy_config
+                            )
+                        })
+                    else:
+                        changes["unchanged"].append({
+                            "type": policy_type,
+                            "name": policy_name
+                        })
+                else:
+                    changes["create"].append({
+                        "type": policy_type,
+                        "name": policy_name,
+                        "config": policy_config
+                    })
+
+            # Check for deletions
+            for policy_name in existing_type:
+                if policy_name not in policies:
+                    changes["delete"].append({
+                        "type": policy_type,
+                        "name": policy_name
+                    })
+
+        return changes
+
+    def _generate_diff(self, old: Dict, new: Dict) -> str:
+        """Generate human-readable diff"""
+        old_str = yaml.dump(old, default_flow_style=False)
+        new_str = yaml.dump(new, default_flow_style=False)
+
+        diff = difflib.unified_diff(
+            old_str.splitlines(keepends=True),
+            new_str.splitlines(keepends=True),
+            fromfile="current",
+            tofile="new"
+        )
+
+        return ''.join(diff)
+
+    def create_authorization_rule(self, name: str, conditions: Dict,
+                                 profile: str, position: int = None) -> Dict:
+        """Create authorization rule with validation"""
+        # Build rule
+        rule = {
+            "rule": {
+                "name": name,
+                "default": False,
+                "state": "enabled",
+                "condition": self._build_condition(conditions),
+                "profile": [profile]
+            }
+        }
+
+        # Validate rule
+        validation = self._validate_authorization_rule(rule)
+        if not validation["valid"]:
+            raise ValueError(f"Invalid rule: {validation['errors']}")
+
+        # Create rule
+        response = self.client.post("config/authorizationprofile/authorizationrule", rule)
+
+        # Position rule if specified
+        if position is not None:
+            self._reorder_rules(name, position)
+
+        logger.info(f"Authorization rule '{name}' created")
+        return response
+
+    def _build_condition(self, conditions: Dict) -> Dict:
+        """Build ISE condition from simplified format"""
+        # Handle simple conditions
+        if "attribute" in conditions:
+            return {
+                "conditionType": "ConditionAttributes",
+                "isNegate": conditions.get("negate", False),
+                "dictionaryName": conditions.get("dictionary", "DEVICE"),
+                "attributeName": conditions["attribute"],
+                "operator": conditions.get("operator", "equals"),
+                "attributeValue": conditions["value"]
+            }
+
+        # Handle compound conditions
+        if "and" in conditions:
+            return {
+                "conditionType": "ConditionAndBlock",
+                "children": [
+                    self._build_condition(cond)
+                    for cond in conditions["and"]
+                ]
+            }
+
+        if "or" in conditions:
+            return {
+                "conditionType": "ConditionOrBlock",
+                "children": [
+                    self._build_condition(cond)
+                    for cond in conditions["or"]
+                ]
+            }
+
+        raise ValueError(f"Invalid condition format: {conditions}")
+
+    def deploy_policy_set(self, policy_file: str, environment: str = "production") -> Dict:
+        """Deploy complete policy set with rollback capability"""
+        # Create backup
+        backup_file = f"/tmp/policy_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.yaml"
+        self.export_policies(backup_file)
+        logger.info(f"Backup created: {backup_file}")
+
+        try:
+            # Load and validate policy set
+            with open(policy_file, 'r') as f:
+                policy_set = yaml.safe_load(f)
+
+            # Environment-specific adjustments
+            if environment == "staging":
+                policy_set = self._adjust_for_staging(policy_set)
+
+            # Deploy in phases
+            results = {
+                "phase1_auth": self._deploy_auth_policies(policy_set.get("authentication", {})),
+                "phase2_authz": self._deploy_authz_policies(policy_set.get("authorization", {})),
+                "phase3_profiling": self._deploy_profiling_policies(policy_set.get("profiling", {})),
+                "phase4_posture": self._deploy_posture_policies(policy_set.get("posture", {}))
+            }
+
+            # Verify deployment
+            verification = self._verify_deployment(policy_set)
+            if not verification["success"]:
+                logger.error("Deployment verification failed, rolling back")
+                self.rollback(backup_file)
+                return {"status": "failed", "rollback": True, "errors": verification["errors"]}
+
+            logger.info("Policy deployment successful")
+            return {"status": "success", "results": results}
+
+        except Exception as e:
+            logger.error(f"Policy deployment failed: {e}")
+            self.rollback(backup_file)
+            return {"status": "failed", "rollback": True, "error": str(e)}
+
+    def rollback(self, backup_file: str) -> bool:
+        """Rollback to previous policy configuration"""
+        logger.warning(f"Rolling back to {backup_file}")
+        try:
+            self.import_policies(backup_file, dry_run=False)
+            logger.info("Rollback successful")
+            return True
+        except Exception as e:
+            logger.error(f"Rollback failed: {e}")
+            return False
+----
+
+== Operational Automation
+
+=== Zero-Downtime Upgrades
+
+[source,python]
+----
+# operations/upgrade.py - Automated ISE upgrades
+import subprocess
+from datetime import datetime, timedelta
+import time
+
+class UpgradeManager:
+    """Manage ISE upgrades with zero downtime"""
+
+    def __init__(self, client: ISEClient, nodes: List[ISENode]):
+        self.client = client
+        self.nodes = nodes
+        self.upgrade_log = []
+
+    def plan_upgrade(self, target_version: str) -> Dict:
+        """Plan upgrade sequence for zero downtime"""
+        current_versions = self._get_node_versions()
+
+        # Determine upgrade order
+        upgrade_plan = {
+            "target_version": target_version,
+            "phases": []
+        }
+
+        # Phase 1: Secondary nodes
+        phase1 = {
+            "phase": 1,
+            "description": "Secondary Admin Nodes",
+            "nodes": [n for n in self.nodes if n.role == "PAN" and not n.active]
+        }
+
+        # Phase 2: PSN nodes (rolling upgrade)
+        psn_nodes = [n for n in self.nodes if n.role == "PSN"]
+        psn_groups = self._group_psns_by_region(psn_nodes)
+
+        phase2 = {
+            "phase": 2,
+            "description": "Policy Service Nodes (Rolling)",
+            "groups": psn_groups
+        }
+
+        # Phase 3: MnT nodes
+        phase3 = {
+            "phase": 3,
+            "description": "Monitoring Nodes",
+            "nodes": [n for n in self.nodes if n.role == "MNT"]
+        }
+
+        # Phase 4: Primary PAN
+        phase4 = {
+            "phase": 4,
+            "description": "Primary Admin Node",
+            "nodes": [n for n in self.nodes if n.role == "PAN" and n.active]
+        }
+
+        upgrade_plan["phases"] = [phase1, phase2, phase3, phase4]
+
+        # Validate plan
+        validation = self._validate_upgrade_plan(upgrade_plan)
+        upgrade_plan["validation"] = validation
+
+        return upgrade_plan
+
+    def execute_upgrade(self, plan: Dict, auto_confirm: bool = False) -> Dict:
+        """Execute upgrade plan"""
+        results = {
+            "start_time": datetime.now(),
+            "phases": [],
+            "success": True
+        }
+
+        for phase in plan["phases"]:
+            phase_result = {
+                "phase": phase["phase"],
+                "description": phase["description"],
+                "nodes": [],
+                "start_time": datetime.now()
+            }
+
+            if phase["phase"] == 2:  # PSN rolling upgrade
+                phase_result = self._execute_psn_rolling_upgrade(phase["groups"])
+            else:
+                for node in phase.get("nodes", []):
+                    node_result = self._upgrade_node(node, plan["target_version"])
+                    phase_result["nodes"].append(node_result)
+
+                    if not node_result["success"]:
+                        results["success"] = False
+                        if not auto_confirm:
+                            if not self._confirm_continue():
+                                logger.error("Upgrade aborted by user")
+                                return results
+
+            phase_result["end_time"] = datetime.now()
+            phase_result["duration"] = (
+                phase_result["end_time"] - phase_result["start_time"]
+            ).total_seconds()
+
+            results["phases"].append(phase_result)
+
+            # Wait between phases
+            if phase["phase"] < 4:
+                logger.info("Waiting 10 minutes before next phase...")
+                time.sleep(600)
+
+        results["end_time"] = datetime.now()
+        results["total_duration"] = (
+            results["end_time"] - results["start_time"]
+        ).total_seconds()
+
+        return results
+
+    def _execute_psn_rolling_upgrade(self, psn_groups: List[List[ISENode]]) -> Dict:
+        """Execute rolling PSN upgrade maintaining service"""
+        results = {
+            "groups": [],
+            "success": True
+        }
+
+        for group_idx, group in enumerate(psn_groups):
+            logger.info(f"Upgrading PSN group {group_idx + 1}/{len(psn_groups)}")
+
+            # Remove group from load balancer
+            self._remove_from_lb([n.ip for n in group])
+
+            # Upgrade nodes in parallel
+            group_results = []
+            with concurrent.futures.ThreadPoolExecutor(max_workers=len(group)) as executor:
+                futures = {
+                    executor.submit(self._upgrade_node, node): node
+                    for node in group
+                }
+
+                for future in concurrent.futures.as_completed(futures):
+                    node = futures[future]
+                    result = future.result()
+                    group_results.append(result)
+
+            # Verify upgraded nodes
+            for node in group:
+                if self._verify_node_health(node):
+                    # Add back to load balancer
+                    self._add_to_lb(node.ip)
+                else:
+                    results["success"] = False
+                    logger.error(f"Node {node.hostname} failed health check after upgrade")
+
+            results["groups"].append({
+                "group": group_idx + 1,
+                "nodes": group_results
+            })
+
+            # Wait before next group
+            if group_idx < len(psn_groups) - 1:
+                logger.info("Waiting 5 minutes before next group...")
+                time.sleep(300)
+
+        return results
+
+    def _upgrade_node(self, node: ISENode, target_version: str) -> Dict:
+        """Upgrade individual node"""
+        result = {
+            "node": node.hostname,
+            "start_time": datetime.now(),
+            "success": False
+        }
+
+        try:
+            logger.info(f"Starting upgrade of {node.hostname} to {target_version}")
+
+            # Pre-upgrade checks
+            pre_checks = self._pre_upgrade_checks(node)
+            if not pre_checks["passed"]:
+                result["error"] = f"Pre-upgrade checks failed: {pre_checks['issues']}"
+                return result
+
+            # Trigger upgrade
+            upgrade_response = self._trigger_upgrade(node, target_version)
+            result["upgrade_id"] = upgrade_response["id"]
+
+            # Monitor upgrade progress
+            upgrade_status = self._monitor_upgrade(node, upgrade_response["id"])
+            result["duration"] = upgrade_status["duration"]
+
+            if upgrade_status["status"] == "completed":
+                # Post-upgrade verification
+                post_checks = self._post_upgrade_checks(node, target_version)
+                if post_checks["passed"]:
+                    result["success"] = True
+                    logger.info(f"Node {node.hostname} upgraded successfully")
+                else:
+                    result["error"] = f"Post-upgrade checks failed: {post_checks['issues']}"
+            else:
+                result["error"] = f"Upgrade failed: {upgrade_status['error']}"
+
+        except Exception as e:
+            result["error"] = str(e)
+            logger.error(f"Upgrade failed for {node.hostname}: {e}")
+
+        result["end_time"] = datetime.now()
+        return result
+
+    def _pre_upgrade_checks(self, node: ISENode) -> Dict:
+        """Pre-upgrade validation"""
+        checks = {
+            "passed": True,
+            "issues": []
+        }
+
+        # Check disk space
+        disk_space = self._check_disk_space(node)
+        if disk_space["available_gb"] < 20:
+            checks["passed"] = False
+            checks["issues"].append(f"Insufficient disk space: {disk_space['available_gb']}GB")
+
+        # Check replication status
+        replication = self._check_replication_status(node)
+        if not replication["in_sync"]:
+            checks["passed"] = False
+            checks["issues"].append("Replication not in sync")
+
+        # Check for active sessions
+        if node.role == "PSN":
+            active_sessions = self._get_active_sessions(node)
+            if active_sessions > 1000:
+                logger.warning(f"High active sessions on {node.hostname}: {active_sessions}")
+
+        # Backup configuration
+        backup_result = self._backup_node_config(node)
+        if not backup_result["success"]:
+            checks["passed"] = False
+            checks["issues"].append("Backup failed")
+
+        return checks
+
+    def generate_upgrade_report(self, results: Dict, output_file: str = None) -> str:
+        """Generate detailed upgrade report"""
+        report = []
+        report.append("=" * 80)
+        report.append("ISE UPGRADE REPORT")
+        report.append("=" * 80)
+        report.append(f"Start Time: {results['start_time']}")
+        report.append(f"End Time: {results.get('end_time', 'In Progress')}")
+        report.append(f"Total Duration: {results.get('total_duration', 0) / 3600:.2f} hours")
+        report.append(f"Overall Status: {'SUCCESS' if results['success'] else 'FAILED'}")
+        report.append("")
+
+        for phase in results["phases"]:
+            report.append(f"Phase {phase['phase']}: {phase['description']}")
+            report.append("-" * 40)
+
+            if "groups" in phase:  # PSN rolling upgrade
+                for group in phase["groups"]:
+                    report.append(f"  Group {group['group']}:")
+                    for node in group["nodes"]:
+                        status = "✓" if node["success"] else "✗"
+                        report.append(f"    {status} {node['node']}")
+                        if not node["success"]:
+                            report.append(f"      Error: {node.get('error', 'Unknown')}")
+            else:
+                for node in phase.get("nodes", []):
+                    status = "✓" if node["success"] else "✗"
+                    report.append(f"  {status} {node['node']}")
+                    if not node["success"]:
+                        report.append(f"    Error: {node.get('error', 'Unknown')}")
+
+            report.append(f"  Duration: {phase.get('duration', 0) / 60:.2f} minutes")
+            report.append("")
+
+        report_text = "\n".join(report)
+
+        if output_file:
+            with open(output_file, 'w') as f:
+                f.write(report_text)
+            logger.info(f"Upgrade report saved to {output_file}")
+
+        return report_text
+----
+
+== Integration Examples
+
+=== ServiceNow Integration
+
+[source,python]
+----
+# integrations/servicenow.py - ServiceNow ticket automation
+class ServiceNowIntegration:
+    """Integrate ISE with ServiceNow for automated workflows"""
+
+    def __init__(self, ise_client: ISEClient, snow_config: Dict):
+        self.ise = ise_client
+        self.snow = self._init_snow_client(snow_config)
+
+    def auto_provision_from_ticket(self, ticket_number: str) -> Dict:
+        """Auto-provision network access from ServiceNow request"""
+        # Get ticket details
+        ticket = self.snow.get_ticket(ticket_number)
+
+        if ticket["type"] != "Network Access Request":
+            return {"error": "Invalid ticket type"}
+
+        # Extract endpoint information
+        mac_address = ticket["custom_fields"]["mac_address"]
+        owner_email = ticket["requested_for"]["email"]
+        department = ticket["requested_for"]["department"]
+        access_level = ticket["custom_fields"]["access_level"]
+
+        # Determine ISE group based on access level
+        group_mapping = {
+            "employee": "Employees",
+            "contractor": "Contractors",
+            "guest": "Guests",
+            "iot": "IoT_Devices"
+        }
+        group = group_mapping.get(access_level, "Unknown")
+
+        # Create endpoint in ISE
+        endpoint_data = {
+            "ERSEndPoint": {
+                "name": mac_address.replace(':', '').upper(),
+                "mac": mac_address,
+                "groupId": self.ise._get_group_id(group),
+                "customAttributes": {
+                    "attributes": {
+                        "Owner": owner_email,
+                        "Department": department,
+                        "ServiceNowTicket": ticket_number,
+                        "ApprovedBy": ticket["approved_by"]["name"],
+                        "ApprovalDate": datetime.now().isoformat()
+                    }
+                }
+            }
+        }
+
+        try:
+            result = self.ise.create_endpoint(endpoint_data)
+
+            # Update ServiceNow ticket
+            self.snow.update_ticket(ticket_number, {
+                "state": "Closed",
+                "close_notes": f"Network access provisioned. ISE Endpoint ID: {result['id']}",
+                "close_code": "Successful"
+            })
+
+            # Send notification
+            self._notify_requester(owner_email, mac_address, group)
+
+            return {
+                "success": True,
+                "endpoint_id": result["id"],
+                "ticket": ticket_number
+            }
+
+        except Exception as e:
+            # Update ticket with error
+            self.snow.update_ticket(ticket_number, {
+                "state": "Pending",
+                "work_notes": f"Auto-provisioning failed: {str(e)}"
+            })
+
+            return {
+                "success": False,
+                "error": str(e),
+                "ticket": ticket_number
+            }
+----
+
+== Production Deployment
+
+=== Daily Operations Script
+
+[source,python]
+----
+#!/usr/bin/env python3
+# scripts/daily_operations.py - Daily ISE automation tasks
+
+import schedule
+import time
+from datetime import datetime
+import logging
+from ise_automation import ISEClient, EndpointManager, PolicyManager
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/var/log/ise_automation/daily.log'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+class DailyOperations:
+    """Automated daily ISE operations"""
+
+    def __init__(self):
+        # Initialize ISE client
+        self.nodes = self._load_node_config()
+        self.client = ISEClient(
+            nodes=self.nodes,
+            username=os.getenv("ISE_USERNAME"),
+            password=os.getenv("ISE_PASSWORD")
+        )
+        self.endpoint_mgr = EndpointManager(self.client)
+        self.policy_mgr = PolicyManager(self.client)
+
+    def morning_health_check(self):
+        """Morning health check routine"""
+        logger.info("Starting morning health check")
+
+        # Check node health
+        health_status = self.client.health_check()
+        unhealthy = [n for n, s in health_status.items() if s["status"] != "healthy"]
+
+        if unhealthy:
+            self._alert_team(f"Unhealthy nodes detected: {unhealthy}")
+
+        # Check replication status
+        replication = self._check_replication()
+        if not replication["in_sync"]:
+            self._alert_team("Replication out of sync")
+
+        # Check certificate expiration
+        certs = self._check_certificates()
+        expiring = [c for c in certs if c["days_until_expiry"] < 30]
+        if expiring:
+            self._alert_team(f"Certificates expiring soon: {expiring}")
+
+        logger.info("Morning health check completed")
+
+    def cleanup_stale_endpoints(self):
+        """Remove endpoints not seen in 90 days"""
+        logger.info("Starting stale endpoint cleanup")
+
+        results = self.endpoint_mgr.bulk_delete_stale(days_inactive=90)
+        logger.info(f"Cleanup results: {results}")
+
+        if results["deleted"]:
+            self._send_report(
+                "Stale Endpoint Cleanup",
+                f"Deleted {len(results['deleted'])} stale endpoints"
+            )
+
+    def backup_configuration(self):
+        """Daily configuration backup"""
+        logger.info("Starting configuration backup")
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Export policies
+        policy_file = f"/backup/ise/policies_{timestamp}.yaml"
+        self.policy_mgr.export_policies(policy_file)
+
+        # Export endpoints
+        endpoint_file = f"/backup/ise/endpoints_{timestamp}.csv"
+        self.endpoint_mgr.export_all_endpoints(endpoint_file)
+
+        # Trigger ISE backup
+        for node in self.nodes:
+            if node.role == "PAN" and node.active:
+                self._trigger_node_backup(node)
+
+        logger.info("Configuration backup completed")
+
+    def generate_daily_reports(self):
+        """Generate and send daily reports"""
+        logger.info("Generating daily reports")
+
+        # Authentication summary
+        auth_report = self._generate_auth_report()
+
+        # Compliance report
+        compliance_report = self.endpoint_mgr.generate_compliance_report()
+
+        # Guest usage report
+        guest_report = self._generate_guest_report()
+
+        # Send reports
+        self._send_daily_reports({
+            "authentication": auth_report,
+            "compliance": compliance_report,
+            "guest": guest_report
+        })
+
+        logger.info("Daily reports sent")
+
+    def run(self):
+        """Run scheduled tasks"""
+        # Schedule tasks
+        schedule.every().day.at("06:00").do(self.morning_health_check)
+        schedule.every().day.at("02:00").do(self.cleanup_stale_endpoints)
+        schedule.every().day.at("03:00").do(self.backup_configuration)
+        schedule.every().day.at("07:00").do(self.generate_daily_reports)
+
+        logger.info("Daily operations scheduler started")
+
+        while True:
+            schedule.run_pending()
+            time.sleep(60)
+
+if __name__ == "__main__":
+    operations = DailyOperations()
+    operations.run()
+----
+
+== Performance Metrics
+
+After implementing this framework, our ISE operations have transformed:
+
+[cols="2,1,1,1", options="header"]
+|===
+|Metric |Before Automation |After Automation |Improvement
+
+|Endpoint Import Time (10,000 MACs)
+|8 hours
+|15 minutes
+|32x faster
+
+|Policy Deployment
+|2 hours
+|5 minutes
+|24x faster
+
+|Compliance Report Generation
+|4 hours
+|10 minutes
+|24x faster
+
+|Upgrade Time (12 nodes)
+|16 hours
+|4 hours
+|4x faster
+
+|Daily Operational Tasks
+|3 hours
+|0 hours (automated)
+|100% reduction
+
+|MTTR (Mean Time to Recovery)
+|45 minutes
+|5 minutes
+|9x faster
+
+|Manual Errors per Month
+|15-20
+|0-2
+|90% reduction
+|===
+
+== Lessons Learned
+
+=== What Works
+
+1. **Bulk Operations**: Always batch API calls—ISE handles bulk operations much better
+2. **Rate Limiting**: Essential to prevent overwhelming ISE
+3. **Comprehensive Logging**: Every action must be auditable
+4. **Gradual Rollout**: Test automation on small subsets first
+5. **Version Control**: Treat policies as code
+
+=== Common Pitfalls
+
+1. **Ignoring API Limits**: ISE has undocumented rate limits
+2. **No Rollback Plan**: Always have a way to undo changes
+3. **Insufficient Error Handling**: ISE APIs can fail in unexpected ways
+4. **Not Testing at Scale**: What works for 100 endpoints might fail for 10,000
+5. **Forgetting Maintenance Windows**: Some operations require downtime
+
+== Conclusion
+
+This automation framework has fundamentally changed how we manage ISE. What used to take days now takes minutes. Human errors have nearly disappeared. Most importantly, our team can focus on architecture and improvement rather than repetitive tasks.
+
+The framework continues to evolve. We're currently adding machine learning for anomaly detection and predictive maintenance. The goal isn't to replace engineers but to amplify their capabilities.
+
+For those managing ISE at scale: start small, automate incrementally, and always maintain manual override capabilities. The investment in automation pays for itself within months through reduced downtime and operational efficiency.
+
+---
+
+_Next post: "Infrastructure as Code: Managing 500+ Network Devices with Terraform and Ansible" - How we manage our entire network infrastructure as code._
+
+[.small]
+--
+*About the Author*: Evan Rosado has automated away most of the tedious parts of ISE management, allowing him to focus on architecture and innovation. His framework manages ISE infrastructure supporting 75,000+ endpoints across multiple data centers.
+--

@@ -1,0 +1,1245 @@
+= Infrastructure as Code: Managing 500+ Network Devices with Terraform and Ansible
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:keywords: Terraform, Ansible, Infrastructure as Code, Network Automation, GitOps, CI/CD
+:description: How we transformed manual network management into a GitOps workflow managing 500+ devices with Terraform and Ansible
+:doctype: article
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+Managing 500+ network devices manually is a recipe for disaster. After implementing Infrastructure as Code principles using Terraform for state management and Ansible for configuration deployment, our network changes went from error-prone marathons to reviewed, tested, and automated deployments. This is how we did it.
+--
+
+== The Breaking Point
+
+In 2022, our network had grown to:
+* 300+ switches across 15 locations
+* 150+ wireless access points
+* 50+ routers and firewalls
+* 30+ load balancers
+
+A typical change request took 4-6 hours and involved manually configuring devices through CLI sessions. Our breaking point came during a VLAN rollout that should have taken 2 hours but stretched to 14 hours due to human errors and inconsistencies.
+
+That weekend, I started building what would become our Infrastructure as Code platform.
+
+== Architecture Overview
+
+=== Technology Stack
+
+[source,yaml]
+----
+infrastructure_stack:
+  state_management:
+    tool: Terraform
+    version: 1.6.x
+    backend: S3 with DynamoDB locking
+
+  configuration_management:
+    tool: Ansible
+    version: 2.16.x
+    inventory: Dynamic from Netbox
+
+  source_control:
+    platform: GitLab
+    branching: GitFlow
+
+  ci_cd:
+    pipeline: GitLab CI
+    stages: [validate, plan, test, deploy]
+
+  monitoring:
+    observability: Prometheus + Grafana
+    logging: ELK Stack
+    alerting: PagerDuty
+
+  documentation:
+    api_docs: OpenAPI/Swagger
+    runbooks: Confluence
+    diagrams: Diagrams as Code (Python)
+----
+
+=== Workflow Architecture
+
+[source,asciidoc]
+....
+Developer → Git Push → CI Pipeline → Terraform Plan → Review → Apply → Ansible Deploy
+     ↑                                                                            ↓
+     └──────────────────────── Monitoring & Rollback ←──────────────────────────┘
+....
+
+== Terraform: Infrastructure State Management
+
+=== Provider Configuration
+
+[source,hcl]
+----
+# terraform/providers.tf - Multi-vendor provider setup
+terraform {
+  required_version = ">= 1.6.0"
+
+  required_providers {
+    cisco = {
+      source  = "CiscoDevNet/cisco"
+      version = "~> 0.8.0"
+    }
+
+    fortios = {
+      source  = "fortinetdev/fortios"
+      version = "~> 1.18.0"
+    }
+
+    panos = {
+      source  = "PaloAltoNetworks/panos"
+      version = "~> 1.11.0"
+    }
+
+    netbox = {
+      source  = "e-breuninger/netbox"
+      version = "~> 3.7.0"
+    }
+
+    vault = {
+      source  = "hashicorp/vault"
+      version = "~> 3.23.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "network-terraform-state"
+    key            = "production/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock"
+  }
+}
+
+# Provider configurations with credential management
+provider "cisco" {
+  alias = "ise"
+
+  host     = var.ise_host
+  username = data.vault_generic_secret.cisco.data["username"]
+  password = data.vault_generic_secret.cisco.data["password"]
+}
+
+provider "netbox" {
+  server_url = var.netbox_url
+  api_token  = data.vault_generic_secret.netbox.data["token"]
+}
+----
+
+=== Network Device Management
+
+[source,hcl]
+----
+# terraform/modules/network_device/main.tf
+resource "netbox_device" "switch" {
+  for_each = var.switches
+
+  name            = each.key
+  device_type_id  = data.netbox_device_type.catalyst_9300.id
+  role_id        = data.netbox_device_role.access_switch.id
+  site_id        = data.netbox_site.site[each.value.location].id
+  status         = "active"
+
+  primary_ip4 = netbox_ip_address.management[each.key].id
+
+  custom_fields = {
+    automation_enabled = true
+    configuration_template = each.value.template
+    vlan_range = each.value.vlan_range
+  }
+
+  tags = [
+    "terraform-managed",
+    "production",
+    each.value.location
+  ]
+}
+
+resource "netbox_ip_address" "management" {
+  for_each = var.switches
+
+  ip_address = each.value.management_ip
+  status     = "active"
+  role       = "management"
+
+  object_type = "dcim.interface"
+  object_id   = netbox_interface.management[each.key].id
+
+  tags = ["management", "terraform"]
+}
+
+resource "netbox_interface" "management" {
+  for_each = var.switches
+
+  device_id = netbox_device.switch[each.key].id
+  name      = "Management1"
+  type      = "1000base-t"
+  enabled   = true
+  mode      = "access"
+
+  tags = ["management"]
+}
+
+# Generate Ansible inventory from Netbox
+resource "local_file" "ansible_inventory" {
+  filename = "../ansible/inventory/dynamic_hosts.yml"
+
+  content = yamlencode({
+    all = {
+      children = {
+        switches = {
+          hosts = {
+            for name, device in netbox_device.switch :
+            name => {
+              ansible_host = device.primary_ip4
+              site         = device.site_id
+              role         = device.role_id
+              template     = device.custom_fields.configuration_template
+            }
+          }
+        }
+      }
+    }
+  })
+}
+----
+
+=== VLAN Management
+
+[source,hcl]
+----
+# terraform/modules/vlan/main.tf
+variable "vlans" {
+  description = "VLAN definitions"
+  type = map(object({
+    id          = number
+    name        = string
+    description = string
+    site        = string
+    subnet      = string
+    gateway     = string
+  }))
+}
+
+resource "netbox_vlan" "vlan" {
+  for_each = var.vlans
+
+  vid         = each.value.id
+  name        = each.value.name
+  description = each.value.description
+  site_id     = data.netbox_site.site[each.value.site].id
+  status      = "active"
+
+  tags = ["terraform", "production"]
+}
+
+resource "netbox_prefix" "subnet" {
+  for_each = var.vlans
+
+  prefix      = each.value.subnet
+  vlan_id     = netbox_vlan.vlan[each.key].id
+  site_id     = data.netbox_site.site[each.value.site].id
+  status      = "active"
+  is_pool     = false
+
+  description = "VLAN ${each.value.id} - ${each.value.name}"
+
+  tags = ["terraform", "production"]
+}
+
+resource "netbox_ip_address" "gateway" {
+  for_each = var.vlans
+
+  ip_address  = each.value.gateway
+  status      = "active"
+  role        = "anycast"
+  description = "Gateway for VLAN ${each.value.id}"
+
+  object_type = "ipam.vlan"
+  object_id   = netbox_vlan.vlan[each.key].id
+
+  tags = ["gateway", "terraform"]
+}
+
+# Output for Ansible consumption
+output "vlan_configuration" {
+  value = {
+    for key, vlan in var.vlans : key => {
+      id      = vlan.id
+      name    = vlan.name
+      subnet  = vlan.subnet
+      gateway = vlan.gateway
+    }
+  }
+}
+----
+
+=== Load Balancer Configuration
+
+[source,hcl]
+----
+# terraform/modules/f5/main.tf
+resource "bigip_ltm_pool" "web_pool" {
+  name                = "/Common/web_pool_${var.environment}"
+  load_balancing_mode = "round-robin"
+  monitors            = ["/Common/http"]
+  allow_snat          = "yes"
+  allow_nat           = "yes"
+}
+
+resource "bigip_ltm_pool_attachment" "web_servers" {
+  for_each = var.web_servers
+
+  pool               = bigip_ltm_pool.web_pool.name
+  node               = each.value.ip
+  port               = each.value.port
+  connection_limit   = 100
+  connection_rate_limit = 100
+  dynamic_ratio      = 1
+  priority_group     = each.value.priority
+}
+
+resource "bigip_ltm_virtual_server" "web_vs" {
+  name        = "/Common/vs_web_${var.environment}"
+  port        = 443
+  destination = var.vip_address
+  pool        = bigip_ltm_pool.web_pool.name
+
+  ip_protocol             = "tcp"
+  source_address_translation = "automap"
+
+  profiles = [
+    "/Common/tcp",
+    "/Common/http",
+    bigip_ltm_profile_client_ssl.web_ssl.name
+  ]
+
+  persistence_profiles = [
+    "/Common/cookie"
+  ]
+
+  irules = [
+    bigip_ltm_irule.security_headers.name
+  ]
+}
+
+resource "bigip_ltm_irule" "security_headers" {
+  name  = "/Common/security_headers_${var.environment}"
+  irule = file("${path.module}/irules/security_headers.tcl")
+}
+
+resource "bigip_ltm_profile_client_ssl" "web_ssl" {
+  name          = "/Common/clientssl_web_${var.environment}"
+  cert          = "/Common/web_cert.crt"
+  key           = "/Common/web_key.key"
+  chain         = "/Common/intermediate.crt"
+  ciphers       = "TLS13:TLS12+HIGH:!RSA:!aNULL:!eNULL:!3DES"
+
+  server_name = var.domain_name
+  sni_require = true
+  sni_default = true
+}
+----
+
+== Ansible: Configuration Deployment
+
+=== Dynamic Inventory
+
+[source,python]
+----
+#!/usr/bin/env python3
+# ansible/inventory/netbox_inventory.py - Dynamic inventory from Netbox
+import json
+import requests
+from typing import Dict, List
+
+class NetboxInventory:
+    """Generate Ansible inventory from Netbox"""
+
+    def __init__(self):
+        self.netbox_url = os.getenv("NETBOX_URL")
+        self.netbox_token = os.getenv("NETBOX_TOKEN")
+        self.inventory = {
+            "_meta": {"hostvars": {}},
+            "all": {"children": ["ungrouped"]}
+        }
+
+    def get_devices(self) -> List[Dict]:
+        """Fetch devices from Netbox"""
+        headers = {"Authorization": f"Token {self.netbox_token}"}
+        response = requests.get(
+            f"{self.netbox_url}/api/dcim/devices/",
+            headers=headers,
+            params={"status": "active", "has_primary_ip": "true"}
+        )
+        return response.json()["results"]
+
+    def build_inventory(self):
+        """Build Ansible inventory structure"""
+        devices = self.get_devices()
+
+        for device in devices:
+            # Skip non-network devices
+            if not device.get("custom_fields", {}).get("automation_enabled"):
+                continue
+
+            hostname = device["name"]
+            ip = device["primary_ip"]["address"].split('/')[0]
+
+            # Device-specific variables
+            self.inventory["_meta"]["hostvars"][hostname] = {
+                "ansible_host": ip,
+                "ansible_network_os": self._get_network_os(device),
+                "ansible_connection": "network_cli",
+                "device_role": device["device_role"]["slug"],
+                "site": device["site"]["slug"],
+                "platform": device["platform"]["slug"] if device.get("platform") else None,
+                "configuration_template": device["custom_fields"].get("configuration_template"),
+                "vlans": self._get_vlans(device),
+            }
+
+            # Group by device role
+            role = device["device_role"]["slug"]
+            if role not in self.inventory:
+                self.inventory[role] = {"hosts": []}
+            self.inventory[role]["hosts"].append(hostname)
+
+            # Group by site
+            site = f"site_{device['site']['slug']}"
+            if site not in self.inventory:
+                self.inventory[site] = {"hosts": []}
+            self.inventory[site]["hosts"].append(hostname)
+
+    def _get_network_os(self, device: Dict) -> str:
+        """Determine network OS from platform"""
+        platform = device.get("platform", {}).get("slug", "")
+
+        os_mapping = {
+            "cisco-ios": "ios",
+            "cisco-nxos": "nxos",
+            "cisco-iosxe": "iosxe",
+            "arista-eos": "eos",
+            "juniper-junos": "junos",
+            "paloalto-panos": "panos"
+        }
+
+        return os_mapping.get(platform, "ios")
+
+    def _get_vlans(self, device: Dict) -> List[Dict]:
+        """Get VLANs assigned to device"""
+        headers = {"Authorization": f"Token {self.netbox_token}"}
+        response = requests.get(
+            f"{self.netbox_url}/api/ipam/vlans/",
+            headers=headers,
+            params={"site_id": device["site"]["id"]}
+        )
+
+        vlans = []
+        for vlan in response.json()["results"]:
+            vlans.append({
+                "id": vlan["vid"],
+                "name": vlan["name"],
+                "description": vlan["description"]
+            })
+
+        return vlans
+
+    def generate(self) -> str:
+        """Generate inventory JSON"""
+        self.build_inventory()
+        return json.dumps(self.inventory, indent=2)
+
+if __name__ == "__main__":
+    inventory = NetboxInventory()
+    print(inventory.generate())
+----
+
+=== Switch Configuration Playbook
+
+[source,yaml]
+----
+# ansible/playbooks/configure_switches.yml
+---
+- name: Configure Access Switches
+  hosts: access_switch
+  gather_facts: no
+
+  vars:
+    configuration_backup_dir: "{{ playbook_dir }}/../backups"
+
+  pre_tasks:
+    - name: Create backup directory
+      delegate_to: localhost
+      file:
+        path: "{{ configuration_backup_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Backup current configuration
+      cisco.ios.ios_config:
+        backup: yes
+        backup_options:
+          filename: "{{ inventory_hostname }}_{{ ansible_date_time.date }}.cfg"
+          dir_path: "{{ configuration_backup_dir }}"
+      register: backup_result
+
+  tasks:
+    - name: Configure hostname and domain
+      cisco.ios.ios_system:
+        hostname: "{{ inventory_hostname }}"
+        domain_name: "{{ domain_name }}"
+        lookup_enabled: no
+
+    - name: Configure management interface
+      cisco.ios.ios_l3_interface:
+        name: "{{ management_interface | default('Vlan99') }}"
+        ipv4: "{{ ansible_host }}/{{ management_netmask }}"
+
+    - name: Configure NTP servers
+      cisco.ios.ios_ntp:
+        server: "{{ item }}"
+        source_int: "{{ management_interface | default('Vlan99') }}"
+        logging: true
+      loop: "{{ ntp_servers }}"
+
+    - name: Configure TACACS+ servers
+      cisco.ios.ios_aaa_server:
+        name: "{{ item.name }}"
+        server_type: tacacs+
+        address: "{{ item.address }}"
+        key: "{{ tacacs_key }}"
+        timeout: 5
+      loop: "{{ tacacs_servers }}"
+      no_log: true
+
+    - name: Configure AAA
+      cisco.ios.ios_config:
+        lines:
+          - aaa new-model
+          - aaa authentication login default group tacacs+ local
+          - aaa authorization exec default group tacacs+ local
+          - aaa accounting exec default start-stop group tacacs+
+          - aaa accounting commands 15 default start-stop group tacacs+
+
+    - name: Configure VLANs
+      cisco.ios.ios_vlans:
+        config:
+          - vlan_id: "{{ item.id }}"
+            name: "{{ item.name }}"
+            state: active
+      loop: "{{ vlans }}"
+
+    - name: Configure trunk ports
+      cisco.ios.ios_l2_interface:
+        name: "{{ item.interface }}"
+        mode: trunk
+        native_vlan: "{{ native_vlan | default(1) }}"
+        trunk_allowed_vlans: "{{ item.allowed_vlans | default('all') }}"
+      loop: "{{ trunk_ports }}"
+      when: trunk_ports is defined
+
+    - name: Configure access ports
+      cisco.ios.ios_l2_interface:
+        name: "{{ item.interface }}"
+        mode: access
+        access_vlan: "{{ item.vlan }}"
+      loop: "{{ access_ports }}"
+      when: access_ports is defined
+
+    - name: Configure spanning-tree
+      cisco.ios.ios_config:
+        lines:
+          - spanning-tree mode rapid-pvst
+          - spanning-tree portfast edge default
+          - spanning-tree portfast edge bpduguard default
+          - spanning-tree vlan 1-4094 priority "{{ stp_priority | default(32768) }}"
+
+    - name: Configure SNMP
+      cisco.ios.ios_snmp_server:
+        config:
+          communities:
+            - name: "{{ snmp_ro_community }}"
+              ro: true
+          hosts:
+            - host: "{{ item }}"
+              community: "{{ snmp_ro_community }}"
+              version: "2c"
+              traps: true
+      loop: "{{ snmp_servers }}"
+      no_log: true
+
+    - name: Configure logging
+      cisco.ios.ios_logging:
+        dest: host
+        name: "{{ item }}"
+        level: informational
+        facility: local7
+      loop: "{{ syslog_servers }}"
+
+    - name: Apply security hardening
+      cisco.ios.ios_config:
+        src: templates/security_hardening.j2
+      notify: save_configuration
+
+    - name: Verify configuration
+      cisco.ios.ios_command:
+        commands:
+          - show vlan brief
+          - show interfaces status
+          - show spanning-tree summary
+          - show logging
+      register: verification
+
+    - name: Generate compliance report
+      template:
+        src: compliance_report.j2
+        dest: "{{ playbook_dir }}/../reports/{{ inventory_hostname }}_compliance.txt"
+      delegate_to: localhost
+
+  handlers:
+    - name: save_configuration
+      cisco.ios.ios_config:
+        save_when: modified
+
+  post_tasks:
+    - name: Validate configuration
+      include_tasks: validate_switch.yml
+
+    - name: Send notification
+      mail:
+        to: "{{ notification_email }}"
+        subject: "Switch Configuration Complete - {{ inventory_hostname }}"
+        body: |
+          Switch configuration completed successfully.
+
+          Device: {{ inventory_hostname }}
+          IP: {{ ansible_host }}
+          Site: {{ site }}
+          Backup: {{ backup_result.backup_path }}
+
+          VLANs configured: {{ vlans | length }}
+          Trunk ports: {{ trunk_ports | default([]) | length }}
+          Access ports: {{ access_ports | default([]) | length }}
+      delegate_to: localhost
+      when: notification_email is defined
+----
+
+=== Configuration Templates
+
+[source,jinja2]
+----
+{# templates/security_hardening.j2 - Security baseline configuration #}
+! Security Hardening Configuration
+! Generated: {{ ansible_date_time.iso8601 }}
+
+! Disable unused services
+no service pad
+no service finger
+no service udp-small-servers
+no service tcp-small-servers
+no ip bootp server
+no ip domain-lookup
+no ip http server
+no ip http secure-server
+
+! Enable useful services
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service compress-config
+
+! Console and VTY hardening
+line console 0
+ exec-timeout 5 0
+ logging synchronous
+ transport output none
+
+line vty 0 15
+ exec-timeout 5 0
+ logging synchronous
+ transport input ssh
+ transport output ssh
+ access-class ACL_SSH_ACCESS in
+
+! SSH Configuration
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip ssh source-interface {{ management_interface | default('Vlan99') }}
+crypto key generate rsa modulus 4096
+
+! Login banner
+banner login ^C
+===============================================================================
+         UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED
+
+This is a private system. Unauthorized access, use, or modification
+of this system is strictly prohibited. All access and activity are
+logged and monitored. Violators will be prosecuted to the fullest
+extent of the law.
+
+Device: $(hostname)
+Location: {{ site }}
+===============================================================================
+^C
+
+! DHCP Snooping (access switches)
+{% if device_role == 'access_switch' %}
+ip dhcp snooping
+ip dhcp snooping vlan {{ vlans | map(attribute='id') | join(',') }}
+ip arp inspection vlan {{ vlans | map(attribute='id') | join(',') }}
+ip verify source
+
+! Loop prevention
+spanning-tree loopguard default
+udld aggressive
+{% endif %}
+
+! Control plane protection
+control-plane
+ service-policy input CONTROL_PLANE_POLICY
+
+! Access lists
+ip access-list standard ACL_SSH_ACCESS
+ permit {{ management_network }} {{ management_wildcard }}
+ deny any log
+
+! Infrastructure ACLs
+ip access-list extended ACL_INFRASTRUCTURE
+ permit tcp {{ management_network }} {{ management_wildcard }} any eq 22
+ permit tcp {{ management_network }} {{ management_wildcard }} any eq 23
+ permit udp any any eq 161
+ permit udp any eq 123 any
+ permit udp any any eq 514
+ deny ip any any log
+
+! Logging configuration
+logging buffered 65536 informational
+logging trap informational
+logging source-interface {{ management_interface | default('Vlan99') }}
+{% for server in syslog_servers %}
+logging host {{ server }}
+{% endfor %}
+
+! Archive configuration
+archive
+ path flash:archive-config
+ write-memory
+ time-period 1440
+
+! End of security hardening
+----
+
+== CI/CD Pipeline
+
+=== GitLab CI Configuration
+
+[source,yaml]
+----
+# .gitlab-ci.yml - Network automation pipeline
+stages:
+  - validate
+  - plan
+  - test
+  - deploy
+  - verify
+
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}/terraform
+  ANSIBLE_ROOT: ${CI_PROJECT_DIR}/ansible
+
+before_script:
+  - export VAULT_ADDR=${VAULT_ADDR}
+  - export VAULT_TOKEN=${VAULT_TOKEN}
+  - export NETBOX_URL=${NETBOX_URL}
+  - export NETBOX_TOKEN=${NETBOX_TOKEN}
+
+# Validation Stage
+terraform-validate:
+  stage: validate
+  image: hashicorp/terraform:1.6
+  script:
+    - cd ${TF_ROOT}
+    - terraform init -backend=false
+    - terraform validate
+    - terraform fmt -check=true -diff=true
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+ansible-lint:
+  stage: validate
+  image: quay.io/ansible/creator-ee:latest
+  script:
+    - cd ${ANSIBLE_ROOT}
+    - ansible-lint playbooks/
+    - ansible-playbook playbooks/*.yml --syntax-check
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+yaml-lint:
+  stage: validate
+  image: python:3.11
+  script:
+    - pip install yamllint
+    - yamllint -c .yamllint ${ANSIBLE_ROOT}
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+# Planning Stage
+terraform-plan:
+  stage: plan
+  image: hashicorp/terraform:1.6
+  script:
+    - cd ${TF_ROOT}
+    - terraform init
+    - terraform plan -out=tfplan
+    - terraform show -no-color tfplan > plan.txt
+  artifacts:
+    paths:
+      - ${TF_ROOT}/tfplan
+      - ${TF_ROOT}/plan.txt
+    expire_in: 7 days
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+review-plan:
+  stage: plan
+  image: alpine:latest
+  dependencies:
+    - terraform-plan
+  script:
+    - cat ${TF_ROOT}/plan.txt
+    # Post plan to merge request as comment
+    - |
+      curl -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+        -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "{\"body\": \"## Terraform Plan\n\`\`\`\n$(cat ${TF_ROOT}/plan.txt)\n\`\`\`\"}"
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+# Test Stage
+test-inventory:
+  stage: test
+  image: quay.io/ansible/creator-ee:latest
+  script:
+    - cd ${ANSIBLE_ROOT}
+    - python inventory/netbox_inventory.py --list > inventory.json
+    - ansible-inventory -i inventory/netbox_inventory.py --list
+    - ansible-inventory -i inventory/netbox_inventory.py --graph
+  artifacts:
+    paths:
+      - ${ANSIBLE_ROOT}/inventory.json
+    expire_in: 1 day
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+dry-run:
+  stage: test
+  image: quay.io/ansible/creator-ee:latest
+  script:
+    - cd ${ANSIBLE_ROOT}
+    - ansible-playbook playbooks/configure_switches.yml --check --diff
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+  when: manual
+
+# Deploy Stage
+terraform-apply:
+  stage: deploy
+  image: hashicorp/terraform:1.6
+  script:
+    - cd ${TF_ROOT}
+    - terraform init
+    - terraform apply tfplan
+  dependencies:
+    - terraform-plan
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  when: manual
+  environment:
+    name: production
+    url: https://netbox.company.com
+
+ansible-deploy:
+  stage: deploy
+  image: quay.io/ansible/creator-ee:latest
+  script:
+    - cd ${ANSIBLE_ROOT}
+    - ansible-playbook playbooks/configure_switches.yml -v
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  when: manual
+  environment:
+    name: production
+
+# Verification Stage
+verify-deployment:
+  stage: verify
+  image: python:3.11
+  script:
+    - pip install requests pytest pytest-html
+    - cd ${CI_PROJECT_DIR}/tests
+    - pytest test_network.py --html=report.html --self-contained-html
+  artifacts:
+    paths:
+      - tests/report.html
+    reports:
+      junit: tests/report.xml
+    expire_in: 30 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+compliance-check:
+  stage: verify
+  image: quay.io/ansible/creator-ee:latest
+  script:
+    - cd ${ANSIBLE_ROOT}
+    - ansible-playbook playbooks/compliance_check.yml
+    - python scripts/generate_compliance_report.py
+  artifacts:
+    paths:
+      - ${ANSIBLE_ROOT}/reports/
+    expire_in: 30 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+----
+
+=== Testing Framework
+
+[source,python]
+----
+# tests/test_network.py - Network validation tests
+import pytest
+import requests
+from netmiko import ConnectHandler
+from typing import Dict, List
+
+class TestNetworkDeployment:
+    """Validate network configuration deployment"""
+
+    @pytest.fixture(scope="module")
+    def devices(self) -> List[Dict]:
+        """Get device list from Netbox"""
+        response = requests.get(
+            f"{os.getenv('NETBOX_URL')}/api/dcim/devices/",
+            headers={"Authorization": f"Token {os.getenv('NETBOX_TOKEN')}"},
+            params={"status": "active", "role": "access_switch"}
+        )
+        return response.json()["results"]
+
+    def test_device_reachability(self, devices):
+        """Test all devices are reachable"""
+        for device in devices:
+            ip = device["primary_ip"]["address"].split('/')[0]
+            response = subprocess.run(
+                ["ping", "-c", "3", "-W", "2", ip],
+                capture_output=True
+            )
+            assert response.returncode == 0, f"Device {device['name']} not reachable"
+
+    def test_ssh_connectivity(self, devices):
+        """Test SSH connectivity to devices"""
+        for device in devices:
+            conn = ConnectHandler(
+                device_type="cisco_ios",
+                host=device["primary_ip"]["address"].split('/')[0],
+                username=os.getenv("NETWORK_USERNAME"),
+                password=os.getenv("NETWORK_PASSWORD"),
+                timeout=10
+            )
+            output = conn.send_command("show version")
+            assert "Cisco" in output, f"Unexpected output from {device['name']}"
+            conn.disconnect()
+
+    def test_vlan_configuration(self, devices):
+        """Verify VLAN configuration"""
+        expected_vlans = self._get_expected_vlans()
+
+        for device in devices:
+            conn = self._connect_device(device)
+            output = conn.send_command("show vlan brief")
+
+            for vlan in expected_vlans[device["site"]["slug"]]:
+                assert str(vlan["id"]) in output, \
+                    f"VLAN {vlan['id']} missing on {device['name']}"
+                assert vlan["name"] in output, \
+                    f"VLAN {vlan['name']} missing on {device['name']}"
+
+            conn.disconnect()
+
+    def test_ntp_synchronization(self, devices):
+        """Verify NTP synchronization"""
+        for device in devices:
+            conn = self._connect_device(device)
+            output = conn.send_command("show ntp status")
+
+            assert "Clock is synchronized" in output, \
+                f"NTP not synchronized on {device['name']}"
+
+            conn.disconnect()
+
+    def test_spanning_tree(self, devices):
+        """Verify spanning-tree configuration"""
+        for device in devices:
+            conn = self._connect_device(device)
+            output = conn.send_command("show spanning-tree summary")
+
+            assert "RSTP" in output or "rapid-pvst" in output, \
+                f"Rapid spanning-tree not configured on {device['name']}"
+
+            assert "Loopguard Default" in output, \
+                f"Loopguard not enabled on {device['name']}"
+
+            conn.disconnect()
+
+    def test_security_hardening(self, devices):
+        """Verify security configurations"""
+        security_checks = [
+            ("show ip ssh", "SSH Enabled - version 2"),
+            ("show running-config | include ^no service", "no service pad"),
+            ("show archive", "Archive feature not enabled")
+        ]
+
+        for device in devices:
+            conn = self._connect_device(device)
+
+            for command, expected in security_checks:
+                output = conn.send_command(command)
+                assert expected in output, \
+                    f"Security check failed on {device['name']}: {expected}"
+
+            conn.disconnect()
+
+    @pytest.mark.performance
+    def test_interface_errors(self, devices):
+        """Check for interface errors"""
+        for device in devices:
+            conn = self._connect_device(device)
+            output = conn.send_command("show interfaces | include error")
+
+            lines = output.split('\n')
+            for line in lines:
+                if "error" in line.lower():
+                    # Parse error counts
+                    parts = line.split()
+                    if len(parts) >= 2 and parts[0].isdigit():
+                        error_count = int(parts[0])
+                        assert error_count == 0, \
+                            f"Interface errors detected on {device['name']}: {line}"
+
+            conn.disconnect()
+
+    def _connect_device(self, device: Dict) -> ConnectHandler:
+        """Helper to connect to device"""
+        return ConnectHandler(
+            device_type="cisco_ios",
+            host=device["primary_ip"]["address"].split('/')[0],
+            username=os.getenv("NETWORK_USERNAME"),
+            password=os.getenv("NETWORK_PASSWORD")
+        )
+
+    def _get_expected_vlans(self) -> Dict[str, List]:
+        """Get expected VLANs from Netbox"""
+        response = requests.get(
+            f"{os.getenv('NETBOX_URL')}/api/ipam/vlans/",
+            headers={"Authorization": f"Token {os.getenv('NETBOX_TOKEN')}"}
+        )
+
+        vlans_by_site = {}
+        for vlan in response.json()["results"]:
+            site = vlan["site"]["slug"]
+            if site not in vlans_by_site:
+                vlans_by_site[site] = []
+
+            vlans_by_site[site].append({
+                "id": vlan["vid"],
+                "name": vlan["name"]
+            })
+
+        return vlans_by_site
+----
+
+== Monitoring and Observability
+
+=== Prometheus Metrics
+
+[source,python]
+----
+# monitoring/network_exporter.py - Custom Prometheus exporter
+from prometheus_client import start_http_server, Gauge, Counter
+import time
+from netmiko import ConnectHandler
+
+# Define metrics
+interface_status = Gauge('network_interface_status',
+                        'Interface operational status',
+                        ['device', 'interface'])
+
+interface_traffic_in = Counter('network_interface_bytes_received',
+                              'Interface bytes received',
+                              ['device', 'interface'])
+
+interface_traffic_out = Counter('network_interface_bytes_transmitted',
+                               'Interface bytes transmitted',
+                               ['device', 'interface'])
+
+cpu_utilization = Gauge('network_device_cpu_percent',
+                       'Device CPU utilization',
+                       ['device'])
+
+memory_utilization = Gauge('network_device_memory_percent',
+                          'Device memory utilization',
+                          ['device'])
+
+config_changes = Counter('network_config_changes_total',
+                        'Configuration changes detected',
+                        ['device'])
+
+def collect_metrics():
+    """Collect metrics from network devices"""
+    devices = get_devices_from_netbox()
+
+    for device in devices:
+        try:
+            conn = connect_to_device(device)
+
+            # Collect interface stats
+            interfaces = conn.send_command("show interfaces", use_textfsm=True)
+            for intf in interfaces:
+                interface_status.labels(
+                    device=device['name'],
+                    interface=intf['interface']
+                ).set(1 if intf['link_status'] == 'up' else 0)
+
+                interface_traffic_in.labels(
+                    device=device['name'],
+                    interface=intf['interface']
+                )._value.set(int(intf.get('input_bytes', 0)))
+
+                interface_traffic_out.labels(
+                    device=device['name'],
+                    interface=intf['interface']
+                )._value.set(int(intf.get('output_bytes', 0)))
+
+            # Collect CPU/Memory
+            cpu = parse_cpu_output(conn.send_command("show processes cpu"))
+            cpu_utilization.labels(device=device['name']).set(cpu)
+
+            memory = parse_memory_output(conn.send_command("show memory"))
+            memory_utilization.labels(device=device['name']).set(memory)
+
+            conn.disconnect()
+
+        except Exception as e:
+            logger.error(f"Failed to collect metrics from {device['name']}: {e}")
+
+if __name__ == "__main__":
+    start_http_server(9100)
+    while True:
+        collect_metrics()
+        time.sleep(60)
+----
+
+== Results and Metrics
+
+After 18 months of Infrastructure as Code:
+
+[cols="2,1,1,1", options="header"]
+|===
+|Metric |Before IaC |After IaC |Improvement
+
+|Average Change Time
+|4 hours
+|15 minutes
+|16x faster
+
+|Change Failure Rate
+|12%
+|0.5%
+|96% reduction
+
+|Rollback Time
+|2 hours
+|5 minutes
+|24x faster
+
+|Configuration Drift
+|35% of devices
+|0%
+|100% eliminated
+
+|Audit Compliance
+|78%
+|99.5%
+|21.5% improvement
+
+|MTTR (Config Issues)
+|3 hours
+|10 minutes
+|18x faster
+
+|Engineer Hours/Week on Configs
+|60 hours
+|5 hours
+|92% reduction
+
+|Documentation Accuracy
+|~60%
+|100%
+|Code is documentation
+|===
+
+== Lessons Learned
+
+=== What Worked
+
+1. **Start Small**: We began with read-only operations, then simple changes, then complex workflows
+2. **Version Everything**: Every change tracked in Git has saved us countless times
+3. **Test in Production-Like**: Our staging environment mirrors production exactly
+4. **Rollback First**: Always implement rollback before deployment
+5. **Monitor Everything**: Observability into the automation itself is crucial
+
+=== Challenges Overcome
+
+1. **Vendor Lock-in**: Multi-vendor environments require abstraction layers
+2. **Legacy Devices**: Some older devices needed custom modules
+3. **Cultural Change**: Network engineers needed time to trust automation
+4. **Credential Management**: Vault integration was essential for security
+5. **Audit Requirements**: Had to build extensive logging and approval workflows
+
+== Future Enhancements
+
+We're currently working on:
+
+* **AI-Powered Anomaly Detection**: Using ML to predict configuration issues
+* **Self-Healing Networks**: Automatic remediation of common issues
+* **Intent-Based Networking**: Declaring desired state rather than configuration
+* **ChatOps Integration**: Managing networks through Slack commands
+* **Predictive Capacity Planning**: Using historical data for proactive scaling
+
+== Conclusion
+
+Infrastructure as Code transformed our network operations from a bottleneck to a competitive advantage. The initial investment in tooling and training paid for itself within six months through reduced outages and faster deployments.
+
+The key insight: networks are just specialized computers running specialized software. Once you treat them as such, modern software engineering practices apply directly. Version control, testing, CI/CD, and observability aren't optional—they're essential for operating at scale.
+
+For teams considering this journey: start today, start small, but start. Every manual configuration you automate is a future problem prevented.
+
+---
+
+_This post represents the culmination of three years building network automation at scale. The frameworks and patterns described here manage production infrastructure supporting millions of users daily._
+
+[.small]
+--
+*About the Author*: Evan Rosado manages network infrastructure as code, treating routers and switches like any other deployment target in a CI/CD pipeline. His automation framework handles 500+ network devices with the same rigor as application deployments.
+--
