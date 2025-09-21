@@ -1,0 +1,115 @@
+= Technical Blog by Evan Rosado
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:revremark: Initial professional blog setup
+:doctype: article
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+.About This Blog
+--
+A professional technical blog focusing on enterprise network security, Identity Services Engine (ISE), full-stack development, and infrastructure automation. Drawing from 9 years of hands-on experience in network engineering and security architecture.
+--
+
+== About the Author
+
+I'm Evan Rosado, a Network Engineer with nearly a decade of experience specializing in Cisco Identity Services Engine (ISE) deployments and enterprise security architecture. My journey has taken me from traditional network engineering to full-stack development, combining infrastructure expertise with modern software engineering practices.
+
+=== Professional Focus Areas
+
+* **Network Security Architecture**: 9 years managing and architecting ISE deployments
+* **Identity Management**: 802.1X, TACACS+, RADIUS, and certificate-based authentication
+* **Full-Stack Development**: Next.js, React, Node.js, PostgreSQL
+* **Infrastructure as Code**: Terraform, Ansible, Docker, Kubernetes
+* **Automation**: Python, JavaScript/TypeScript for network and system automation
+
+== Blog Series
+
+=== ISE Mastery Series
+A comprehensive series covering real-world ISE deployments, troubleshooting, and optimization based on 9 years of production experience.
+
+=== Full-Stack Engineering
+Exploring the intersection of network engineering and modern web development, including my Domus Digitalis project.
+
+=== Infrastructure Automation
+Practical guides for automating enterprise infrastructure using modern DevOps practices.
+
+== Content Structure
+
+[source,tree]
+----
+tech-blog/
+├── 00_META/                 # Blog metadata and configuration
+├── 01_POSTS/                # Published articles
+│   ├── 2025-POST-ISE-*      # ISE series
+│   ├── 2025-POST-DEV-*      # Development posts
+│   └── 2025-POST-INFRA-*    # Infrastructure posts
+├── 02_DRAFTS/               # Work in progress
+├── 03_SERIES/               # Multi-part series
+├── 04_ASSETS/               # Images, diagrams
+└── 05_TEMPLATES/            # Post templates
+----
+
+== Publishing Pipeline
+
+This blog uses GitHub as the content management system with manual publishing control.
+
+=== How to Publish
+
+. Write posts in AsciiDoc format
+. Commit and push changes to GitHub (any branch)
+. Go to the repository on GitHub
+. Click on the "Actions" tab
+. Select "Publish Blog" workflow from the left sidebar
+. Click "Run workflow" button on the right
+. Optionally enter a publish message
+. Click the green "Run workflow" button to publish
+
+The workflow will automatically:
+* Convert all AsciiDoc files to HTML
+* Apply styling and formatting
+* Deploy to GitHub Pages
+
+=== Local Preview
+
+To preview posts locally before publishing:
+
+[source,bash]
+----
+# Convert single file
+asciidoctor 01_POSTS/2025-POST-ISE-001-nine-years-of-ise.adoc
+
+# Convert with custom output directory
+asciidoctor -D output/ 01_POSTS/*.adoc
+
+# Convert all posts
+asciidoctor 01_POSTS/*.adoc
+----
+
+== Technical Standards
+
+=== Writing Style
+* Clear, concise technical writing
+* Real-world examples from production environments
+* Code samples tested and verified
+* Professional tone without unnecessary jargon
+
+=== Content Guidelines
+* Focus on practical, applicable knowledge
+* Include lessons learned and gotchas
+* Provide working configurations and code
+* Reference relevant RFCs and documentation
+
+== Contact
+
+* GitHub: https://github.com/EvanusModestus
+* Email: evan.rosado@outlook.com
+* LinkedIn: [Professional Network]
+
+---
+
+_Building bridges between network engineering and software development_

@@ -1,0 +1,82 @@
+name: Publish Blog
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_message:
+        description: 'Publish message'
+        required: false
+        default: 'Publishing blog updates'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+
+    - name: Install Asciidoctor
+      run: |
+        gem install asciidoctor
+        gem install asciidoctor-diagram
+        gem install rouge
+
+    - name: Build AsciiDoc to HTML
+      run: |
+        mkdir -p output
+        for file in 01_POSTS/*.adoc; do
+          asciidoctor \
+            -a source-highlighter=rouge \
+            -a icons=font \
+            -a toc=left \
+            -D output \
+            "$file"
+        done
+
+    - name: Generate Index
+      run: |
+        cat > output/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Evan Rosado - Technical Blog</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; }
+            h1 { color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 0.5rem; }
+            .post-list { list-style: none; padding: 0; }
+            .post-item { margin: 1.5rem 0; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 8px; }
+            .post-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+            .post-title { font-size: 1.25rem; margin: 0 0 0.5rem 0; }
+            .post-meta { color: #666; font-size: 0.9rem; }
+            a { color: #0066cc; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+          </style>
+        </head>
+        <body>
+          <h1>Technical Blog - Evan Rosado</h1>
+          <p>Network Engineering | Full-Stack Development | Infrastructure Automation</p>
+          <ul class="post-list">
+        EOF
+
+        for file in output/*.html; do
+          if [ "$(basename $file)" != "index.html" ]; then
+            title=$(grep -o '<title>.*</title>' "$file" | sed 's/<[^>]*>//g')
+            filename=$(basename "$file")
+            echo "<li class='post-item'><h2 class='post-title'><a href='$filename'>$title</a></h2></li>" >> output/index.html
+          fi
+        done
+
+        echo "</ul></body></html>" >> output/index.html
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./output
