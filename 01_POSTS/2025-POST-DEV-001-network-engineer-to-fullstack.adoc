@@ -1,0 +1,537 @@
+= From Network Engineer to Full-Stack Developer: Building Domus Digitalis
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:keywords: Full-Stack, Network Engineering, Next.js, React, PostgreSQL, Career Transition
+:description: How I leveraged network engineering expertise to build a production-ready full-stack application
+:doctype: article
+:toc: left
+:toclevels: 2
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+The journey from configuring routers to building React components might seem like a leap, but network engineering provides a unique foundation for full-stack development. This is the story of how I built Domus Digitalis—a production-ready project management system—while maintaining my day job managing enterprise networks.
+--
+
+== The Catalyst
+
+In 2024, after eight years of managing network infrastructure, I found myself writing more Python scripts than configuring VLANs. The automation tools I'd built for ISE management had grown into full applications. It was time to formalize this transition.
+
+The decision to build Domus Digitalis wasn't about abandoning networking—it was about expanding my toolkit. Networks are becoming software-defined, and understanding both sides of this equation makes you invaluable.
+
+== Why Network Engineers Make Good Developers
+
+=== We Already Think in Systems
+
+Network engineers inherently understand:
+
+* **State management**: We track connection states across devices
+* **Asynchronous operations**: Packet routing is inherently async
+* **Error handling**: Networks fail gracefully or catastrophically
+* **Performance optimization**: Latency and throughput are our metrics
+* **Security**: It's built into everything we do
+
+These concepts translate directly to application development:
+
+[source,javascript]
+----
+// Network thinking applied to React state management
+const ConnectionManager = () => {
+  const [connections, setConnections] = useState(new Map());
+  const [retryQueue, setRetryQueue] = useState([]);
+
+  // Similar to OSPF adjacency formation
+  const establishConnection = async (endpoint) => {
+    const maxRetries = 3;
+    const backoffMs = [1000, 2000, 4000]; // Exponential backoff
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const conn = await initiateConnection(endpoint);
+
+        // Three-way handshake concept
+        await conn.syn();
+        await conn.synAck();
+        await conn.ack();
+
+        setConnections(prev => new Map(prev).set(endpoint.id, conn));
+        return conn;
+      } catch (error) {
+        console.log(`Attempt ${attempt + 1} failed, backing off ${backoffMs[attempt]}ms`);
+        await new Promise(resolve => setTimeout(resolve, backoffMs[attempt]));
+      }
+    }
+
+    // Add to dead peer detection queue
+    setRetryQueue(prev => [...prev, endpoint]);
+  };
+};
+----
+
+=== Protocol Knowledge Transfers to APIs
+
+Understanding network protocols provides insight into API design:
+
+[source,javascript]
+----
+// RESTful API design inspired by network protocols
+class APIClient {
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+    this.timeout = 30000; // TCP-like timeout
+    this.maxRetries = 3;  // Similar to RADIUS retransmits
+  }
+
+  async request(endpoint, options = {}) {
+    const { method = 'GET', body, headers = {} } = options;
+
+    // Add request ID for tracking (like RADIUS Identifier)
+    const requestId = crypto.randomUUID();
+    headers['X-Request-ID'] = requestId;
+
+    // Implement circuit breaker pattern (like spanning-tree)
+    if (this.circuitBreaker.isOpen(endpoint)) {
+      throw new Error('Circuit breaker open for endpoint');
+    }
+
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        },
+        body: body ? JSON.stringify(body) : undefined,
+        signal: AbortSignal.timeout(this.timeout)
+      });
+
+      // Track metrics like SNMP counters
+      this.metrics.record({
+        endpoint,
+        status: response.status,
+        latency: performance.now() - startTime,
+        requestId
+      });
+
+      return response.json();
+    } catch (error) {
+      this.circuitBreaker.recordFailure(endpoint);
+      throw error;
+    }
+  }
+}
+----
+
+== Building Domus Digitalis: Architecture Decisions
+
+=== The Stack Selection
+
+Choosing the technology stack was influenced by my networking background:
+
+[cols="1,2,2", options="header"]
+|===
+|Technology |Why I Chose It |Network Engineering Parallel
+
+|Next.js 15
+|Server-side rendering for performance
+|Like caching at edge routers
+
+|PostgreSQL
+|ACID compliance and relationships
+|Similar to RADIUS database integrity
+
+|Redis
+|In-memory caching layer
+|Like CAM tables in switches
+
+|TypeScript
+|Type safety and IDE support
+|Like strict SNMP MIB definitions
+
+|Docker
+|Consistent environments
+|Like network namespaces and VRFs
+
+|Tailwind CSS
+|Utility-first approach
+|Like CLI commands - composable and precise
+|===
+
+=== Database Design: Thinking in Tables, Not Packets
+
+The transition from network state tables to database schemas was surprisingly natural:
+
+[source,sql]
+----
+-- Network engineer's approach to database design
+CREATE TABLE projects (
+    id SERIAL PRIMARY KEY,  -- Like interface index
+    uuid UUID DEFAULT gen_random_uuid(), -- Unique identifier like MAC
+
+    -- Core attributes (like interface properties)
+    name_en VARCHAR(255) NOT NULL,
+    description_en TEXT,
+    status VARCHAR(50) CHECK (status IN ('active', 'inactive', 'maintenance')),
+
+    -- Multilingual support (like VLAN tagging)
+    name_es VARCHAR(255),
+    name_pt VARCHAR(255),
+    name_de VARCHAR(255),
+
+    -- Metadata (like SNMP counters)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_accessed TIMESTAMP,
+    access_count INTEGER DEFAULT 0,
+
+    -- Relationships (like routing tables)
+    category_id INTEGER REFERENCES categories(id),
+    owner_id INTEGER REFERENCES users(id),
+
+    -- Performance indexes (like CEF/FIB tables)
+    INDEX idx_status (status),
+    INDEX idx_category (category_id),
+    INDEX idx_updated (updated_at DESC)
+);
+
+-- Trigger for updates (like SNMP traps)
+CREATE TRIGGER update_projects_timestamp
+    BEFORE UPDATE ON projects
+    FOR EACH ROW
+    EXECUTE FUNCTION update_modified_column();
+----
+
+=== Caching Strategy: Lessons from Route Caching
+
+My experience with CEF (Cisco Express Forwarding) influenced the caching architecture:
+
+[source,javascript]
+----
+// Redis caching inspired by network route caching
+class CacheManager {
+  constructor(redisClient) {
+    this.redis = redisClient;
+    this.localCache = new Map(); // L1 cache (like FIB)
+    this.stats = {
+      hits: 0,
+      misses: 0,
+      evictions: 0
+    };
+  }
+
+  async get(key, options = {}) {
+    const { ttl = 300, fallback = null } = options;
+
+    // Check L1 cache first (like checking FIB)
+    if (this.localCache.has(key)) {
+      this.stats.hits++;
+      return this.localCache.get(key).value;
+    }
+
+    // Check L2 cache (Redis, like checking RIB)
+    try {
+      const cached = await this.redis.get(key);
+      if (cached) {
+        this.stats.hits++;
+        // Populate L1 for next access
+        this.localCache.set(key, {
+          value: JSON.parse(cached),
+          expires: Date.now() + (ttl * 1000)
+        });
+        return JSON.parse(cached);
+      }
+    } catch (error) {
+      console.error('Redis error, falling back:', error);
+    }
+
+    // Cache miss (like route not found, need to compute)
+    this.stats.misses++;
+
+    if (fallback) {
+      const value = await fallback();
+      await this.set(key, value, ttl);
+      return value;
+    }
+
+    return null;
+  }
+
+  async set(key, value, ttl = 300) {
+    // Update both caches (like updating FIB and RIB)
+    this.localCache.set(key, {
+      value,
+      expires: Date.now() + (ttl * 1000)
+    });
+
+    try {
+      await this.redis.setex(key, ttl, JSON.stringify(value));
+    } catch (error) {
+      console.error('Failed to set Redis cache:', error);
+    }
+
+    // Implement LRU eviction if needed (like CAM table overflow)
+    this.evictIfNeeded();
+  }
+
+  evictIfNeeded() {
+    const maxSize = 1000; // Like CAM table size limit
+    if (this.localCache.size > maxSize) {
+      const sorted = Array.from(this.localCache.entries())
+        .sort((a, b) => a[1].expires - b[1].expires);
+
+      const toEvict = sorted.slice(0, 100); // Evict oldest 10%
+      toEvict.forEach(([key]) => {
+        this.localCache.delete(key);
+        this.stats.evictions++;
+      });
+    }
+  }
+}
+----
+
+== Performance Optimization: Network Principles in Web Development
+
+=== Request Coalescing (Like Multicast)
+
+[source,javascript]
+----
+// Prevent duplicate API calls using request coalescing
+class RequestCoalescer {
+  constructor() {
+    this.pending = new Map();
+  }
+
+  async fetch(key, fetcher) {
+    // If request is already pending, join it (like IGMP join)
+    if (this.pending.has(key)) {
+      return this.pending.get(key);
+    }
+
+    // Start new request and allow others to join
+    const promise = fetcher().finally(() => {
+      this.pending.delete(key);
+    });
+
+    this.pending.set(key, promise);
+    return promise;
+  }
+}
+
+// Usage in React component
+const useProjectData = (projectId) => {
+  const coalescer = useRef(new RequestCoalescer());
+
+  return useQuery({
+    queryKey: ['project', projectId],
+    queryFn: () => coalescer.current.fetch(
+      `project-${projectId}`,
+      () => api.getProject(projectId)
+    ),
+    staleTime: 60000 // Like ARP cache timeout
+  });
+};
+----
+
+=== Load Balancing (Like ECMP)
+
+[source,javascript]
+----
+// Client-side load balancing inspired by ECMP
+class LoadBalancer {
+  constructor(endpoints) {
+    this.endpoints = endpoints;
+    this.healthChecks = new Map();
+    this.currentIndex = 0;
+  }
+
+  // Round-robin with health checking (like HSRP/VRRP)
+  async getHealthyEndpoint() {
+    const maxAttempts = this.endpoints.length;
+
+    for (let i = 0; i < maxAttempts; i++) {
+      const endpoint = this.endpoints[this.currentIndex];
+      this.currentIndex = (this.currentIndex + 1) % this.endpoints.length;
+
+      if (await this.isHealthy(endpoint)) {
+        return endpoint;
+      }
+    }
+
+    throw new Error('No healthy endpoints available');
+  }
+
+  async isHealthy(endpoint) {
+    // Similar to ICMP health checks
+    try {
+      const response = await fetch(`${endpoint}/health`, {
+        method: 'HEAD',
+        signal: AbortSignal.timeout(3000)
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
+}
+----
+
+== Deployment: Infrastructure as Code
+
+My networking background made infrastructure as code intuitive:
+
+[source,yaml]
+----
+# docker-compose.yml - Like a network topology diagram
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: domus_dev
+      POSTGRES_USER: domus_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U domus_user"]
+      interval: 10s  # Like BFD timers
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy lru-ttl
+    networks:
+      - backend_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./apps/backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://domus_user:${DB_PASSWORD}@postgres:5432/domus_dev
+      REDIS_URL: redis://redis:6379
+    networks:
+      - backend_net
+      - frontend_net
+    restart: unless-stopped  # Like interface err-disable recovery
+
+  frontend:
+    build: ./apps/frontend
+    depends_on:
+      - backend
+    networks:
+      - frontend_net
+    ports:
+      - "3000:3000"  # Like NAT port mapping
+
+networks:
+  backend_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24  # Private network like RFC1918
+
+  frontend_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
+
+volumes:
+  postgres_data:
+  redis_data:
+----
+
+== Lessons Learned
+
+=== What Networking Taught Me About Development
+
+1. **Always have redundancy**: Just like redundant network paths, implement fallbacks in code
+2. **Monitor everything**: Application metrics are like SNMP—essential for troubleshooting
+3. **Document thoroughly**: Network diagrams translate to architecture diagrams
+4. **Test failure scenarios**: Chaos engineering is like pulling cables
+5. **Performance matters**: Milliseconds in web apps are like microseconds in networks
+
+=== What Development Taught Me About Networking
+
+1. **Version control everything**: Including network configurations
+2. **Automated testing**: Why don't we unit test firewall rules?
+3. **CI/CD pipelines**: Network changes should be deployed like code
+4. **User experience**: Network services have users too—consider their experience
+5. **Agile practices**: Small, iterative network changes are safer
+
+== The Result: Production-Ready Application
+
+Domus Digitalis now handles:
+
+* **76+ projects** with full CRUD operations
+* **7 languages** with Redis-cached translations
+* **Sub-10ms response times** for cached queries
+* **PostgreSQL** with proper indexing and relationships
+* **OAuth authentication** with session management
+* **Docker deployment** for consistent environments
+
+The application serves as both a portfolio piece and a practical tool I use daily for project management.
+
+== Advice for Network Engineers Considering Development
+
+=== Start With What You Know
+
+Begin by automating your current work:
+
+1. Write Python scripts for repetitive tasks
+2. Build web interfaces for your scripts
+3. Add databases to store configuration data
+4. Implement APIs for integration
+5. Deploy your tools in containers
+
+=== Leverage Your Strengths
+
+Your networking background provides advantages:
+
+* **System thinking**: You understand complex interactions
+* **Troubleshooting skills**: Debugging code is like tracing packets
+* **Performance awareness**: You know what affects latency
+* **Security mindset**: You think about attack vectors naturally
+* **Documentation habits**: Network engineers document everything
+
+=== Build Something Real
+
+Don't just follow tutorials—build something you'll use:
+
+* A network automation dashboard
+* A configuration backup system
+* An IP address management tool
+* A change tracking system
+* A monitoring aggregation platform
+
+== Conclusion
+
+The journey from network engineer to full-stack developer isn't about leaving networking behind—it's about expanding your capabilities. The same mindset that helps you design resilient networks will help you build robust applications.
+
+Domus Digitalis started as a learning project but evolved into a production system because I approached it with the same rigor I apply to network design: proper planning, redundancy, monitoring, and documentation.
+
+For network engineers considering this path: your background is an asset, not a liability. The industry needs developers who understand infrastructure, just as it needs network engineers who can code. The future belongs to those who can bridge both worlds.
+
+---
+
+_Next post: "Building a Network Automation Platform with Next.js and Python" where I'll detail how to create a modern web interface for network automation tasks._
+
+[.small]
+--
+*About the Author*: Evan Rosado is a Network Engineer turned Full-Stack Developer who believes the future of infrastructure is code. With 9 years in networking and growing expertise in modern web development, he builds systems that bridge the gap between traditional infrastructure and cloud-native applications.
+--

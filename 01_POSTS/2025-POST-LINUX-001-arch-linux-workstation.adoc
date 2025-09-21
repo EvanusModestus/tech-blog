@@ -1,0 +1,810 @@
+= Building the Perfect Development Workstation with Arch Linux
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-01-20
+:keywords: Arch Linux, WSL2, Development Environment, Linux, System Administration
+:description: A comprehensive guide to setting up Arch Linux as a professional development workstation, from WSL2 integration to advanced customization
+:doctype: article
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+After years of distro-hopping and settling on Arch Linux, I've refined a development environment that balances minimalism with functionality. This guide details my production setup running Arch on WSL2, supporting everything from ISE automation to full-stack development.
+--
+
+== Introduction
+
+Arch Linux's philosophy of simplicity and user control aligns perfectly with engineering mindsets. You build exactly what you need—no more, no less. After three years of daily driving Arch for network automation and full-stack development, I've developed a setup that's both minimal and powerful.
+
+This isn't about rice or aesthetics—it's about building a workstation that can handle enterprise network management, containerized development, and everything in between.
+
+== Why Arch Linux for Professional Development
+
+=== The Case for Arch
+
+Working in enterprise environments taught me that understanding your tools completely is non-negotiable. Arch forces this understanding:
+
+* **No abstraction layers**: You know exactly what's running
+* **Rolling release**: Always current with security patches
+* **AUR**: Access to specialized networking and development tools
+* **Minimal base**: Start with nothing, add only what you need
+* **Documentation**: The Arch Wiki is unmatched
+
+=== My Setup Overview
+
+[source,yaml]
+----
+environment:
+  host: Windows 11 Professional
+  virtualization: WSL2
+  distro: Arch Linux
+  kernel: 6.6.87.2-microsoft-standard-WSL2
+
+workloads:
+  - network_automation:
+      - Python scripts for ISE management
+      - Ansible playbooks for infrastructure
+      - Terraform for cloud resources
+
+  - full_stack_development:
+      - Next.js/React applications
+      - Node.js backend services
+      - PostgreSQL databases
+      - Redis caching layers
+
+  - security_operations:
+      - Network packet analysis
+      - Certificate management
+      - Vulnerability scanning
+----
+
+== Installation and Base Configuration
+
+=== WSL2 Arch Installation
+
+[source,bash]
+----
+# Download Arch bootstrap
+curl -L https://github.com/yuk7/ArchWSL/releases/latest/download/Arch.zip -o Arch.zip
+
+# Extract and install
+unzip Arch.zip
+./Arch.exe
+
+# Initial setup inside Arch
+passwd
+echo "%wheel ALL=(ALL) ALL" > /etc/sudoers.d/wheel
+useradd -m -G wheel -s /bin/zsh evanusmodestus
+passwd evanusmodestus
+
+# Initialize keyring
+pacman-key --init
+pacman-key --populate
+pacman -Sy archlinux-keyring
+pacman -Su
+----
+
+=== Essential System Configuration
+
+[source,bash]
+----
+# /etc/pacman.conf optimizations
+[options]
+HoldPkg     = pacman glibc
+Architecture = auto
+Color
+CheckSpace
+VerbosePkgLists
+ParallelDownloads = 5
+ILoveCandy  # Yes, really - adds a pacman animation
+
+# Multilib for compatibility
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+
+# Faster mirrors
+sudo pacman -S reflector
+sudo reflector --country US --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+----
+
+=== Core Package Installation
+
+[source,bash]
+----
+# Development essentials
+sudo pacman -S --needed \
+  base-devel git vim neovim \
+  python python-pip \
+  nodejs npm yarn \
+  docker docker-compose \
+  postgresql redis \
+  tmux zsh fzf ripgrep \
+  htop btop ncdu \
+  openssh openssl \
+  wget curl jq \
+  man-db man-pages \
+  gcc clang cmake \
+  go rust
+
+# Network tools for infrastructure work
+sudo pacman -S --needed \
+  net-tools iproute2 \
+  tcpdump wireshark-cli \
+  nmap netcat \
+  bind-tools \
+  openvpn wireguard-tools \
+  ansible terraform
+
+# AUR helper for extended packages
+git clone https://aur.archlinux.org/yay.git
+cd yay && makepkg -si
+
+# AUR packages
+yay -S --needed \
+  azure-cli-bin \
+  kubectl-bin \
+  helm-bin \
+  lazygit-bin \
+  lazydocker-bin
+----
+
+== Shell Environment Configuration
+
+=== Zsh with Custom Framework
+
+[source,bash]
+----
+# ~/.zshrc - Optimized for development
+export ZDOTDIR="${HOME}/.config/zsh"
+export HISTFILE="${ZDOTDIR}/.zsh_history"
+export HISTSIZE=50000
+export SAVEHIST=50000
+
+# Performance optimizations
+zmodload zsh/zprof  # Profiling
+autoload -Uz compinit && compinit -C  # Faster completion
+
+# Plugin management without Oh-My-Zsh
+ZPLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+
+# Load plugins
+for plugin in zsh-autosuggestions zsh-syntax-highlighting zsh-completions; do
+  [[ -d "$ZPLUGIN_DIR/$plugin" ]] && source "$ZPLUGIN_DIR/$plugin/$plugin.zsh"
+done
+
+# Custom prompt showing git status and Python venv
+setopt PROMPT_SUBST
+PROMPT='%F{cyan}%n@%m%f %F{blue}%~%f $(git_prompt_info)$(venv_prompt_info)
+%F{green}❯%f '
+
+git_prompt_info() {
+  local branch=$(git branch --show-current 2>/dev/null)
+  [[ -n $branch ]] && echo " %F{magenta}($branch)%f"
+}
+
+venv_prompt_info() {
+  [[ -n $VIRTUAL_ENV ]] && echo " %F{yellow}[$(basename $VIRTUAL_ENV)]%f"
+}
+
+# Productivity aliases
+alias ll='ls -lah'
+alias vim='nvim'
+alias gs='git status'
+alias gd='git diff'
+alias gc='git commit'
+alias gp='git push'
+alias docker-clean='docker system prune -af'
+alias k='kubectl'
+alias tf='terraform'
+
+# Network engineering aliases
+alias sshi='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias ansible-lab='ansible-playbook -i inventory/lab'
+alias ise-backup='python3 ~/scripts/ise-backup.py'
+alias pcap='tcpdump -i any -w /tmp/capture-$(date +%Y%m%d-%H%M%S).pcap'
+
+# Development functions
+mkcd() { mkdir -p "$1" && cd "$1" }
+backup() { cp -r "$1" "$1.backup-$(date +%Y%m%d-%H%M%S)" }
+ports() { sudo lsof -i -P -n | grep LISTEN }
+myip() { curl -s https://ipinfo.io/json | jq -r '.ip' }
+----
+
+== Terminal Multiplexer Setup
+
+=== Tmux Configuration for Development
+
+[source,bash]
+----
+# ~/.tmux.conf - Optimized for development workflows
+# Set prefix to Ctrl-a (like screen)
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# Modern settings
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm-256color:RGB"
+set -g mouse on
+set -g history-limit 50000
+set -g display-time 4000
+set -g status-interval 5
+set -g focus-events on
+setw -g aggressive-resize on
+
+# Start windows and panes at 1
+set -g base-index 1
+setw -g pane-base-index 1
+set -g renumber-windows on
+
+# Split panes using | and -
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+# Vim-style pane navigation
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Resize panes
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
+# Session management
+bind C-c new-session
+bind C-f command-prompt -p find-session 'switch-client -t %%'
+
+# Status bar configuration
+set -g status-style 'bg=#1a1b26 fg=#a9b1d6'
+set -g status-left '#[fg=#7aa2f7,bold] #S #[fg=#a9b1d6]│ '
+set -g status-right '#[fg=#a9b1d6]│ #[fg=#7aa2f7]%H:%M %Y-%m-%d '
+set -g status-left-length 30
+set -g status-right-length 50
+
+# Window status
+setw -g window-status-current-style 'fg=#7aa2f7 bold'
+setw -g window-status-current-format ' #I:#W#F '
+setw -g window-status-style 'fg=#565f89'
+setw -g window-status-format ' #I:#W#F '
+
+# Pane borders
+set -g pane-border-style 'fg=#565f89'
+set -g pane-active-border-style 'fg=#7aa2f7'
+
+# Plugins (using TPM)
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-yank'
+
+# Plugin configuration
+set -g @resurrect-capture-pane-contents 'on'
+set -g @continuum-restore 'on'
+set -g @continuum-boot 'on'
+
+# Initialize TPM
+run '~/.tmux/plugins/tpm/tpm'
+
+# Development session layouts
+bind D source-file ~/.tmux/dev-session.conf
+bind I source-file ~/.tmux/ise-session.conf
+----
+
+=== Tmux Session Templates
+
+[source,bash]
+----
+# ~/.tmux/dev-session.conf - Full-stack development layout
+new-session -s dev -n editor -c ~/dev-workspace
+send-keys 'nvim' C-m
+
+new-window -n frontend -c ~/dev-workspace/projects/web/domus-digitalis/apps/frontend
+send-keys 'npm run dev' C-m
+
+new-window -n backend -c ~/dev-workspace/projects/web/domus-digitalis/apps/backend
+split-window -h -p 40
+send-keys -t 0 'npm run dev' C-m
+send-keys -t 1 'docker-compose logs -f' C-m
+
+new-window -n database
+send-keys 'docker exec -it postgres psql -U domus_user domus_dev' C-m
+
+new-window -n git
+send-keys 'lazygit' C-m
+
+select-window -t editor
+----
+
+== Development Environment Integration
+
+=== Docker on WSL2
+
+[source,bash]
+----
+# Docker without Docker Desktop
+# /etc/docker/daemon.json
+{
+  "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"],
+  "storage-driver": "overlay2",
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  },
+  "dns": ["8.8.8.8", "8.8.4.4"],
+  "insecure-registries": ["localhost:5000"]
+}
+
+# Start Docker daemon automatically
+sudo mkdir -p /etc/systemd/system/
+cat << 'EOF' | sudo tee /etc/systemd/system/docker-wsl.service
+[Unit]
+Description=Docker Daemon for WSL
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dockerd
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable docker-wsl
+sudo systemctl start docker-wsl
+----
+
+=== Python Development Environment
+
+[source,bash]
+----
+# Python environment management
+# ~/.config/python/startup.py
+import sys
+import os
+from pathlib import Path
+
+# Add custom modules path
+sys.path.insert(0, str(Path.home() / 'dev-workspace' / 'scripts'))
+
+# Rich REPL
+try:
+    from rich import pretty
+    from rich.console import Console
+    pretty.install()
+    console = Console()
+    print = console.print
+except ImportError:
+    pass
+
+# Auto-reload modules in development
+try:
+    import importlib
+    import types
+
+    def reload_all():
+        """Reload all imported modules"""
+        for name, module in list(sys.modules.items()):
+            if isinstance(module, types.ModuleType) and hasattr(module, '__file__'):
+                if module.__file__ and '/site-packages/' not in module.__file__:
+                    try:
+                        importlib.reload(module)
+                        print(f"Reloaded: {name}")
+                    except:
+                        pass
+except ImportError:
+    pass
+
+# Useful imports for interactive sessions
+import json
+import requests
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+from collections import defaultdict, Counter
+from pprint import pprint
+
+# Network automation helpers
+try:
+    from netmiko import ConnectHandler
+    from nornir import InitNornir
+    import napalm
+except ImportError:
+    pass
+
+print("🐍 Python development environment loaded")
+
+# Set PYTHONSTARTUP environment variable
+export PYTHONSTARTUP=~/.config/python/startup.py
+----
+
+=== Node.js and JavaScript Setup
+
+[source,bash]
+----
+# Node version management with fnm (fast node manager)
+curl -fsSL https://fnm.vercel.app/install | bash
+
+# ~/.config/fnm/fnm.toml
+[settings]
+use-on-cd = true
+corepack-enabled = true
+version-file-strategy = "recursive"
+
+# Install latest LTS
+fnm install --lts
+fnm default lts-latest
+
+# Global packages for development
+npm install -g \
+  typescript \
+  @types/node \
+  ts-node \
+  nodemon \
+  pm2 \
+  eslint \
+  prettier \
+  npm-check-updates \
+  vercel \
+  @railway/cli
+
+# PNPM for faster package management
+corepack enable
+corepack prepare pnpm@latest --activate
+----
+
+== System Monitoring and Management
+
+=== Custom Monitoring Scripts
+
+[source,bash]
+----
+#!/bin/bash
+# ~/scripts/system-monitor.sh - Real-time system monitoring
+
+monitor_system() {
+  while true; do
+    clear
+    echo "=== System Monitor - $(date) ==="
+    echo ""
+
+    # CPU and Memory
+    echo "📊 Resources:"
+    echo "├─ CPU: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}')%"
+    echo "├─ RAM: $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
+    echo "└─ Swap: $(free -h | awk '/^Swap:/ {print $3 "/" $2}')"
+    echo ""
+
+    # Disk usage
+    echo "💾 Disk Usage:"
+    df -h | grep -E '^/dev|^/mnt' | awk '{printf "├─ %-20s %s/%s (%s)\n", $6, $3, $2, $5}'
+    echo ""
+
+    # Network
+    echo "🌐 Network:"
+    echo "├─ Connections: $(ss -tun | tail -n +2 | wc -l)"
+    echo "├─ Listening: $(ss -tuln | tail -n +2 | wc -l)"
+
+    # Docker
+    if command -v docker &> /dev/null; then
+      echo ""
+      echo "🐋 Docker:"
+      echo "├─ Containers: $(docker ps -q | wc -l) running / $(docker ps -aq | wc -l) total"
+      echo "├─ Images: $(docker images -q | sort -u | wc -l)"
+      echo "└─ Volumes: $(docker volume ls -q | wc -l)"
+    fi
+
+    # Processes
+    echo ""
+    echo "📋 Top Processes (by CPU):"
+    ps aux | head -1
+    ps aux | sort -nrk 3,3 | head -5
+
+    sleep 5
+  done
+}
+
+# Run with: monitor_system
+----
+
+=== Backup Strategy
+
+[source,bash]
+----
+#!/bin/bash
+# ~/scripts/backup-system.sh - Comprehensive backup solution
+
+BACKUP_DIR="/mnt/backup/arch-$(date +%Y%m%d)"
+EXCLUDE_FILE="$HOME/.backup-exclude"
+
+# Create exclude file
+cat > "$EXCLUDE_FILE" << 'EOF'
+/tmp/*
+/var/tmp/*
+/var/cache/*
+*/.cache/*
+*/node_modules/*
+*/.npm/*
+*/.cargo/registry/*
+*/target/debug/*
+*/target/release/*
+*/__pycache__/*
+*.pyc
+.git/objects/*
+EOF
+
+backup_configs() {
+  echo "📦 Backing up configurations..."
+
+  # Essential configs
+  mkdir -p "$BACKUP_DIR/configs"
+
+  # System configs
+  sudo cp -r /etc/pacman.conf "$BACKUP_DIR/configs/"
+  sudo cp -r /etc/pacman.d/mirrorlist "$BACKUP_DIR/configs/"
+
+  # User configs
+  cp -r ~/.config "$BACKUP_DIR/configs/"
+  cp -r ~/.zshrc "$BACKUP_DIR/configs/"
+  cp -r ~/.tmux.conf "$BACKUP_DIR/configs/"
+  cp -r ~/.gitconfig "$BACKUP_DIR/configs/"
+
+  # Package lists
+  pacman -Qe > "$BACKUP_DIR/configs/pacman-explicit.txt"
+  pacman -Qm > "$BACKUP_DIR/configs/pacman-aur.txt"
+  pip list > "$BACKUP_DIR/configs/pip-packages.txt"
+  npm list -g --depth=0 > "$BACKUP_DIR/configs/npm-global.txt"
+}
+
+backup_projects() {
+  echo "💼 Backing up projects..."
+
+  rsync -av --exclude-from="$EXCLUDE_FILE" \
+    ~/dev-workspace/ \
+    "$BACKUP_DIR/dev-workspace/"
+}
+
+backup_scripts() {
+  echo "📜 Backing up scripts..."
+
+  cp -r ~/scripts "$BACKUP_DIR/"
+  cp -r ~/automation "$BACKUP_DIR/"
+}
+
+# Run backup
+mkdir -p "$BACKUP_DIR"
+backup_configs
+backup_projects
+backup_scripts
+
+# Compress
+echo "🗜️ Compressing backup..."
+tar czf "$BACKUP_DIR.tar.gz" -C "$(dirname $BACKUP_DIR)" "$(basename $BACKUP_DIR)"
+rm -rf "$BACKUP_DIR"
+
+echo "✅ Backup complete: $BACKUP_DIR.tar.gz"
+echo "Size: $(du -h $BACKUP_DIR.tar.gz | cut -f1)"
+----
+
+== Security Hardening
+
+=== System Security
+
+[source,bash]
+----
+# Firewall configuration with ufw
+sudo pacman -S ufw
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow from 172.16.0.0/12  # WSL2 network
+sudo ufw enable
+
+# Fail2ban for SSH protection (if exposed)
+sudo pacman -S fail2ban
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+# Security auditing
+sudo pacman -S lynis rkhunter
+
+# Run security audit
+sudo lynis audit system
+sudo rkhunter --check
+----
+
+=== Development Security
+
+[source,bash]
+----
+# Git credential management
+git config --global credential.helper store
+git config --global credential.helper cache --timeout=3600
+
+# SSH key management
+# ~/.ssh/config
+Host github.com
+    User git
+    IdentityFile ~/.ssh/github_ed25519
+    IdentitiesOnly yes
+
+Host gitlab.company.com
+    User git
+    Port 2222
+    IdentityFile ~/.ssh/gitlab_rsa
+    IdentitiesOnly yes
+
+Host ise-*
+    User admin
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ~/.ssh/ise_automation
+
+# GPG for commit signing
+gpg --full-generate-key
+gpg --list-secret-keys --keyid-format=long
+git config --global user.signingkey <key-id>
+git config --global commit.gpgsign true
+----
+
+== Performance Optimization
+
+=== System Tuning
+
+[source,bash]
+----
+# /etc/sysctl.d/99-performance.conf
+# Network performance
+net.core.rmem_max = 134217728
+net.core.wmem_max = 134217728
+net.ipv4.tcp_rmem = 4096 87380 134217728
+net.ipv4.tcp_wmem = 4096 65536 134217728
+net.ipv4.tcp_congestion_control = bbr
+net.core.netdev_max_backlog = 5000
+
+# File system
+fs.inotify.max_user_watches = 524288
+fs.file-max = 2097152
+
+# Virtual memory
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+
+# Apply settings
+sudo sysctl -p /etc/sysctl.d/99-performance.conf
+----
+
+=== WSL2 Specific Optimizations
+
+[source,ini]
+----
+# Windows: %USERPROFILE%\.wslconfig
+[wsl2]
+memory=8GB
+processors=4
+localhostForwarding=true
+kernelCommandLine = syscall.x32=y
+
+[experimental]
+sparseVhd=true
+autoMemoryReclaim=gradual
+----
+
+== Troubleshooting Common Issues
+
+=== WSL2 Network Issues
+
+[source,bash]
+----
+# Fix DNS resolution
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+
+# Fix time sync issues
+sudo hwclock -s
+
+# Reset WSL2 networking (from Windows)
+wsl --shutdown
+netsh winsock reset
+netsh int ip reset
+----
+
+=== Package Management Issues
+
+[source,bash]
+----
+# Fix corrupted package database
+sudo rm /var/lib/pacman/db.lck
+sudo pacman -Syy
+
+# Fix GPG key issues
+sudo pacman-key --refresh-keys
+sudo pacman -S archlinux-keyring
+
+# Clear package cache
+sudo pacman -Scc
+----
+
+== My Daily Workflow
+
+=== Morning Routine
+
+[source,bash]
+----
+#!/bin/bash
+# ~/scripts/morning-setup.sh
+
+echo "☕ Starting morning setup..."
+
+# System updates
+echo "📦 Checking updates..."
+sudo pacman -Syu --noconfirm
+yay -Sua --noconfirm
+
+# Start services
+echo "🐋 Starting Docker..."
+sudo systemctl start docker-wsl
+
+# Update repositories
+echo "📁 Updating repositories..."
+for repo in ~/dev-workspace/projects/*/*; do
+  if [ -d "$repo/.git" ]; then
+    echo "Updating $(basename $repo)..."
+    git -C "$repo" fetch --all --prune
+  fi
+done
+
+# Start tmux sessions
+echo "💻 Starting development environment..."
+tmux new-session -d -s main
+tmux new-session -d -s ise
+tmux new-session -d -s dev
+
+echo "✅ Ready for work!"
+----
+
+=== Project Organization
+
+[source,text]
+----
+~/dev-workspace/
+├── projects/
+│   ├── infrastructure/    # Terraform, Ansible
+│   ├── tools/            # Automation scripts
+│   ├── web/              # Full-stack projects
+│   └── writing/          # Technical documentation
+├── scripts/              # Utility scripts
+├── configs/              # Backup configurations
+└── lab/                  # Testing environment
+----
+
+== Conclusion
+
+This Arch Linux setup has evolved over three years of daily use in production environments. It handles everything from managing 75,000+ network endpoints through ISE to developing full-stack applications with modern frameworks.
+
+The key principles:
+* **Minimalism**: Only install what you need
+* **Understanding**: Know your system completely
+* **Automation**: Script repetitive tasks
+* **Documentation**: Document your setup
+* **Backup**: Always have recovery plans
+
+Arch Linux isn't just a distribution—it's a philosophy of taking complete ownership of your computing environment. For engineers who demand control and understanding of their tools, it's the perfect foundation.
+
+---
+
+_Next post: "Neovim as a Complete IDE: From Network Configs to React Components" - A deep dive into my Neovim configuration that replaced traditional IDEs._
+
+[.small]
+--
+*About the Author*: Evan Rosado is a Network Engineer and Full-Stack Developer who believes in understanding systems from the kernel up. Daily driving Arch Linux for enterprise work since 2022.
+--
