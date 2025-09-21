@@ -1,0 +1,140 @@
+// Code Copy Functionality for Blog
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy functionality to all code blocks
+    const codeBlocks = document.querySelectorAll('.listingblock pre');
+    
+    codeBlocks.forEach(block => {
+        // Single click selects all text
+        block.addEventListener('click', function(e) {
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(this);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        });
+        
+        // Double click copies to clipboard
+        block.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            const code = this.textContent || this.innerText;
+            
+            // Copy to clipboard
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showCopyNotification('Code copied to clipboard!');
+                }).catch(err => {
+                    fallbackCopy(code);
+                });
+            } else {
+                fallbackCopy(code);
+            }
+        });
+        
+        // Add visual feedback on hover
+        block.style.transition = 'all 0.2s ease';
+    });
+    
+    // Fallback copy method for older browsers
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.top = '0';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        try {
+            document.execCommand('copy');
+            showCopyNotification('Code copied to clipboard!');
+        } catch (err) {
+            showCopyNotification('Press Ctrl+C to copy');
+        }
+        
+        document.body.removeChild(textarea);
+    }
+    
+    // Show copy notification
+    function showCopyNotification(message) {
+        // Remove existing notification if any
+        const existing = document.querySelector('.copy-notification');
+        if (existing) {
+            existing.remove();
+        }
+        
+        // Create new notification
+        const notification = document.createElement('div');
+        notification.className = 'copy-notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Remove after 2 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+    
+    // Add keyboard shortcut (Ctrl+Shift+C) to copy selected code
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+            const selection = window.getSelection();
+            if (selection.toString()) {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(selection.toString());
+                    showCopyNotification('Selected code copied!');
+                }
+            }
+        }
+    });
+    
+    // Add line numbers toggle
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'Toggle Line Numbers';
+    toggleButton.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        left: 2rem;
+        padding: 0.5rem 1rem;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        z-index: 100;
+    `;
+    
+    let lineNumbersEnabled = false;
+    toggleButton.addEventListener('click', function() {
+        lineNumbersEnabled = !lineNumbersEnabled;
+        codeBlocks.forEach(block => {
+            if (lineNumbersEnabled) {
+                block.classList.add('numbered');
+            } else {
+                block.classList.remove('numbered');
+            }
+        });
+    });
+    
+    // Only add toggle button if there are code blocks
+    if (codeBlocks.length > 0) {
+        document.body.appendChild(toggleButton);
+    }
+});
+
+// Add slide out animation to CSS dynamically
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);

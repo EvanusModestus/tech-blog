@@ -1,0 +1,113 @@
+= [Title: Clear, Specific, and Engaging]
+:author: Evan Rosado
+:email: evan.rosado@outlook.com
+:revdate: 2025-MM-DD
+:keywords: [5-7 relevant keywords]
+:description: [One sentence description for SEO]
+:doctype: article
+:toc: left
+:toclevels: 2
+:icons: font
+:source-highlighter: rouge
+
+[abstract]
+--
+[2-3 sentences that summarize the key value proposition of this post. What will readers learn? Why should they care?]
+--
+
+== Introduction
+
+[Set the context. What problem are you solving? What experience led to this insight? Keep it relatable and professional.]
+
+== The Challenge
+
+[Describe the specific problem or situation. Use concrete examples from real experience.]
+
+== The Solution
+
+=== Approach 1: [Descriptive Name]
+
+[Explain the first approach with code examples]
+
+[source,language]
+----
+// Code example with comments explaining key concepts
+----
+
+=== Approach 2: [Descriptive Name]
+
+[Alternative or complementary approach]
+
+== Implementation Details
+
+=== Technical Architecture
+
+[Detailed technical explanation with diagrams if applicable]
+
+=== Code Walkthrough
+
+[source,language]
+----
+// Complete, working code example
+// Include error handling
+// Add performance considerations
+----
+
+== Results and Metrics
+
+[Quantify the impact. Include specific numbers, performance improvements, time saved, etc.]
+
+[cols="1,1,1", options="header"]
+|===
+|Metric |Before |After
+
+|[Metric 1]
+|[Value]
+|[Value]
+
+|[Metric 2]
+|[Value]
+|[Value]
+
+|[Metric 3]
+|[Value]
+|[Value]
+|===
+
+== Lessons Learned
+
+=== What Worked
+
+* **[Key Success 1]**: [Brief explanation]
+* **[Key Success 2]**: [Brief explanation]
+* **[Key Success 3]**: [Brief explanation]
+
+=== What Didn't
+
+* **[Challenge 1]**: [What happened and how you addressed it]
+* **[Challenge 2]**: [What happened and how you addressed it]
+
+== Best Practices
+
+. **[Practice 1]**: [Explanation]
+. **[Practice 2]**: [Explanation]
+. **[Practice 3]**: [Explanation]
+
+== Conclusion
+
+[Summarize key points. Reinforce the value delivered. End with a forward-looking statement or call to action.]
+
+== Resources
+
+* link:[Resource 1]
+* link:[Resource 2]
+* link:[Resource 3]
+
+---
+
+_Next in this series: [Title of next post] where I'll explore [topic]._
+
+[.small]
+--
+*About the Author*: Evan Rosado is a Network Engineer specializing in [relevant expertise]. With [experience], he [unique value proposition].
+--

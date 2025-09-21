@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evan Rosado - Technical Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            color: #666;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .post-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .post-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .post-card h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-card h3 a {
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .post-card h3 a:hover {
+            color: #667eea;
+        }
+        
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        .tag.ise { background: #e3f2fd; color: #1565c0; }
+        .tag.dev { background: #f3e5f5; color: #7b1fa2; }
+        .tag.infra { background: #e8f5e9; color: #2e7d32; }
+        .tag.linux { background: #fff3e0; color: #e65100; }
+        .tag.vim { background: #e8eaf6; color: #283593; }
+        
+        .draft-card {
+            background: #fffbf0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .series-card {
+            background: #f3e5f5;
+            border-left: 4px solid #7b1fa2;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <header>
+        <h1>Technical Blog by Evan Rosado</h1>
+        <p>9 Years of ISE | Network Automation | Full-Stack Development</p>
+        <div class="nav">
+            <a href="#published">Published Posts</a>
+            <a href="#drafts">Drafts</a>
+            <a href="#series">Series</a>
+            <a href="https://github.com/EvanusModestus/tech-blog">GitHub</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <h3>6</h3>
+                <p>Published Posts</p>
+            </div>
+            <div class="stat-card">
+                <h3>1</h3>
+                <p>Draft in Progress</p>
+            </div>
+            <div class="stat-card">
+                <h3>8</h3>
+                <p>Part Series Planned</p>
+            </div>
+            <div class="stat-card">
+                <h3>9+</h3>
+                <p>Years Experience</p>
+            </div>
+        </div>
+        
+        <section class="section" id="published">
+            <h2>Published Posts</h2>
+            <div class="post-grid">
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-ISE-001-nine-years-of-ise.html">Nine Years of ISE: Lessons from the Trenches</a></h3>
+                    <div class="post-meta">
+                        <span class="tag ise">ISE</span>
+                        <span>2025-01-20</span>
+                        <span>49 KB</span>
+                    </div>
+                    <p>Real-world insights from managing Cisco ISE in production environments. Covers deployment patterns, troubleshooting techniques, and hard-learned lessons from 9 years of experience.</p>
+                </article>
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-ISE-002-automation-framework.html">Building a Production ISE Automation Framework</a></h3>
+                    <div class="post-meta">
+                        <span class="tag ise">ISE</span>
+                        <span>2025-01-20</span>
+                        <span>87 KB</span>
+                    </div>
+                    <p>Complete Python framework for automating ISE operations at scale. Includes bulk operations, policy management, and zero-downtime upgrade strategies tested in production.</p>
+                </article>
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-DEV-001-network-engineer-to-fullstack.html">From Network Engineer to Full-Stack Developer</a></h3>
+                    <div class="post-meta">
+                        <span class="tag dev">Development</span>
+                        <span>2025-01-20</span>
+                        <span>55 KB</span>
+                    </div>
+                    <p>My journey from managing networks to building full-stack applications. How network engineering principles apply to software development, featuring my Domus Digitalis project.</p>
+                </article>
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-LINUX-001-arch-linux-workstation.html">Arch Linux on WSL2: The Complete Developer Setup</a></h3>
+                    <div class="post-meta">
+                        <span class="tag linux">Linux</span>
+                        <span>2025-01-20</span>
+                        <span>58 KB</span>
+                    </div>
+                    <p>Building a professional development environment with Arch Linux on WSL2. Complete configuration for network engineering and full-stack development workflows.</p>
+                </article>
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-VIM-001-neovim-complete-ide.html">Neovim as a Complete IDE: From Config to Production</a></h3>
+                    <div class="post-meta">
+                        <span class="tag vim">Vim</span>
+                        <span>2025-01-20</span>
+                        <span>68 KB</span>
+                    </div>
+                    <p>Transform Neovim into a powerful IDE for network automation and full-stack development. LSP setup, plugin configuration, and custom functions for daily workflows.</p>
+                </article>
+                
+                <article class="post-card">
+                    <h3><a href="2025-POST-INFRA-001-infrastructure-as-code.html">Infrastructure as Code: Managing 500+ Network Devices</a></h3>
+                    <div class="post-meta">
+                        <span class="tag infra">Infrastructure</span>
+                        <span>2025-01-20</span>
+                        <span>75 KB</span>
+                    </div>
+                    <p>Real-world implementation of IaC for network infrastructure. Terraform for state management, Ansible for configuration, and GitLab CI/CD for automated deployment.</p>
+                </article>
+                
+            </div>
+        </section>
+        
+        <section class="section" id="drafts">
+            <h2>Drafts in Progress</h2>
+            <div class="post-grid">
+                
+                <article class="post-card draft-card">
+                    <h3>Zero Trust Network Architecture: ISE as the Policy Decision Point</h3>
+                    <div class="post-meta">
+                        <span class="tag">Security</span>
+                        <span>40% Complete</span>
+                    </div>
+                    <p>Implementing Zero Trust with ISE as the central policy engine. Covers pxGrid integration, microsegmentation with TrustSec, and lessons from production deployment.</p>
+                </article>
+                
+            </div>
+        </section>
+        
+        <section class="section" id="series">
+            <h2>Article Series</h2>
+            <div class="post-grid">
+                
+                <article class="post-card series-card">
+                    <h3>Network Automation with Python: Complete Series</h3>
+                    <div class="post-meta">
+                        <span class="tag">Python</span>
+                        <span>8 Parts Planned</span>
+                        <span>Feb - May 2025</span>
+                    </div>
+                    <p>Comprehensive series taking you from Python basics to advanced network automation. Based on real production implementations managing 500+ devices.</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                        <li>Part 1: Python Fundamentals for Network Engineers</li>
+                        <li>Part 2: Device Communication Patterns</li>
+                        <li>Part 3: Configuration Management at Scale</li>
+                        <li>Part 4: Network Testing and Validation</li>
+                        <li>Part 5: Event-Driven Automation</li>
+                        <li>Part 6: Integration with Network Controllers</li>
+                        <li>Part 7: Building a Network Automation Framework</li>
+                        <li>Part 8: Production Deployment and Operations</li>
+                    </ul>
+                </article>
+                
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2025 Evan Rosado | Real Production Knowledge | No Fluff</p>
+        <p style="margin-top: 1rem; opacity: 0.8;">Built with AsciiDoc | Converted with Asciidoctor | Published via GitHub Pages</p>
+    </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
