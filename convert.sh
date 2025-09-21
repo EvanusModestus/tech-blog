@@ -288,6 +288,7 @@ for html in ${HTML_OUTPUT}/*.html ${HTML_OUTPUT}/*/*.html; do
         # Add CSS link and JavaScript if not already present
         if ! grep -q "style.css" "$html"; then
             sed -i "/<\/head>/i <link rel=\"stylesheet\" href=\"${ASSET_PATH}style.css\">" "$html" 2>/dev/null || true
+            sed -i "/<\/head>/i <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">" "$html" 2>/dev/null || true
             sed -i "/<\/head>/i <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css\">" "$html" 2>/dev/null || true
             sed -i "/<\/body>/i <script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js\"></script>" "$html" 2>/dev/null || true
             sed -i "/<\/body>/i <script>hljs.highlightAll();</script>" "$html" 2>/dev/null || true

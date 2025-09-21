@@ -1,163 +1,268 @@
-/* Custom AsciiDoc Styling */
+/* Custom AsciiDoc Styling - Override defaults */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    background: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    line-height: 1.6 !important;
+    color: #333 !important;
+    background: #f5f5f5 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* TOC layout fix */
+body.toc2.toc-left {
+    padding-left: 15em !important;
+}
+
+#toc.toc2 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 15em !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    z-index: 1000 !important;
+    background: white !important;
+    border-right: 1px solid #ddd !important;
+    padding: 1rem !important;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1) !important;
+}
+
+#header, #content, #footer {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 2rem !important;
 }
 
 #header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    margin-bottom: 2rem !important;
 }
 
 #header h1 {
-    margin: 0;
-    font-size: 2.5rem;
+    margin: 0 !important;
+    font-size: 2.5rem !important;
+    color: white !important;
 }
 
-#toc {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+/* Remove the duplicate #toc styling since it's handled by #toc.toc2 above */
 
 #toctitle {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: #667eea;
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 1rem !important;
+    color: #667eea !important;
 }
 
-.sectlevel1 { margin-left: 0; }
-.sectlevel2 { margin-left: 1rem; }
-.sectlevel3 { margin-left: 2rem; }
+.sectlevel1 { margin-left: 0 !important; }
+.sectlevel2 { margin-left: 1rem !important; }
+.sectlevel3 { margin-left: 2rem !important; }
 
 #content {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
-/* Code blocks */
+/* Code blocks - Force dark theme */
+.listingblock .content pre,
+.literalblock .content pre,
 .listingblock pre,
 .literalblock pre,
 pre.rouge,
-pre.highlight {
+pre.highlight,
+pre {
     background: #1e1e1e !important;
     color: #d4d4d4 !important;
-    padding: 1rem;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    cursor: pointer;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    overflow-x: auto !important;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    border: none !important;
 }
 
-.listingblock pre:hover,
-.literalblock pre:hover,
+.listingblock .content pre:hover,
+.literalblock .content pre:hover,
 pre.rouge:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+
+/* Override Rouge syntax highlighting colors */
+pre.rouge .w,
+pre.rouge .err,
+pre.rouge .x,
+pre.rouge .il,
+pre.rouge .dl,
+pre.rouge .sd,
+pre.rouge .s2,
+pre.rouge .se,
+pre.rouge .sh,
+pre.rouge .si,
+pre.rouge .sx,
+pre.rouge .sr,
+pre.rouge .s1,
+pre.rouge .ss {
+    color: #d4d4d4 !important;
+}
+
+pre.rouge .c,
+pre.rouge .ch,
+pre.rouge .cm,
+pre.rouge .c1,
+pre.rouge .cs {
+    color: #6a9955 !important;
+}
+
+pre.rouge .k,
+pre.rouge .kc,
+pre.rouge .kd,
+pre.rouge .kn,
+pre.rouge .kp,
+pre.rouge .kr,
+pre.rouge .kt {
+    color: #c586c0 !important;
+}
+
+pre.rouge .s,
+pre.rouge .sa,
+pre.rouge .sb,
+pre.rouge .sc,
+pre.rouge .sd,
+pre.rouge .s2,
+pre.rouge .se,
+pre.rouge .sh,
+pre.rouge .si,
+pre.rouge .sx,
+pre.rouge .sr,
+pre.rouge .s1,
+pre.rouge .ss {
+    color: #ce9178 !important;
+}
+
+pre.rouge .m,
+pre.rouge .mf,
+pre.rouge .mh,
+pre.rouge .mi,
+pre.rouge .mo,
+pre.rouge .il {
+    color: #b5cea8 !important;
+}
+
+pre.rouge .n,
+pre.rouge .na,
+pre.rouge .nb,
+pre.rouge .nc,
+pre.rouge .no,
+pre.rouge .nd,
+pre.rouge .ni,
+pre.rouge .ne,
+pre.rouge .nf,
+pre.rouge .nl,
+pre.rouge .nn,
+pre.rouge .nx,
+pre.rouge .py,
+pre.rouge .nt,
+pre.rouge .nv,
+pre.rouge .vc,
+pre.rouge .vg,
+pre.rouge .vi {
+    color: #4ec9b0 !important;
 }
 
 /* Inline code */
 code {
-    background: #f0f0f0;
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9em;
+    background: #f0f0f0 !important;
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 3px !important;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 0.9em !important;
+    color: #333 !important;
 }
 
+/* Don't style inline code inside pre blocks */
 pre code {
-    background: none;
-    padding: 0;
+    background: none !important;
+    padding: 0 !important;
+    color: inherit !important;
 }
 
 /* Tables */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 1.5rem 0 !important;
 }
 
 table thead {
-    background: #667eea;
-    color: white;
+    background: #667eea !important;
+    color: white !important;
 }
 
 table th, table td {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    text-align: left;
+    padding: 0.75rem !important;
+    border: 1px solid #ddd !important;
+    text-align: left !important;
 }
 
 table tbody tr:nth-child(even) {
-    background: #f9f9f9;
+    background: #f9f9f9 !important;
 }
 
 /* Admonitions */
 .admonitionblock {
-    margin: 1.5rem 0;
-    padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid;
+    margin: 1.5rem 0 !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    border-left: 4px solid !important;
 }
 
 .admonitionblock.note {
-    background: #e3f2fd;
-    border-left-color: #2196f3;
+    background: #e3f2fd !important;
+    border-left-color: #2196f3 !important;
 }
 
 .admonitionblock.tip {
-    background: #e8f5e9;
-    border-left-color: #4caf50;
+    background: #e8f5e9 !important;
+    border-left-color: #4caf50 !important;
 }
 
 .admonitionblock.warning {
-    background: #fff3e0;
-    border-left-color: #ff9800;
+    background: #fff3e0 !important;
+    border-left-color: #ff9800 !important;
 }
 
 .admonitionblock.important {
-    background: #fce4ec;
-    border-left-color: #e91e63;
+    background: #fce4ec !important;
+    border-left-color: #e91e63 !important;
 }
 
 /* Links */
 a {
-    color: #667eea;
-    text-decoration: none;
+    color: #667eea !important;
+    text-decoration: none !important;
 }
 
 a:hover {
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 /* Sections */
 .sect1 {
-    margin-top: 2rem;
+    margin-top: 2rem !important;
 }
 
 .sect1 h2 {
-    color: #333;
-    border-bottom: 2px solid #667eea;
-    padding-bottom: 0.5rem;
+    color: #333 !important;
+    border-bottom: 2px solid #667eea !important;
+    padding-bottom: 0.5rem !important;
 }
 
-/* Syntax highlighting colors */
-.hljs {
+/* Force override all syntax highlighting */
+.hljs,
+.hljs * {
     background: #1e1e1e !important;
     color: #d4d4d4 !important;
 }
